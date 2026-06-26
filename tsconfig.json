@@ -1,3 +1,21 @@
-export const venues=['桐生','戸田','江戸川','平和島','多摩川','浜名湖','蒲郡','常滑','津','三国','びわこ','住之江','尼崎','鳴門','丸亀','児島','宮島','徳山','下関','若松','芦屋','福岡','唐津','大村'];
-export type Racer={lane:number;name:string;className:string;national:number;local:number;motor:number;boat:number;st:number;exhibition:number;tilt:number;weight:number};
-export const sampleRacers=(venue:string,race:number):Racer[]=>[1,2,3,4,5,6].map(i=>({lane:i,name:['山田 太郎','鈴木 一郎','佐藤 健','田中 翼','伊藤 誠','加藤 海'][i-1],className:i<=2?'A1':i<=4?'A2':'B1',national:Number((7.2-i*.35+(race%3)*.08).toFixed(2)),local:Number((6.8-i*.25+(venue.length%3)*.1).toFixed(2)),motor:Math.max(22,Number((48-i*2.7+(race%5)).toFixed(1))),boat:Math.max(20,Number((42-i*2.2+(race%4)).toFixed(1))),st:Number((0.12+i*.012).toFixed(2)),exhibition:Number((6.71+i*.025).toFixed(2)),tilt:i===5?0.5:0,weight:52+i}));
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [{ "name": "next" }],
+    "paths": { "@/*": ["./*"] }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}

@@ -1,1 +1,11 @@
-*{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#111827;font-family:Arial,'Hiragino Sans','Yu Gothic',sans-serif}.wrap{max-width:1180px;margin:auto;padding:22px}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.brand{font-size:28px;font-weight:800}.sub{color:#64748b;font-size:13px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.card{background:white;border:1px solid #e5e7eb;border-radius:16px;padding:16px;box-shadow:0 6px 20px rgba(15,23,42,.05)}button,.btn{border:0;background:#0f172a;color:white;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}button.alt{background:#e5e7eb;color:#111827}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.active{background:#2563eb}.table{width:100%;border-collapse:collapse;font-size:13px}.table th,.table td{padding:9px;border-bottom:1px solid #e5e7eb;text-align:left}.rank{font-size:22px;font-weight:800}.good{color:#16a34a;font-weight:800}.warn{color:#d97706;font-weight:800}.bad{color:#dc2626;font-weight:800}.muted{color:#64748b}.pill{display:inline-block;background:#eef2ff;color:#3730a3;border-radius:999px;padding:4px 8px;font-size:12px;font-weight:700}input,select{width:100%;padding:8px;border:1px solid #d1d5db;border-radius:10px}.two{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}@media(max-width:800px){.two{grid-template-columns:1fr}.head{display:block}}
+import { VenueCard } from '@/components/VenueCard';
+import { venues } from '@/lib/mockData';
+
+export default function VenuePage() {
+  return (
+    <>
+      <div className="section-title"><h2>本日開催場</h2><span className="badge">手動データ / API接続前</span></div>
+      <div className="grid grid-2">{venues.map(v => <VenueCard key={v.id} venue={v} />)}</div>
+    </>
+  );
+}

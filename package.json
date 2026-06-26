@@ -1,1 +1,51 @@
-export default function Header(){return <div className="head"><div><div className="brand">Boat AI</div><div className="sub">確率・期待値・結果検証で競艇を分析</div></div><div className="pill">STEP 9</div></div>}
+'use client';
+
+import { useMemo, useState } from 'react';
+import type { Race, TrifectaPrediction } from '@/lib/types';
+import { saveResult } from '@/lib/storage';
+
+export function ResultRecorder({ race, topItems }: { race: Race; topItems: TrifectaPrediction[] }) {
+  const [betCombination, setBetCombination] = useState(topItems[0]?.combination ?? '');
+  const [resultCombination, setResultCombination] = useState('');
+  const [betAmount, setBetAmount] = useState(1000);
+  const [payout, setPayout] = useState(0);
+  const [message, setMessage] = useState('');
+
+  const hit = useMemo(() => betCombination && resultCombination && betCombination === resultCombination, [betCombination, resultCombination]);
+  const profit = hit ? payout - betAmount : -betAmount;
+
+  function handleSave() {
+    if (!betCombination || !resultCombination) {
+      setMessage('買い目と結果を入力してください');
+      return;
+    }
+    saveResult({
+      id: `${Date.now()}`,
+      venueName: race.venueName,
+      raceNo: race.raceNo,
+      date: new Date().toISOString(),
+      betCombination,
+      betAmount,
+      resultCombination,
+      payout: hit ? payout : 0,
+      hit,
+      profit
+    });
+    setMessage(`保存しました：${hit ? '的中' : '不的中'} / 収支 ${profit.toLocaleString()}円`);
+  }
+
+  return (
+    <div className="card">
+      <div className="section-title" style={{marginTop: 0}}><h2>結果入力</h2><span className="badge">localStorage保存</span></div>
+      <div className="form-row">
+        <div className="field"><label>購入買い目</label><select value={betCombination} onChange={e => setBetCombination(e.target.value)}>{topItems.slice(0, 30).map(i => <option key={i.combination}>{i.combination}</option>)}</select></div>
+        <div className="field"><label>確定3連単</label><input value={resultCombination} onChange={e => setResultCombination(e.target.value)} placeholder="例 1-3-2" /></div>
+        <div className="field"><label>投資額</label><input type="number" value={betAmount} onChange={e => setBetAmount(Number(e.target.value))} /></div>
+        <div className="field"><label>払戻金</label><input type="number" value={payout} onChange={e => setPayout(Number(e.target.value))} /></div>
+        <div className="field"><label>判定</label><input readOnly value={resultCombination ? (hit ? '的中' : '不的中') : '未入力'} /></div>
+        <div className="field"><label>収支</label><input readOnly value={`${profit.toLocaleString()}円`} /></div>
+      </div>
+      <div style={{marginTop: 14, display:'flex', gap: 12, alignItems:'center'}}><button className="btn" onClick={handleSave}>結果を保存</button><span className={hit ? 'good' : 'bad'}>{message}</span></div>
+    </div>
+  );
+}
