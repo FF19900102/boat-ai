@@ -1,83 +1,45 @@
-export type Boat = {
-  frame: number;
-  name: string;
-  className: string;
-  nationalWin: number;
-  localWin: number;
-  st: number;
-  motorRate: number;
-  boatRate: number;
-  exhibition: number;
-  tilt: number;
-  weight: number;
-  entry: number;
-};
+import { Boat, Venue } from './types';
 
-export type Weather = { weather: string; windDir: string; wind: number; wave: number };
-export type Prediction = Boat & { score: number; first: number; top2: number; top3: number };
-export type Ticket = { key: string; first: number; second: number; third: number; probability: number; odds: number; ev: number; judge: string };
+export const venues: Venue[] = [
+  { id: 'kiryu', name: '桐生', region: '関東', night: true },
+  { id: 'toda', name: '戸田', region: '関東' },
+  { id: 'edogawa', name: '江戸川', region: '関東' },
+  { id: 'heiwajima', name: '平和島', region: '関東' },
+  { id: 'tamagawa', name: '多摩川', region: '関東' },
+  { id: 'hamanako', name: '浜名湖', region: '東海' },
+  { id: 'gamagori', name: '蒲郡', region: '東海', night: true },
+  { id: 'tokoname', name: '常滑', region: '東海' },
+  { id: 'tsu', name: '津', region: '近畿' },
+  { id: 'mikuni', name: '三国', region: '北陸' },
+  { id: 'biwako', name: 'びわこ', region: '近畿' },
+  { id: 'suminoe', name: '住之江', region: '近畿', night: true },
+  { id: 'amagasaki', name: '尼崎', region: '近畿' },
+  { id: 'naruto', name: '鳴門', region: '四国' },
+  { id: 'marugame', name: '丸亀', region: '四国', night: true },
+  { id: 'kojima', name: '児島', region: '中国' },
+  { id: 'miyajima', name: '宮島', region: '中国' },
+  { id: 'tokuyama', name: '徳山', region: '中国' },
+  { id: 'shimonoseki', name: '下関', region: '中国', night: true },
+  { id: 'wakamatsu', name: '若松', region: '九州', night: true },
+  { id: 'ashiya', name: '芦屋', region: '九州' },
+  { id: 'fukuoka', name: '福岡', region: '九州' },
+  { id: 'karatsu', name: '唐津', region: '九州' },
+  { id: 'omura', name: '大村', region: '九州', night: true }
+];
 
-const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
-
-export function defaultBoats(): Boat[] {
-  return [1,2,3,4,5,6].map((frame) => ({
-    frame,
-    name: `${frame}号艇`,
-    className: frame <= 2 ? 'A1' : frame <= 4 ? 'A2' : 'B1',
-    nationalWin: [6.5,5.8,5.5,5.2,4.8,4.5][frame-1],
-    localWin: [6.2,5.6,5.4,5.0,4.7,4.3][frame-1],
-    st: [0.14,0.16,0.15,0.17,0.18,0.19][frame-1],
-    motorRate: [38,34,36,31,30,28][frame-1],
-    boatRate: [35,32,34,30,29,27][frame-1],
-    exhibition: [6.72,6.76,6.74,6.78,6.81,6.84][frame-1],
+export function createDefaultBoats(): Boat[] {
+  return Array.from({ length: 6 }, (_, i) => ({
+    frame: i + 1,
+    name: `選手${i + 1}`,
+    className: i === 0 ? 'A1' : i < 3 ? 'A2' : 'B1',
+    nationalRate: [6.8, 5.9, 5.6, 5.1, 4.8, 4.2][i],
+    localRate: [6.4, 5.5, 5.8, 4.9, 4.5, 4.0][i],
+    avgSt: [0.14, 0.16, 0.15, 0.18, 0.17, 0.19][i],
+    motorRate: [42, 36, 39, 31, 28, 25][i],
+    boatRate: [38, 33, 34, 29, 30, 24][i],
+    exhibition: [6.72, 6.79, 6.76, 6.84, 6.81, 6.88][i],
     tilt: 0,
-    weight: [52,53,52,54,53,55][frame-1],
-    entry: frame
+    weight: [52, 53, 52, 54, 53, 55][i],
+    course: i + 1
   }));
-}
-
-export function scoreBoat(b: Boat, w: Weather): number {
-  const frameBonus: Record<number, number> = {1: 22, 2: 8, 3: 5, 4: 1, 5: -4, 6: -8};
-  const entryBonus = b.entry === 1 ? 8 : b.entry === 2 ? 3 : b.entry === 3 ? 1 : b.entry >= 5 ? -3 : 0;
-  const stScore = clamp((0.24 - b.st) * 90, -8, 14);
-  const exScore = clamp((6.95 - b.exhibition) * 28, -8, 10);
-  const motorScore = (b.motorRate - 30) * 0.28;
-  const boatScore = (b.boatRate - 30) * 0.14;
-  const winScore = b.nationalWin * 6 + b.localWin * 3;
-  const classBonus = b.className === 'A1' ? 7 : b.className === 'A2' ? 3 : b.className === 'B1' ? -1 : -4;
-  const windPenalty = w.wind >= 5 && b.frame === 1 ? -5 : w.wind >= 5 && b.frame >= 4 ? 3 : 0;
-  const wavePenalty = w.wave >= 5 && b.frame >= 5 ? -2 : 0;
-  return Math.max(1, winScore + stScore + exScore + motorScore + boatScore + classBonus + (frameBonus[b.frame] || 0) + entryBonus + windPenalty + wavePenalty);
-}
-
-export function makePredictions(boats: Boat[], weather: Weather): Prediction[] {
-  const raw = boats.map((b) => ({...b, score: scoreBoat(b, weather)}));
-  const total = raw.reduce((s, b) => s + b.score, 0) || 1;
-  return raw.map((b) => {
-    const first = b.score / total;
-    return {...b, first, top2: clamp(first * 1.75, 0, .92), top3: clamp(first * 2.35, 0, .98)};
-  }).sort((a,b) => b.first - a.first);
-}
-
-export function generateTickets(predictions: Prediction[], oddsMap: Record<string, number> = {}): Ticket[] {
-  const byFrame = [...predictions].sort((a,b) => a.frame - b.frame);
-  const tickets: Ticket[] = [];
-  for (const a of byFrame) for (const b of byFrame) for (const c of byFrame) {
-    if (a.frame === b.frame || a.frame === c.frame || b.frame === c.frame) continue;
-    const key = `${a.frame}-${b.frame}-${c.frame}`;
-    const rest2 = Math.max(0.01, 1 - a.first);
-    const secondProb = (b.top2 - b.first * 0.35) / rest2;
-    const rest3 = Math.max(0.01, 1 - a.first - b.first * 0.55);
-    const thirdProb = (c.top3 - c.top2 * 0.32) / rest3;
-    const probability = clamp(a.first * clamp(secondProb, .01, .75) * clamp(thirdProb, .01, .65), 0.0001, 0.35);
-    const odds = oddsMap[key] || 0;
-    const ev = odds > 0 ? probability * odds * 100 : 0;
-    const judge = odds === 0 ? 'オッズ待ち' : ev >= 120 ? '買い候補' : ev >= 100 ? '注意' : '見送り';
-    tickets.push({key, first:a.frame, second:b.frame, third:c.frame, probability, odds, ev, judge});
-  }
-  return tickets.sort((a,b) => b.ev - a.ev || b.probability - a.probability);
-}
-
-export function ticketHit(ticketKey: string, result: string) {
-  return ticketKey.replaceAll(' ', '') === result.replaceAll(' ', '');
 }

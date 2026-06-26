@@ -1,42 +1,20 @@
-import { Boat, Venue, Weather } from './types';
-
-export const venues: Venue[] = [
-  { id: 'kiryu', name: '桐生', region: '関東', night: true },
-  { id: 'toda', name: '戸田', region: '関東' },
-  { id: 'edogawa', name: '江戸川', region: '関東' },
-  { id: 'heiwajima', name: '平和島', region: '関東' },
-  { id: 'tamagawa', name: '多摩川', region: '関東' },
-  { id: 'hamanako', name: '浜名湖', region: '東海' },
-  { id: 'gamagori', name: '蒲郡', region: '東海', night: true },
-  { id: 'tokoname', name: '常滑', region: '東海' },
-  { id: 'tsu', name: '津', region: '近畿' },
-  { id: 'mikuni', name: '三国', region: '北陸' },
-  { id: 'biwako', name: 'びわこ', region: '近畿' },
-  { id: 'suminoe', name: '住之江', region: '近畿', night: true },
-  { id: 'marugame', name: '丸亀', region: '四国', night: true },
-  { id: 'kojima', name: '児島', region: '中国' },
-  { id: 'miyajima', name: '宮島', region: '中国' },
-  { id: 'tokuyama', name: '徳山', region: '中国' },
-  { id: 'shimonoseki', name: '下関', region: '中国', night: true },
-  { id: 'wakamatsu', name: '若松', region: '九州', night: true },
-  { id: 'ashiya', name: '芦屋', region: '九州' },
-  { id: 'fukuoka', name: '福岡', region: '九州' },
-  { id: 'karatsu', name: '唐津', region: '九州' },
-  { id: 'omura', name: '大村', region: '九州', night: true }
-];
-
-export const defaultWeather: Weather = {
-  condition: '晴れ',
-  windDirection: '向かい風',
-  windSpeed: 2,
-  wave: 2
-};
-
-export const defaultBoats: Boat[] = [
-  { frame: 1, name: '選手A', className: 'A1', nationalWin: 6.8, localWin: 6.5, avgST: 0.14, motorRate: 38, boatRate: 34, exhibition: 6.72, tilt: -0.5, weight: 52, course: 1 },
-  { frame: 2, name: '選手B', className: 'A2', nationalWin: 5.7, localWin: 5.4, avgST: 0.16, motorRate: 32, boatRate: 31, exhibition: 6.78, tilt: -0.5, weight: 53, course: 2 },
-  { frame: 3, name: '選手C', className: 'B1', nationalWin: 5.1, localWin: 5.8, avgST: 0.15, motorRate: 35, boatRate: 29, exhibition: 6.75, tilt: 0, weight: 52, course: 3 },
-  { frame: 4, name: '選手D', className: 'A2', nationalWin: 5.9, localWin: 5.2, avgST: 0.18, motorRate: 29, boatRate: 37, exhibition: 6.83, tilt: 0, weight: 54, course: 4 },
-  { frame: 5, name: '選手E', className: 'B1', nationalWin: 4.8, localWin: 4.6, avgST: 0.17, motorRate: 41, boatRate: 35, exhibition: 6.80, tilt: 0.5, weight: 51, course: 5 },
-  { frame: 6, name: '選手F', className: 'B1', nationalWin: 4.3, localWin: 4.2, avgST: 0.19, motorRate: 27, boatRate: 28, exhibition: 6.88, tilt: 0.5, weight: 55, course: 6 }
-];
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [{ "name": "next" }]
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}
