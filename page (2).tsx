@@ -1,23 +1,21 @@
-import Header from '@/components/Header';
+import Link from 'next/link';
+import { raceService } from '@/services/raceService';
 import VenueCard from '@/components/VenueCard';
-import { venues } from '@/lib/data';
 
-export default function Home() {
-  const today = new Date().toLocaleDateString('ja-JP');
+export default function HomePage() {
+  const venues = raceService.listTodayVenues();
+
   return (
-    <>
-      <Header />
-      <main className="wrap">
-        <div className="topline">
-          <div>
-            <h1 className="title">本日開催</h1>
-            <p className="muted">{today} / 開催場を選択してください</p>
-          </div>
-        </div>
-        <section className="section grid">
-          {venues.map((venue) => <VenueCard key={venue.id} venue={venue} />)}
-        </section>
-      </main>
-    </>
+    <main className="container">
+      <section className="card" style={{marginBottom:20}}>
+        <h1 className="title">Boat AI</h1>
+        <p className="muted">確率・期待値・結果検証で戦う競艇AI。まずは本日開催場からレースを選択してください。</p>
+        <Link className="btn" href="/venues">開催場を選ぶ</Link>
+      </section>
+      <h2>本日開催</h2>
+      <div className="grid">
+        {venues.map(v => <VenueCard key={v.id} venue={v} />)}
+      </div>
+    </main>
   );
 }

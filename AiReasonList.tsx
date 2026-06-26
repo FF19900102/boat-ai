@@ -1,0 +1,3 @@
+import DataSourceBadge from '@/components/DataSourceBadge';
+import {getTodayVenues} from '@/services/liveBoatRace';
+export default async function DataPage(){const data=await getTodayVenues();return <><div className="card"><h1>データ取得</h1><p className="muted">公式データ・有料API・モックの切替をここで管理します。</p></div><div style={{marginTop:16}}><DataSourceBadge sources={data.sources}/></div><h2 className="section-title">接続予定</h2><div className="grid split3"><div className="card"><h3>出走表</h3><p className="mini">選手、級別、全国勝率、当地勝率、平均ST。</p></div><div className="card"><h3>直前情報</h3><p className="mini">展示タイム、チルト、体重、進入、気象。</p></div><div className="card"><h3>結果速報</h3><p className="mini">確定着順、3連単、払戻金、返還。</p></div></div></>}

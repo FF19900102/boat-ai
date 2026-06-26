@@ -1,15 +1,8 @@
-import Link from 'next/link';
+import './globals.css';
+import type { Metadata } from 'next';
 
-export function Header() {
-  return (
-    <header className="header">
-      <div className="header-inner">
-        <Link className="logo" href="/">Boat AI</Link>
-        <nav className="nav">
-          <Link href="/venue">開催場</Link>
-          <Link href="/dashboard">成績</Link>
-        </nav>
-      </div>
-    </header>
-  );
+export const metadata: Metadata = { title: 'Boat AI', description: '競艇AI分析アプリ' };
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return <html lang="ja"><body>{children}</body></html>;
 }

@@ -1,13 +1,30 @@
-export function Header() {
+import EntryTable from '@/components/EntryTable';
+import PredictionTable from '@/components/PredictionTable';
+import TrifectaTable from '@/components/TrifectaTable';
+import { calculatePredictions, buildTrifectaRanking } from '@/ai/predictor';
+import { raceService } from '@/services/raceService';
+
+export default function RaceDetailPage({ params }: { params: { raceId: string } }) {
+  const race = raceService.getRace(params.raceId);
+  if (!race) {
+    return <main className="container"><div className="card">レースが見つかりません。</div></main>;
+  }
+  const venue = raceService.getVenue(race.venueId);
+  const predictions = calculatePredictions(race.entries, venue?.weather);
+  const trifecta = buildTrifectaRanking(predictions, race.odds);
+  const buyCount = trifecta.filter(t => t.expectedValue >= 120).length;
+
   return (
-    <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-        <div>
-          <div className="text-xl font-black tracking-tight">Boat AI</div>
-          <div className="text-xs text-slate-500">確率・期待値・結果検証</div>
-        </div>
-        <div className="rounded-full bg-slate-900 px-3 py-1 text-xs font-bold text-white">Phase 1 Full</div>
+    <main className="container">
+      <div className="card" style={{marginBottom:16}}>
+        <h1 className="title">{venue?.name} {race.title}</h1>
+        <p className="muted">締切 {race.deadline} / 買い候補 {buyCount}点 / {buyCount === 0 ? '見送り推奨' : '期待値候補あり'}</p>
       </div>
-    </header>
+      <div style={{display:'grid', gap:16}}>
+        <EntryTable entries={race.entries} />
+        <PredictionTable predictions={predictions} />
+        <TrifectaTable rows={trifecta} />
+      </div>
+    </main>
   );
 }

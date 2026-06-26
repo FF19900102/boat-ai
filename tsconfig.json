@@ -1,21 +1,2 @@
-{
-  "compilerOptions": {
-    "target": "ES2020",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": false,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "plugins": [{ "name": "next" }],
-    "paths": { "@/*": ["./*"] }
-  },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
-}
+import { TrifectaPick } from '@/types/boat';
+export function TrifectaTable({items}:{items:TrifectaPick[]}){return <div className="card"><h2>3連単 期待値ランキング</h2><table className="table"><thead><tr><th>買い目</th><th>確率</th><th>オッズ</th><th>期待値</th><th>判定</th></tr></thead><tbody>{items.map(p=><tr key={p.combination}><td><b>{p.combination}</b></td><td>{p.probability}%</td><td>{p.odds}倍</td><td className={p.expectedValue>=120?'good':p.expectedValue>=100?'warn':'bad'}>{p.expectedValue}</td><td><span className="badge">{p.verdict==='BUY'?'買い候補':p.verdict==='WATCH'?'注意':'見送り'}</span></td></tr>)}</tbody></table></div>}

@@ -1,0 +1,2 @@
+import {racesForVenue,venues} from '@/lib/mockData';import RaceCard from '@/components/RaceCard';
+export default function VenuePage({params}:{params:{venueId:string}}){const venue=venues.find(v=>v.id===params.venueId);const races=racesForVenue(params.venueId);return <><div className="card"><h1>{venue?.name||params.venueId}</h1><p className="muted">レースを選択してください。</p></div><h2 className="section-title">レース一覧</h2><div className="grid races">{races.map(r=><RaceCard key={r.id} race={r}/>)}</div></>}

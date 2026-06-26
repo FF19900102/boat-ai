@@ -1,12 +1,2 @@
-import Link from 'next/link';
-import type { Race } from '@/lib/types';
-
-export function RaceCard({ race }: { race: Race }) {
-  return (
-    <Link className="race-card" href={`/race/${race.venueId}/${race.raceNo}`}>
-      <strong>{race.raceNo}R</strong>
-      <span>{race.deadline}</span>
-      <div className="venue-meta">{race.title}</div>
-    </Link>
-  );
-}
+import {Prediction} from '@/types/boat';
+export default function PredictionTable({predictions}:{predictions:Prediction[]}){return <table className="table"><thead><tr><th>順位</th><th>艇</th><th>選手</th><th>AIスコア</th><th>1着率</th><th>2連対</th><th>3連対</th></tr></thead><tbody>{predictions.map(p=><tr key={p.lane}><td>{p.rank}</td><td><span className={`lane lane${p.lane}`}>{p.lane}</span></td><td>{p.name}</td><td>{p.score}</td><td>{p.first}%</td><td>{p.top2}%</td><td>{p.top3}%</td></tr>)}</tbody></table>}

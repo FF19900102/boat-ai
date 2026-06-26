@@ -1,14 +1,3 @@
-"use client";
-import { Weather } from "@/lib/types";
-
-export function WeatherForm({ weather, onChange }: { weather: Weather; onChange: (w: Weather) => void }) {
-  const set = (key: keyof Weather, value: string) => onChange({ ...weather, [key]: key === "weather" || key === "windDirection" ? value : Number(value) });
-  return (
-    <div className="grid gap-3 md:grid-cols-4">
-      <div><div className="label">天候</div><input className="input" value={weather.weather} onChange={(e)=>set("weather", e.target.value)} /></div>
-      <div><div className="label">風向</div><input className="input" value={weather.windDirection} onChange={(e)=>set("windDirection", e.target.value)} /></div>
-      <div><div className="label">風速 m</div><input className="input" type="number" value={weather.windSpeed} onChange={(e)=>set("windSpeed", e.target.value)} /></div>
-      <div><div className="label">波高 cm</div><input className="input" type="number" value={weather.waveHeight} onChange={(e)=>set("waveHeight", e.target.value)} /></div>
-    </div>
-  );
-}
+'use client';
+import {useEffect,useState} from 'react';import {calcStats,loadResults} from '@/services/storage';import {RaceResult} from '@/types/boat';
+export default function Dashboard(){const[results,setResults]=useState<RaceResult[]>([]);useEffect(()=>setResults(loadResults()),[]);const s=calcStats(results);return <><div className="card"><h1>成績ダッシュボード</h1><p className="muted">localStorage保存の成績です。</p></div><div className="grid venues" style={{marginTop:16}}><div className="card"><p className="muted">レース数</p><div className="score">{s.count}</div></div><div className="card"><p className="muted">的中率</p><div className="score">{s.hitRate}%</div></div><div className="card"><p className="muted">回収率</p><div className="score">{s.roi}%</div></div><div className="card"><p className="muted">収支</p><div className={s.profit>=0?'score good':'score bad'}>{s.profit}円</div></div></div></>}
