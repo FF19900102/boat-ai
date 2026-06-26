@@ -1,0 +1,6 @@
+'use client';
+import { BoatEntry } from '@/lib/types';
+export default function EntryEditor({entries,setEntries}:{entries:BoatEntry[];setEntries:(v:BoatEntry[])=>void}){
+ const update=(idx:number,key:keyof BoatEntry,value:string)=>{const next=[...entries]; const current:any={...next[idx]}; current[key]=['player','classRank'].includes(String(key))?value:Number(value); next[idx]=current; setEntries(next)};
+ return <div className="card"><h2 className="sectionTitle">出走表入力</h2><div className="tableWrap"><table><thead><tr>{['枠','選手','級','全国勝率','当地勝率','平均ST','モーター2連','ボート2連','展示','チルト','体重','進入'].map(h=><th key={h}>{h}</th>)}</tr></thead><tbody>{entries.map((e,i)=><tr key={e.frame}><td>{e.frame}</td><td><input value={e.player} onChange={ev=>update(i,'player',ev.target.value)}/></td><td><select value={e.classRank} onChange={ev=>update(i,'classRank',ev.target.value)}><option>A1</option><option>A2</option><option>B1</option><option>B2</option></select></td>{(['nationalWin','localWin','avgST','motorRate','boatRate','exhibition','tilt','weight','course'] as (keyof BoatEntry)[]).map(k=><td key={String(k)}><input type="number" step="0.01" value={e[k] as number} onChange={ev=>update(i,k,ev.target.value)}/></td>)}</tr>)}</tbody></table></div></div>
+}

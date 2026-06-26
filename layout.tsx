@@ -1,14 +1,8 @@
-import VenueCard from "@/components/VenueCard";
-import { venues } from "@/lib/mockData";
+# AI方針
 
-export default function VenuePage() {
-  return (
-    <main className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-black mb-2">開催場一覧</h1>
-      <p className="text-slate-500 mb-6">本日開催している場を選択してください。</p>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {venues.map((venue) => <VenueCard key={venue.id} venue={venue} />)}
-      </div>
-    </main>
-  );
-}
+Phase1は数式AI。
+Phase2以降でDBに全レース保存。
+Phase3でLightGBM / XGBoost / CatBoostを比較する。
+
+予想の主目的は的中率ではなく回収率。
+期待値が低いレースは見送りを推奨する。
