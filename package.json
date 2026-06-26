@@ -1,148 +1,52 @@
-"use client";
+import { Racer, Weather, Trifecta } from './types';
 
-import { useMemo, useState } from "react";
-import { defaultRacers, probabilities, summarize, trifectaTickets, venues, type Racer, type RaceResult } from "../lib/boat";
+function laneBonus(lane:number){ return ({1:1.25,2:1.03,3:1.00,4:.95,5:.88,6:.78} as Record<number,number>)[lane] ?? 1; }
+function clamp(n:number,min:number,max:number){ return Math.max(min,Math.min(max,n)); }
 
-const races = Array.from({ length: 12 }, (_, i) => i + 1);
-
-export default function Page() {
-  const [venue, setVenue] = useState(venues.find(v => v.id === "hamanako")?.id ?? venues[0].id);
-  const [raceNo, setRaceNo] = useState(1);
-  const [racers, setRacers] = useState<Racer[]>(defaultRacers);
-  const [oddsText, setOddsText] = useState("1-2-3 12.5\n1-3-2 15.8\n2-1-3 38.0");
-  const [results, setResults] = useState<RaceResult[]>([]);
-  const [order, setOrder] = useState("1-2-3");
-  const [payout, setPayout] = useState(0);
-  const [betAmount, setBetAmount] = useState(1000);
-
-  const oddsMap = useMemo(() => parseOdds(oddsText), [oddsText]);
-  const probs = useMemo(() => probabilities(racers), [racers]);
-  const tickets = useMemo(() => trifectaTickets(racers, oddsMap), [racers, oddsMap]);
-  const topTickets = tickets.slice(0, 15);
-  const stats = summarize(results);
-  const selectedVenue = venues.find(v => v.id === venue);
-
-  function updateRacer(index: number, key: keyof Racer, value: string) {
-    setRacers((prev) => prev.map((r, i) => {
-      if (i !== index) return r;
-      const numericKeys: Array<keyof Racer> = ["lane", "nationalRate", "localRate", "st", "motorRate", "boatRate", "exhibition", "tilt", "weight", "oddsWin"];
-      return { ...r, [key]: numericKeys.includes(key) ? Number(value) : value } as Racer;
-    }));
-  }
-
-  function addResult() {
-    const hit = topTickets.slice(0, 5).some(t => t.key === order);
-    const result: RaceResult = { order, payout: Number(payout), betAmount: Number(betAmount), hit, profit: Number(payout) - Number(betAmount) };
-    setResults([result, ...results]);
-  }
-
-  return (
-    <main className="wrap">
-      <div className="header">
-        <div>
-          <div className="brand">Boat AI</div>
-          <div className="sub">確率・期待値・結果検証で見る競艇AI</div>
-        </div>
-        <div className="small">Ver 0.2 / 手入力版・自動取得の土台</div>
-      </div>
-
-      <section className="card grid grid2" style={{ marginBottom: 14 }}>
-        <div>
-          <h2>本日開催場</h2>
-          <div className="grid grid4">
-            {venues.map(v => <button key={v.id} className={venue === v.id ? "btnOn" : "btn2"} onClick={() => setVenue(v.id)}>{v.name}{v.night ? " ナイター" : ""}</button>)}
-          </div>
-        </div>
-        <div>
-          <h2>レース選択</h2>
-          <div className="grid grid4">
-            {races.map(r => <button key={r} className={raceNo === r ? "btnOn" : "btn2"} onClick={() => setRaceNo(r)}>{r}R</button>)}
-          </div>
-          <p className="small">選択中：{selectedVenue?.name} {raceNo}R</p>
-        </div>
-      </section>
-
-      <section className="card" style={{ marginBottom: 14 }}>
-        <h2>出走表入力</h2>
-        <div style={{ overflowX: "auto" }}>
-          <table>
-            <thead><tr><th>枠</th><th>選手</th><th>級</th><th>全国</th><th>当地</th><th>ST</th><th>モーター</th><th>ボート</th><th>展示</th><th>チルト</th><th>体重</th></tr></thead>
-            <tbody>
-              {racers.map((r, i) => <tr key={r.lane}>
-                <td><span className={`lane l${r.lane}`}>{r.lane}</span></td>
-                <td><input value={r.name} onChange={e => updateRacer(i, "name", e.target.value)} /></td>
-                <td><input value={r.className} onChange={e => updateRacer(i, "className", e.target.value)} /></td>
-                <td><input value={r.nationalRate} type="number" step="0.01" onChange={e => updateRacer(i, "nationalRate", e.target.value)} /></td>
-                <td><input value={r.localRate} type="number" step="0.01" onChange={e => updateRacer(i, "localRate", e.target.value)} /></td>
-                <td><input value={r.st} type="number" step="0.01" onChange={e => updateRacer(i, "st", e.target.value)} /></td>
-                <td><input value={r.motorRate} type="number" step="0.1" onChange={e => updateRacer(i, "motorRate", e.target.value)} /></td>
-                <td><input value={r.boatRate} type="number" step="0.1" onChange={e => updateRacer(i, "boatRate", e.target.value)} /></td>
-                <td><input value={r.exhibition} type="number" step="0.01" onChange={e => updateRacer(i, "exhibition", e.target.value)} /></td>
-                <td><input value={r.tilt} type="number" step="0.5" onChange={e => updateRacer(i, "tilt", e.target.value)} /></td>
-                <td><input value={r.weight} type="number" step="0.1" onChange={e => updateRacer(i, "weight", e.target.value)} /></td>
-              </tr>)}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <div className="grid grid2" style={{ marginBottom: 14 }}>
-        <section className="card">
-          <h2>各艇の確率</h2>
-          <table>
-            <thead><tr><th>枠</th><th>選手</th><th>AIスコア</th><th>1着率</th><th>2着内</th><th>3着内</th></tr></thead>
-            <tbody>{probs.map(p => <tr key={p.lane}><td><span className={`lane l${p.lane}`}>{p.lane}</span></td><td>{p.name}</td><td>{p.score.toFixed(1)}</td><td>{pct(p.first)}</td><td>{pct(p.top2)}</td><td>{pct(p.top3)}</td></tr>)}</tbody>
-          </table>
-        </section>
-        <section className="card">
-          <h2>3連単オッズ入力</h2>
-          <p className="small">形式：1-2-3 12.5 のように1行ずつ。未入力は推定オッズ。</p>
-          <textarea value={oddsText} onChange={e => setOddsText(e.target.value)} style={{ width: "100%", minHeight: 180, border: "1px solid #e5e7eb", borderRadius: 12, padding: 12 }} />
-        </section>
-      </div>
-
-      <section className="card" style={{ marginBottom: 14 }}>
-        <h2>期待値ランキング</h2>
-        <table>
-          <thead><tr><th>順位</th><th>買い目</th><th>的中確率</th><th>オッズ</th><th>期待値</th><th>判定</th></tr></thead>
-          <tbody>{topTickets.map((t, i) => <tr key={t.key}><td>{i+1}</td><td><b>{t.key}</b></td><td>{pct(t.probability)}</td><td>{t.odds.toFixed(1)}</td><td>{t.ev.toFixed(1)}</td><td><span className={`pill ${t.rank === "買い候補" ? "good" : t.rank === "注意" ? "warn" : "bad"}`}>{t.rank}</span></td></tr>)}</tbody>
-        </table>
-      </section>
-
-      <div className="grid grid2">
-        <section className="card">
-          <h2>結果入力</h2>
-          <div className="grid grid3">
-            <div><label>確定3連単</label><input value={order} onChange={e => setOrder(e.target.value)} /></div>
-            <div><label>払戻金</label><input type="number" value={payout} onChange={e => setPayout(Number(e.target.value))} /></div>
-            <div><label>投資額</label><input type="number" value={betAmount} onChange={e => setBetAmount(Number(e.target.value))} /></div>
-          </div>
-          <br />
-          <button onClick={addResult}>結果を保存</button>
-        </section>
-        <section className="card">
-          <h2>成績</h2>
-          <div className="grid grid3">
-            <Stat label="レース数" value={`${stats.races}`} />
-            <Stat label="的中率" value={pct(stats.hitRate)} />
-            <Stat label="回収率" value={pct(stats.returnRate)} />
-            <Stat label="投資" value={`${stats.bet.toLocaleString()}円`} />
-            <Stat label="払戻" value={`${stats.payout.toLocaleString()}円`} />
-            <Stat label="収支" value={`${stats.profit.toLocaleString()}円`} />
-          </div>
-        </section>
-      </div>
-    </main>
-  );
+export function boatScore(r:Racer,w:Weather){
+  const win = r.nationalWin*8 + r.localWin*5;
+  const motor = r.motorRate*.55 + r.boatRate*.25;
+  const st = (0.25 - clamp(r.st,0.05,0.25))*120;
+  const ex = (6.9 - clamp(r.exhibition,6.45,6.9))*75;
+  const weight = (55 - clamp(r.weight,47,60))*0.5;
+  const windPenalty = w.windSpeed >= 5 && r.lane === 1 ? -8 : 0;
+  const roughBonus = w.wave >= 5 && r.lane >= 4 ? 3 : 0;
+  return Math.max(1,(win+motor+st+ex+weight+windPenalty+roughBonus)*laneBonus(r.lane));
 }
 
-function parseOdds(text: string) {
-  const map: Record<string, number> = {};
-  text.split(/\n/).forEach(line => {
-    const m = line.trim().match(/^(\d-\d-\d)\s+([0-9.]+)/);
-    if (m) map[m[1]] = Number(m[2]);
-  });
-  return map;
+export function firstProbabilities(racers:Racer[], weather:Weather){
+  const scores = racers.map(r=>boatScore(r,weather));
+  const total = scores.reduce((a,b)=>a+b,0);
+  return racers.map((r,i)=>({ lane:r.lane, score:scores[i], p1:scores[i]/total }));
 }
-function pct(n: number) { return `${(n * 100).toFixed(1)}%`; }
-function Stat({ label, value }: { label: string; value: string }) { return <div className="card" style={{ padding: 12 }}><div className="small">{label}</div><b>{value}</b></div>; }
+
+export function placeProbabilities(racers:Racer[], weather:Weather){
+  const p1 = firstProbabilities(racers,weather);
+  return p1.map(x=>({ lane:x.lane, score:x.score, p1:x.p1, p2:Math.min(.92,x.p1*1.85+.08), p3:Math.min(.98,x.p1*2.55+.16) }));
+}
+
+export function trifectaProbability(order:number[], racers:Racer[], weather:Weather){
+  const scores = racers.map(r=>({lane:r.lane, s:boatScore(r,weather)}));
+  const s1 = scores.find(x=>x.lane===order[0])!.s;
+  const t1 = scores.reduce((a,b)=>a+b.s,0);
+  const rem2 = scores.filter(x=>x.lane!==order[0]);
+  const s2 = rem2.find(x=>x.lane===order[1])!.s;
+  const t2 = rem2.reduce((a,b)=>a+b.s,0);
+  const rem3 = rem2.filter(x=>x.lane!==order[1]);
+  const s3 = rem3.find(x=>x.lane===order[2])!.s;
+  const t3 = rem3.reduce((a,b)=>a+b.s,0);
+  return (s1/t1)*(s2/t2)*(s3/t3);
+}
+
+export function generateTrifectas(racers:Racer[], weather:Weather, oddsMap:Record<string,number> = {}): Trifecta[]{
+  const out:Trifecta[]=[];
+  for(const a of racers){for(const b of racers){for(const c of racers){
+    if(a.lane===b.lane||a.lane===c.lane||b.lane===c.lane) continue;
+    const lanes=[a.lane,b.lane,c.lane]; const key=lanes.join('-');
+    const probability=trifectaProbability(lanes,racers,weather);
+    const odds=oddsMap[key] || Number((1/Math.max(probability,.001)*0.72).toFixed(1));
+    const ev=probability*odds*100;
+    out.push({key,lanes,probability,odds,ev,label:ev>=120?'買い候補':ev>=100?'注意':'見送り'});
+  }}}
+  return out.sort((a,b)=>b.ev-a.ev);
+}
