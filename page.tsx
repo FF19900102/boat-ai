@@ -1,9 +1,8 @@
-import type { Metadata } from 'next';
 import './globals.css';
 
-export const metadata: Metadata = {
+export const metadata = {
   title: 'Boat AI',
-  description: '競艇AI分析アプリ'
+  description: '競艇AI 確率・期待値分析アプリ'
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

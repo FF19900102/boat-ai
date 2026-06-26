@@ -1,26 +1,192 @@
 'use client';
 
-type Props = {
-  source: string;
-  updatedAt: string;
-  loading: boolean;
-  onReload: () => void;
-  onFetchResult: () => void;
+import { useMemo, useState, useEffect } from 'react';
+import { Boat, Weather, defaultBoats, generateTickets, makePredictions, ticketHit } from '../lib/boatAi';
+
+const venues = ['桐生','戸田','江戸川','平和島','多摩川','浜名湖','蒲郡','常滑','津','三国','びわこ','住之江','尼崎','鳴門','丸亀','児島','宮島','徳山','下関','若松','芦屋','福岡','唐津','大村'];
+const races = Array.from({ length: 12 }, (_, i) => `${i + 1}R`);
+
+type SavedRace = {
+  id: string; date: string; venue: string; race: string; result: string; investment: number; payout: number; hit: boolean; profit: number;
 };
 
-export function AutoSyncPanel({ source, updatedAt, loading, onReload, onFetchResult }: Props) {
+export default function Page() {
+  const today = new Date().toISOString().slice(0,10);
+  const [date, setDate] = useState(today);
+  const [venue, setVenue] = useState('浜名湖');
+  const [race, setRace] = useState('1R');
+  const [boats, setBoats] = useState<Boat[]>(defaultBoats());
+  const [weather, setWeather] = useState<Weather>({ weather: '晴', windDir: '向かい風', wind: 2, wave: 2 });
+  const [oddsText, setOddsText] = useState('1-2-3 12.5\n1-3-2 15.8\n1-2-4 18.2\n1-4-2 25.0\n3-1-2 42.0');
+  const [buyKey, setBuyKey] = useState('1-3-2');
+  const [buyAmount, setBuyAmount] = useState(1000);
+  const [result, setResult] = useState('1-3-2');
+  const [payout, setPayout] = useState(15800);
+  const [saved, setSaved] = useState<SavedRace[]>([]);
+
+  useEffect(() => {
+    const raw = localStorage.getItem('boat-ai-results');
+    if (raw) setSaved(JSON.parse(raw));
+  }, []);
+
+  const oddsMap = useMemo(() => {
+    const map: Record<string, number> = {};
+    oddsText.split('\n').forEach((line) => {
+      const [key, val] = line.trim().split(/\s+/);
+      if (key && val) map[key] = Number(val);
+    });
+    return map;
+  }, [oddsText]);
+
+  const predictions = useMemo(() => makePredictions(boats, weather), [boats, weather]);
+  const tickets = useMemo(() => generateTickets(predictions, oddsMap), [predictions, oddsMap]);
+  const topTickets = tickets.slice(0, 20);
+  const best = topTickets[0];
+  const buyHit = ticketHit(buyKey, result);
+  const profit = buyHit ? payout - buyAmount : -buyAmount;
+  const totalInvestment = saved.reduce((s,r) => s + r.investment, 0);
+  const totalPayout = saved.reduce((s,r) => s + r.payout, 0);
+  const totalProfit = saved.reduce((s,r) => s + r.profit, 0);
+  const hitRate = saved.length ? Math.round(saved.filter(r => r.hit).length / saved.length * 100) : 0;
+  const recovery = totalInvestment ? Math.round(totalPayout / totalInvestment * 100) : 0;
+
+  function updateBoat(index: number, key: keyof Boat, value: string) {
+    setBoats((prev) => prev.map((b, i) => i === index ? { ...b, [key]: key === 'name' || key === 'className' ? value : Number(value) } : b));
+  }
+
+  function saveResult() {
+    const item: SavedRace = { id: `${Date.now()}`, date, venue, race, result, investment: buyAmount, payout: buyHit ? payout : 0, hit: buyHit, profit };
+    const next = [item, ...saved];
+    setSaved(next);
+    localStorage.setItem('boat-ai-results', JSON.stringify(next));
+  }
+
+  function clearResults() {
+    if (!confirm('成績を削除しますか？')) return;
+    setSaved([]); localStorage.removeItem('boat-ai-results');
+  }
+
   return (
-    <section className="card sync-card">
-      <div>
-        <h2>データ取得</h2>
-        <p className="small">今はモックAPI。ここを公式サイト取得・有料API・DBへ差し替えます。</p>
-        <p className="small">source: {source || '未取得'}</p>
-        <p className="small">updated: {updatedAt ? new Date(updatedAt).toLocaleString('ja-JP') : '--'}</p>
+    <main className="wrap">
+      <div className="hero">
+        <div>
+          <div className="title">Boat AI</div>
+          <div className="sub">確率・期待値・結果検証で競艇を分析</div>
+        </div>
+        <div className="tabs">
+          <span className="pill">Ver 0.12</span>
+          <span className="pill">localStorage保存</span>
+          <span className="pill">AI計算エンジン内蔵</span>
+        </div>
       </div>
-      <div className="sync-actions">
-        <button className="btn" onClick={onReload} disabled={loading}>{loading ? '取得中...' : '出走表を取得'}</button>
-        <button className="btn secondary" onClick={onFetchResult} disabled={loading}>結果速報を確認</button>
+
+      <div className="grid grid3">
+        <div className="card">
+          <h2 className="sectionTitle">1. レース選択</h2>
+          <div className="grid grid2">
+            <div><label>日付</label><input type="date" value={date} onChange={e=>setDate(e.target.value)} /></div>
+            <div><label>レース</label><select value={race} onChange={e=>setRace(e.target.value)}>{races.map(r=><option key={r}>{r}</option>)}</select></div>
+          </div>
+          <div style={{height:10}} />
+          <label>本日開催場</label>
+          <div className="grid grid2">
+            {venues.map(v => <button key={v} className={`venue ${venue===v?'active':''}`} onClick={()=>setVenue(v)}><b>{v}</b><span className="muted">12R</span></button>)}
+          </div>
+        </div>
+
+        <div className="card">
+          <h2 className="sectionTitle">2. 気象・水面</h2>
+          <div className="grid grid2">
+            <div><label>天候</label><select value={weather.weather} onChange={e=>setWeather({...weather, weather:e.target.value})}><option>晴</option><option>曇</option><option>雨</option></select></div>
+            <div><label>風向</label><select value={weather.windDir} onChange={e=>setWeather({...weather, windDir:e.target.value})}><option>向かい風</option><option>追い風</option><option>右横風</option><option>左横風</option></select></div>
+            <div><label>風速 m</label><input type="number" value={weather.wind} onChange={e=>setWeather({...weather, wind:Number(e.target.value)})} /></div>
+            <div><label>波高 cm</label><input type="number" value={weather.wave} onChange={e=>setWeather({...weather, wave:Number(e.target.value)})} /></div>
+          </div>
+        </div>
+
+        <div className="card">
+          <h2 className="sectionTitle">3. 成績</h2>
+          <div className="summary">
+            <div className="metric"><div className="muted small">レース数</div><div className="v num">{saved.length}</div></div>
+            <div className="metric"><div className="muted small">的中率</div><div className="v num">{hitRate}%</div></div>
+            <div className="metric"><div className="muted small">回収率</div><div className="v num">{recovery}%</div></div>
+            <div className="metric"><div className="muted small">投資</div><div className="v num">{totalInvestment.toLocaleString()}</div></div>
+            <div className="metric"><div className="muted small">収支</div><div className={`v num ${totalProfit>=0?'good':'bad'}`}>{totalProfit.toLocaleString()}</div></div>
+          </div>
+          <div style={{height:10}} />
+          <button className="btn btnDanger" onClick={clearResults}>成績削除</button>
+        </div>
       </div>
-    </section>
+
+      <div style={{height:14}} />
+      <div className="card">
+        <h2 className="sectionTitle">4. 出走表入力</h2>
+        <div className="tableWrap"><table><thead><tr><th>艇</th><th>選手</th><th>級</th><th>全国</th><th>当地</th><th>ST</th><th>モーター</th><th>ボート</th><th>展示</th><th>チルト</th><th>体重</th><th>進入</th></tr></thead><tbody>
+          {boats.map((b, i) => <tr key={b.frame}>
+            <td><span className={`boatBadge b${b.frame}`}>{b.frame}</span></td>
+            <td><input value={b.name} onChange={e=>updateBoat(i,'name',e.target.value)} /></td>
+            <td><select value={b.className} onChange={e=>updateBoat(i,'className',e.target.value)}><option>A1</option><option>A2</option><option>B1</option><option>B2</option></select></td>
+            <td><input type="number" step="0.01" value={b.nationalWin} onChange={e=>updateBoat(i,'nationalWin',e.target.value)} /></td>
+            <td><input type="number" step="0.01" value={b.localWin} onChange={e=>updateBoat(i,'localWin',e.target.value)} /></td>
+            <td><input type="number" step="0.01" value={b.st} onChange={e=>updateBoat(i,'st',e.target.value)} /></td>
+            <td><input type="number" step="0.1" value={b.motorRate} onChange={e=>updateBoat(i,'motorRate',e.target.value)} /></td>
+            <td><input type="number" step="0.1" value={b.boatRate} onChange={e=>updateBoat(i,'boatRate',e.target.value)} /></td>
+            <td><input type="number" step="0.01" value={b.exhibition} onChange={e=>updateBoat(i,'exhibition',e.target.value)} /></td>
+            <td><input type="number" step="0.5" value={b.tilt} onChange={e=>updateBoat(i,'tilt',e.target.value)} /></td>
+            <td><input type="number" step="0.1" value={b.weight} onChange={e=>updateBoat(i,'weight',e.target.value)} /></td>
+            <td><input type="number" value={b.entry} onChange={e=>updateBoat(i,'entry',e.target.value)} /></td>
+          </tr>)}
+        </tbody></table></div>
+      </div>
+
+      <div style={{height:14}} />
+      <div className="grid grid2">
+        <div className="card">
+          <h2 className="sectionTitle">5. AI確率</h2>
+          <div className="tableWrap"><table><thead><tr><th>順位</th><th>艇</th><th>選手</th><th>AIスコア</th><th>1着率</th><th>2連対</th><th>3連対</th></tr></thead><tbody>
+            {predictions.map((p, i) => <tr key={p.frame}><td className={i===0?'rank1':''}>{i+1}</td><td><span className={`boatBadge b${p.frame}`}>{p.frame}</span></td><td>{p.name}</td><td className="num">{p.score.toFixed(1)}</td><td className="num good">{(p.first*100).toFixed(1)}%</td><td className="num">{(p.top2*100).toFixed(1)}%</td><td className="num">{(p.top3*100).toFixed(1)}%</td></tr>)}
+          </tbody></table></div>
+        </div>
+        <div className="card">
+          <h2 className="sectionTitle">6. オッズ入力</h2>
+          <div className="muted small">形式：買い目 オッズ　例：1-2-3 12.5</div>
+          <textarea style={{width:'100%',height:235,marginTop:8,background:'#081525',color:'var(--text)',border:'1px solid var(--line)',borderRadius:12,padding:12}} value={oddsText} onChange={e=>setOddsText(e.target.value)} />
+        </div>
+      </div>
+
+      <div style={{height:14}} />
+      <div className="card">
+        <h2 className="sectionTitle">7. 3連単 期待値ランキング</h2>
+        {best && <div className="pill" style={{marginBottom:10}}>最高候補：{best.key} / EV {best.ev.toFixed(0)} / {best.judge}</div>}
+        <div className="tableWrap"><table><thead><tr><th>順位</th><th>買い目</th><th>的中確率</th><th>オッズ</th><th>期待値</th><th>判定</th></tr></thead><tbody>
+          {topTickets.map((t,i) => <tr key={t.key}><td>{i+1}</td><td><b>{t.key}</b></td><td className="num">{(t.probability*100).toFixed(2)}%</td><td className="num">{t.odds || '-'}</td><td className={`num ${t.ev>=120?'good':t.ev>=100?'warn':'bad'}`}>{t.ev ? t.ev.toFixed(0) : '-'}</td><td>{t.judge}</td></tr>)}
+        </tbody></table></div>
+      </div>
+
+      <div style={{height:14}} />
+      <div className="grid grid2">
+        <div className="card">
+          <h2 className="sectionTitle">8. 結果入力</h2>
+          <div className="grid grid2">
+            <div><label>購入買い目</label><input value={buyKey} onChange={e=>setBuyKey(e.target.value)} /></div>
+            <div><label>投資額</label><input type="number" value={buyAmount} onChange={e=>setBuyAmount(Number(e.target.value))} /></div>
+            <div><label>確定結果</label><input value={result} onChange={e=>setResult(e.target.value)} /></div>
+            <div><label>払戻金</label><input type="number" value={payout} onChange={e=>setPayout(Number(e.target.value))} /></div>
+          </div>
+          <div style={{height:12}} />
+          <div className={`pill ${buyHit?'good':'bad'}`}>{buyHit ? '的中' : '不的中'} / 収支 {profit.toLocaleString()}円</div>
+          <div style={{height:12}} />
+          <button className="btn btnPrimary" onClick={saveResult}>この結果を保存</button>
+        </div>
+        <div className="card">
+          <h2 className="sectionTitle">9. 保存履歴</h2>
+          <div className="tableWrap"><table><thead><tr><th>日付</th><th>場</th><th>R</th><th>結果</th><th>判定</th><th>収支</th></tr></thead><tbody>
+            {saved.slice(0,10).map(r => <tr key={r.id}><td>{r.date}</td><td>{r.venue}</td><td>{r.race}</td><td>{r.result}</td><td className={r.hit?'good':'bad'}>{r.hit?'的中':'不的中'}</td><td className={`num ${r.profit>=0?'good':'bad'}`}>{r.profit.toLocaleString()}</td></tr>)}
+            {saved.length === 0 && <tr><td colSpan={6} className="muted">まだ保存履歴がありません</td></tr>}
+          </tbody></table></div>
+        </div>
+      </div>
+      <div className="footer">次追加予定：公式データ取得API接続、結果速報、AI別リーグ戦、DB保存。</div>
+    </main>
   );
 }

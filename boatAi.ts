@@ -1,29 +1,4 @@
-'use client';
-import { Boat } from '../lib/types';
-
-export default function BoatTable({boats,setBoats}:{boats:Boat[];setBoats:(b:Boat[])=>void}){
-  const update=(i:number,key:keyof Boat,value:string)=>{
-    const next=[...boats];
-    (next[i] as any)[key]=['name','className'].includes(key as string)?value:Number(value);
-    setBoats(next);
-  };
-  return <div className="card" style={{overflowX:'auto'}}>
-    <div className="row" style={{justifyContent:'space-between',marginBottom:10}}>
-      <h2 style={{margin:0}}>出走表入力</h2><span className="small">今は手入力。後で自動取得に差し替え</span>
-    </div>
-    <table className="table"><thead><tr><th>枠</th><th>選手</th><th>級</th><th>全国</th><th>当地</th><th>ST</th><th>モーター</th><th>ボート</th><th>展示</th><th>チルト</th><th>体重</th></tr></thead>
-    <tbody>{boats.map((b,i)=><tr key={b.frame}>
-      <td>{b.frame}</td>
-      <td><input className="input" value={b.name} onChange={e=>update(i,'name',e.target.value)}/></td>
-      <td><input className="input" value={b.className} onChange={e=>update(i,'className',e.target.value)}/></td>
-      <td><input className="input" type="number" step="0.01" value={b.nationalRate} onChange={e=>update(i,'nationalRate',e.target.value)}/></td>
-      <td><input className="input" type="number" step="0.01" value={b.localRate} onChange={e=>update(i,'localRate',e.target.value)}/></td>
-      <td><input className="input" type="number" step="0.01" value={b.avgST} onChange={e=>update(i,'avgST',e.target.value)}/></td>
-      <td><input className="input" type="number" step="0.1" value={b.motorRate} onChange={e=>update(i,'motorRate',e.target.value)}/></td>
-      <td><input className="input" type="number" step="0.1" value={b.boatRate} onChange={e=>update(i,'boatRate',e.target.value)}/></td>
-      <td><input className="input" type="number" step="0.01" value={b.exhibition} onChange={e=>update(i,'exhibition',e.target.value)}/></td>
-      <td><input className="input" type="number" step="0.5" value={b.tilt} onChange={e=>update(i,'tilt',e.target.value)}/></td>
-      <td><input className="input" type="number" step="0.1" value={b.weight} onChange={e=>update(i,'weight',e.target.value)}/></td>
-    </tr>)}</tbody></table>
-  </div>
+:root{
+  --bg:#07111f;--panel:#0d1b2e;--panel2:#13243a;--line:#24364f;--text:#eef5ff;--muted:#91a3bc;--accent:#37d399;--bad:#ff6b6b;--warn:#ffd166;--blue:#5ab0ff;
 }
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#06101d,#091827 55%,#07111f);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}.wrap{max-width:1280px;margin:0 auto;padding:22px}.hero{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:18px}.title{font-size:34px;font-weight:900;letter-spacing:.02em}.sub{color:var(--muted);margin-top:6px}.grid{display:grid;gap:14px}.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid4{grid-template-columns:repeat(4,minmax(0,1fr))}.card{background:rgba(13,27,46,.92);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 12px 30px rgba(0,0,0,.18)}.sectionTitle{font-size:18px;font-weight:800;margin:0 0 12px}.btn{border:1px solid var(--line);background:#142740;color:var(--text);padding:11px 14px;border-radius:12px;font-weight:800;cursor:pointer}.btn:hover{border-color:var(--blue)}.btnPrimary{background:linear-gradient(135deg,#17b978,#37d399);color:#052013;border:none}.btnDanger{background:#402026;border-color:#72313c}.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#0b1728;border-radius:999px;padding:6px 10px;color:var(--muted);font-size:13px}.tabs{display:flex;gap:8px;flex-wrap:wrap}.tab{padding:10px 13px;border-radius:999px;border:1px solid var(--line);background:#0b1728;color:var(--muted);font-weight:800;cursor:pointer}.tab.active{background:var(--accent);color:#041911;border-color:var(--accent)}input,select{width:100%;padding:10px 9px;background:#081525;color:var(--text);border:1px solid var(--line);border-radius:10px}label{font-size:12px;color:var(--muted);display:block;margin-bottom:5px}.tableWrap{overflow:auto;border:1px solid var(--line);border-radius:14px}table{width:100%;border-collapse:collapse;min-width:760px}th,td{border-bottom:1px solid var(--line);padding:10px;text-align:left;white-space:nowrap}th{color:var(--muted);font-size:12px;background:#0a1728}td{font-size:14px}.rank1{color:var(--accent);font-weight:900}.good{color:var(--accent);font-weight:900}.warn{color:var(--warn);font-weight:900}.bad{color:var(--bad);font-weight:900}.muted{color:var(--muted)}.num{font-variant-numeric:tabular-nums}.venue{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:13px;border:1px solid var(--line);background:#0a1728;border-radius:14px;cursor:pointer}.venue.active{border-color:var(--accent);background:#102b27}.boatBadge{display:inline-flex;width:28px;height:28px;border-radius:8px;align-items:center;justify-content:center;font-weight:900;border:1px solid rgba(255,255,255,.25)}.b1{background:#fff;color:#111}.b2{background:#111;color:#fff}.b3{background:#d3212d;color:#fff}.b4{background:#2767d8;color:#fff}.b5{background:#ffd43b;color:#111}.b6{background:#229954;color:#fff}.summary{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.metric{background:#081525;border:1px solid var(--line);border-radius:14px;padding:12px}.metric .v{font-size:22px;font-weight:900;margin-top:4px}.small{font-size:12px}.footer{color:var(--muted);font-size:12px;margin-top:18px}@media(max-width:900px){.grid2,.grid3,.grid4{grid-template-columns:1fr}.summary{grid-template-columns:repeat(2,1fr)}.hero{display:block}.title{font-size:28px}}
