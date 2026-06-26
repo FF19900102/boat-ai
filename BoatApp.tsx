@@ -1,5 +1,2 @@
 import BoatApp from '../components/BoatApp';
-
-export default function Page() {
-  return <BoatApp />;
-}
+export default function Page(){return <BoatApp/>}
