@@ -1,7 +1,7 @@
-# Boat AI Step 24
+# Boat AI Step 25
 
 追加内容
-- Prisma導入メモ
-- GitHub Actions雛形
-- デプロイ手順
-- 今後のAI学習ロードマップ
+- AI学習ロードマップ
+- モデル評価指標
+- データ収集項目一覧
+- API接続タスクリスト
