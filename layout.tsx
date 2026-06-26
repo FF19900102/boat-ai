@@ -1,1 +1,14 @@
-:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#667085;--line:#e6e9f0;--accent:#0d6efd;--good:#0a8f4a;--warn:#c47b00;--bad:#c62828}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,'Hiragino Sans','Yu Gothic',sans-serif}.wrap{max-width:1180px;margin:0 auto;padding:20px}.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.brand{font-size:28px;font-weight:800}.sub{color:var(--muted);font-size:13px}.grid{display:grid;gap:14px}.cols2{grid-template-columns:1fr 1fr}.cols3{grid-template-columns:repeat(3,1fr)}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 8px 22px rgba(16,24,40,.06)}.section-title{font-size:18px;font-weight:800;margin:0 0 12px}.btn{border:0;border-radius:12px;padding:11px 14px;font-weight:800;cursor:pointer;background:#eef4ff;color:#114a9b}.btn.primary{background:var(--accent);color:#fff}.btn.good{background:#e9f8f0;color:var(--good)}.btn.warn{background:#fff6e5;color:var(--warn)}.btn.small{padding:7px 9px;font-size:12px}.btn.active{outline:3px solid #a8c7ff;background:#dbeafe}.venue-list,.race-list{display:flex;flex-wrap:wrap;gap:8px}table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px solid var(--line);padding:8px;text-align:left}th{color:var(--muted);font-weight:700;background:#fafbff}input,select{width:100%;padding:8px;border:1px solid var(--line);border-radius:10px;background:#fff}.num{text-align:right}.rank1{font-weight:800;color:var(--accent)}.pill{display:inline-block;border-radius:999px;padding:4px 8px;font-size:12px;font-weight:800}.pill.good{background:#e9f8f0;color:var(--good)}.pill.warn{background:#fff6e5;color:var(--warn)}.pill.bad{background:#ffecec;color:var(--bad)}.stat{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:8px 0}.big{font-size:26px;font-weight:900}.footer{margin-top:18px;color:var(--muted);font-size:12px}@media(max-width:800px){.cols2,.cols3{grid-template-columns:1fr}.wrap{padding:12px}table{font-size:12px}.hide-sm{display:none}}
+import VenueCard from "@/components/VenueCard";
+import { venues } from "@/lib/mockData";
+
+export default function VenuePage() {
+  return (
+    <main className="max-w-6xl mx-auto px-4 py-8">
+      <h1 className="text-3xl font-black mb-2">開催場一覧</h1>
+      <p className="text-slate-500 mb-6">本日開催している場を選択してください。</p>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {venues.map((venue) => <VenueCard key={venue.id} venue={venue} />)}
+      </div>
+    </main>
+  );
+}
