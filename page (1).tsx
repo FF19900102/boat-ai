@@ -1,1 +1,15 @@
-:root{--bg:#0b1020;--panel:#11182c;--panel2:#18213b;--text:#eef3ff;--muted:#94a3b8;--line:#26344f;--accent:#38bdf8;--good:#22c55e;--warn:#f59e0b;--bad:#ef4444}*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#071022,#0b1020 40%,#090d18);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}.wrap{max-width:1280px;margin:0 auto;padding:24px}.header{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:18px}.brand{font-size:28px;font-weight:900;letter-spacing:.02em}.sub{color:var(--muted);font-size:13px}.grid{display:grid;gap:14px}.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid4{grid-template-columns:repeat(4,minmax(0,1fr))}.card{background:rgba(17,24,44,.92);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 12px 35px rgba(0,0,0,.25)}button,.btn{background:#1f2a44;color:var(--text);border:1px solid #33415e;border-radius:12px;padding:10px 14px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-weight:700}button:hover,.btn:hover{border-color:var(--accent)}.primary{background:linear-gradient(90deg,#0284c7,#2563eb);border-color:#38bdf8}.venue{min-height:96px;text-align:left}.venueName{font-size:20px;font-weight:800}.tag{font-size:12px;padding:3px 8px;border-radius:999px;background:#172554;border:1px solid #1d4ed8;color:#bfdbfe}.muted{color:var(--muted)}.tableWrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:760px}th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}th{color:#cbd5e1;background:rgba(255,255,255,.03)}input,select{width:100%;background:#0b1224;border:1px solid #33415e;color:var(--text);border-radius:10px;padding:9px}input:focus,select:focus{outline:1px solid var(--accent)}.rank1{color:#fbbf24;font-weight:900}.good{color:var(--good);font-weight:800}.warn{color:var(--warn);font-weight:800}.bad{color:var(--bad);font-weight:800}.pill{padding:4px 8px;border-radius:999px;background:#0f172a;border:1px solid #334155;font-size:12px}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.kpi{font-size:28px;font-weight:900}.small{font-size:12px}.sectionTitle{font-size:18px;font-weight:900;margin:0 0 12px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.tabActive{background:#0ea5e9;color:white}.notice{border-left:4px solid var(--accent);background:#082f49;padding:12px;border-radius:12px}.dangerNotice{border-left:4px solid var(--bad);background:#3b1111;padding:12px;border-radius:12px}@media(max-width:850px){.grid2,.grid3,.grid4{grid-template-columns:1fr}.wrap{padding:14px}.header{align-items:flex-start;flex-direction:column}table{min-width:980px}}
+import './globals.css';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Boat AI',
+  description: '競艇AI分析アプリ'
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="ja">
+      <body>{children}</body>
+    </html>
+  );
+}
