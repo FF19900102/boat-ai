@@ -1,11 +1,16 @@
 'use client';
 
-export function RaceSelector({ selected, onSelect }: { selected: number; onSelect: (raceNo: number) => void }) {
+export function RaceSelector({ raceNo, onSelect }: { raceNo: number; onSelect: (raceNo: number) => void }) {
   return (
-    <div className="grid race-grid">
-      {Array.from({ length: 12 }, (_, i) => i + 1).map((r) => (
-        <button key={r} className={`btn secondary ${selected === r ? 'active' : ''}`} onClick={() => onSelect(r)}>{r}R</button>
-      ))}
-    </div>
+    <section className="card">
+      <h2>レース選択</h2>
+      <div className="grid grid-3">
+        {Array.from({ length: 12 }, (_, i) => i + 1).map((no) => (
+          <button key={no} className={`race-button ${raceNo === no ? 'active' : ''}`} onClick={() => onSelect(no)}>
+            {no}R
+          </button>
+        ))}
+      </div>
+    </section>
   );
 }

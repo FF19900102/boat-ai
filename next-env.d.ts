@@ -1,76 +1,71 @@
-export type Racer = {
-  lane: number;
-  name: string;
-  className: string;
-  nationalWin: number;
-  localWin: number;
-  avgSt: number;
-  motorRate: number;
-  boatRate: number;
-  exhibition: number;
-  tilt: number;
-  weight: number;
-};
+import type { Racer, RaceWeather, Ticket } from './types';
 
-export type Weather = { weather: string; windDir: string; windSpeed: number; wave: number };
-export type Prediction = Racer & { score: number; p1: number; p2: number; p3: number };
-export type Ticket = { combo: string; probability: number; odds: number; ev: number; rank: '買い候補' | '注意' | '買わない' };
-export type ResultRecord = { id: string; date: string; venue: string; raceNo: number; result: string; investment: number; payout: number; profit: number; hit: boolean };
+const laneBias: Record<number, number> = { 1: 1.22, 2: 1.03, 3: 1.0, 4: 0.94, 5: 0.86, 6: 0.74 };
+const classBias: Record<string, number> = { A1: 1.12, A2: 1.03, B1: 0.92, B2: 0.84 };
 
-export const venues = ['桐生','戸田','江戸川','平和島','多摩川','浜名湖','蒲郡','常滑','津','三国','びわこ','住之江','尼崎','鳴門','丸亀','児島','宮島','徳山','下関','若松','芦屋','福岡','唐津','大村'];
+export function racerScore(racer: Racer, weather: RaceWeather): number {
+  const startScore = Math.max(0, (0.24 - racer.avgStart) * 180);
+  const exhibitionScore = Math.max(0, (6.95 - racer.exhibitionTime) * 45);
+  const windPenalty = weather.windSpeed >= 5 && racer.lane === 1 ? -5 : 0;
+  const wavePenalty = weather.waveHeight >= 5 && racer.lane >= 5 ? -3 : 0;
 
-export const createDefaultRacers = (): Racer[] => Array.from({ length: 6 }, (_, i) => ({
-  lane: i + 1,
-  name: `${i + 1}号艇`,
-  className: 'A1',
-  nationalWin: [6.5,5.8,5.5,5.1,4.8,4.5][i],
-  localWin: [6.2,5.6,5.2,5.0,4.7,4.3][i],
-  avgSt: [0.14,0.16,0.15,0.17,0.18,0.19][i],
-  motorRate: [38,34,36,31,29,27][i],
-  boatRate: [35,33,32,30,28,26][i],
-  exhibition: [6.72,6.76,6.74,6.79,6.81,6.83][i],
-  tilt: 0,
-  weight: [52,53,52,54,53,52][i]
-}));
+  const raw =
+    racer.nationalWinRate * 9 +
+    racer.localWinRate * 5 +
+    racer.motorRate * 0.45 +
+    racer.boatRate * 0.25 +
+    startScore +
+    exhibitionScore +
+    windPenalty +
+    wavePenalty;
 
-const laneBonus = [18, 8, 4, 0, -4, -8];
-
-export function predict(racers: Racer[], weather: Weather): Prediction[] {
-  const minEx = Math.min(...racers.map(r => safe(r.exhibition, 6.8)));
-  const windPenalty = Math.max(0, safe(weather.windSpeed, 0) - 4);
-  const raw = racers.map(r => {
-    const stScore = Math.max(0, (0.25 - safe(r.avgSt, 0.18)) * 120);
-    const exScore = Math.max(0, (safe(r.exhibition, 6.9) - minEx) * -45 + 10);
-    const score =
-      safe(r.nationalWin, 0) * 9 +
-      safe(r.localWin, 0) * 5 +
-      safe(r.motorRate, 0) * 0.55 +
-      safe(r.boatRate, 0) * 0.25 +
-      stScore + exScore + laneBonus[r.lane - 1] -
-      (r.lane === 1 ? windPenalty * 1.2 : 0) +
-      (r.lane >= 4 && windPenalty > 4 ? 2 : 0);
-    return { ...r, score: Math.max(1, score) };
-  });
-  const sum = raw.reduce((a, b) => a + b.score, 0);
-  return raw.map(r => {
-    const p1 = r.score / sum;
-    return { ...r, p1, p2: Math.min(.95, p1 * 1.65), p3: Math.min(.98, p1 * 2.25) };
-  }).sort((a,b)=>b.p1-a.p1);
+  return Math.max(1, raw * (laneBias[racer.lane] || 1) * (classBias[racer.className] || 1));
 }
 
-export function trifectaTickets(pred: Prediction[], oddsMap: Record<string, number>): Ticket[] {
-  const byLane = [...pred].sort((a,b)=>a.lane-b.lane);
+export function winProbabilities(racers: Racer[], weather: RaceWeather) {
+  const scores = racers.map((r) => ({ lane: r.lane, score: racerScore(r, weather) }));
+  const total = scores.reduce((sum, item) => sum + item.score, 0) || 1;
+  return scores.map((item) => ({ lane: item.lane, score: item.score, probability: item.score / total }));
+}
+
+export function generateTrifectaTickets(racers: Racer[], weather: RaceWeather): Ticket[] {
+  const probs = winProbabilities(racers, weather);
+  const pMap = new Map(probs.map((p) => [p.lane, p.probability]));
   const tickets: Ticket[] = [];
-  for (const a of byLane) for (const b of byLane) for (const c of byLane) {
-    if (a.lane === b.lane || a.lane === c.lane || b.lane === c.lane) continue;
-    const combo = `${a.lane}-${b.lane}-${c.lane}`;
-    const probability = a.p1 * (b.p2 / Math.max(.01, 1 - a.p1 * .55)) * (c.p3 / Math.max(.01, 1 - a.p1 * .35 - b.p2 * .25)) * 0.42;
-    const odds = oddsMap[combo] || 0;
-    const ev = odds > 0 ? probability * odds * 100 : 0;
-    tickets.push({ combo, probability, odds, ev, rank: ev >= 120 ? '買い候補' : ev >= 100 ? '注意' : '買わない' });
+
+  for (const first of racers) {
+    for (const second of racers) {
+      for (const third of racers) {
+        if (first.lane === second.lane || first.lane === third.lane || second.lane === third.lane) continue;
+        const p1 = pMap.get(first.lane) || 0;
+        const p2 = (pMap.get(second.lane) || 0) / Math.max(0.01, 1 - p1);
+        const p3 = (pMap.get(third.lane) || 0) / Math.max(0.01, 1 - p1 - (pMap.get(second.lane) || 0));
+        const probability = Math.max(0.0001, p1 * p2 * p3 * 0.78);
+        const odds = estimateOdds(probability, first.oddsWin, second.oddsWin, third.oddsWin);
+        const ev = probability * odds * 100;
+        tickets.push({
+          combination: `${first.lane}-${second.lane}-${third.lane}`,
+          probability,
+          odds,
+          ev,
+          rank: ev >= 120 ? 'BUY' : ev >= 100 ? 'WATCH' : 'SKIP'
+        });
+      }
+    }
   }
-  return tickets.sort((a,b)=>b.ev-a.ev || b.probability-a.probability);
+  return tickets.sort((a, b) => b.ev - a.ev);
 }
 
-export function formatPct(n: number) { return `${(n * 100).toFixed(1)}%`; }
-function safe(n: number, fallback: number) { return Number.isFinite(n) ? n : fallback; }
+function estimateOdds(probability: number, firstOdds: number, secondOdds: number, thirdOdds: number) {
+  const market = (firstOdds * 0.48 + secondOdds * 0.28 + thirdOdds * 0.18) * 1.25;
+  const fair = 1 / Math.max(probability, 0.0001) * 0.75;
+  return Math.round(((market + fair) / 2) * 10) / 10;
+}
+
+export function verdict(tickets: Ticket[]) {
+  const top = tickets[0];
+  if (!top) return { label: 'データ不足', detail: '出走表を入力してください' };
+  if (top.ev >= 130) return { label: '購入候補', detail: `最上位 ${top.combination} / EV ${top.ev.toFixed(0)}` };
+  if (top.ev >= 110) return { label: '少額注意', detail: `妙味あり ${top.combination} / EV ${top.ev.toFixed(0)}` };
+  return { label: '見送り', detail: '期待値が足りません' };
+}

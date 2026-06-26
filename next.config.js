@@ -1,4 +1,44 @@
-'use client';
-import {useMemo,useState,useEffect} from 'react';
-import {venues,defaultBoats,probabilities,trifecta,Boat} from '../lib/boat';
-export default function BoatApp(){const [venue,setVenue]=useState('浜名湖');const [race,setRace]=useState(1);const [boats,setBoats]=useState<Boat[]>(defaultBoats());const [result,setResult]=useState('');const [pay,setPay]=useState(0);const [stake,setStake]=useState(1000);const [saved,setSaved]=useState<any[]>([]);useEffect(()=>{setSaved(JSON.parse(localStorage.getItem('boat-ai-results')||'[]'))},[]);const probs=useMemo(()=>probabilities(boats),[boats]);const tickets=useMemo(()=>trifecta(boats),[boats]);const top=tickets[0];function update(i:number,k:keyof Boat,v:any){setBoats(bs=>bs.map((b,idx)=>idx===i?{...b,[k]:k==='name'?v:Number(v)}:b))}function save(){const hit=result&&tickets.slice(0,10).some(t=>t.ticket===result);const ret=hit?pay:0;const row={date:new Date().toLocaleString(),venue,race,result,top:top?.ticket,hit,stake,pay:ret,profit:ret-stake};const next=[row,...saved];setSaved(next);localStorage.setItem('boat-ai-results',JSON.stringify(next))}const totalStake=saved.reduce((a,b)=>a+b.stake,0);const totalPay=saved.reduce((a,b)=>a+b.pay,0);return <div className="wrap"><div className="header"><div className="big">Boat AI</div><div className="muted">確率・期待値・結果検証</div></div><div className="grid"><div className="card"><b>開催場</b><select value={venue} onChange={e=>setVenue(e.target.value)}>{venues.map(v=><option key={v}>{v}</option>)}</select></div><div className="card"><b>レース</b><select value={race} onChange={e=>setRace(Number(e.target.value))}>{Array.from({length:12},(_,i)=><option key={i+1} value={i+1}>{i+1}R</option>)}</select></div><div className="card"><b>AI判定</b><div className={'pill '+(top?.ev>=120?'buy':top?.ev>=100?'warn':'skip')}>{top?.ev>=120?'購入候補':'見送り寄り'}</div><div className="big">{top?.ticket}</div><div>期待値 {top?.ev.toFixed(0)}</div></div></div><div className="card" style={{marginTop:14}}><h3>出走表入力</h3>{boats.map((b,i)=><div className="row" key={b.frame}><div><label>枠</label><input value={b.frame} onChange={e=>update(i,'frame',e.target.value)}/></div><div><label>選手</label><input value={b.name} onChange={e=>update(i,'name',e.target.value)}/></div><div><label>全国</label><input value={b.win} onChange={e=>update(i,'win',e.target.value)}/></div><div><label>当地</label><input value={b.local} onChange={e=>update(i,'local',e.target.value)}/></div><div><label>ST</label><input value={b.st} onChange={e=>update(i,'st',e.target.value)}/></div><div><label>モーター%</label><input value={b.motor} onChange={e=>update(i,'motor',e.target.value)}/></div><div><label>展示</label><input value={b.exhibit} onChange={e=>update(i,'exhibit',e.target.value)}/></div></div>)}</div><div className="grid" style={{marginTop:14}}><div className="card"><h3>各艇確率</h3><table className="table"><thead><tr><th>艇</th><th>選手</th><th>1着率</th><th>2連対</th><th>3連対</th></tr></thead><tbody>{probs.map(p=><tr key={p.frame}><td>{p.frame}</td><td>{p.name}</td><td>{(p.p1*100).toFixed(1)}%</td><td>{(p.p2*100).toFixed(1)}%</td><td>{(p.p3*100).toFixed(1)}%</td></tr>)}</tbody></table></div><div className="card"><h3>期待値ランキング</h3><table className="table"><thead><tr><th>買い目</th><th>確率</th><th>推定オッズ</th><th>EV</th><th>判定</th></tr></thead><tbody>{tickets.slice(0,12).map(t=><tr key={t.ticket}><td>{t.ticket}</td><td>{(t.prob*100).toFixed(2)}%</td><td>{t.odds.toFixed(1)}</td><td>{t.ev.toFixed(0)}</td><td><span className={'pill '+(t.ev>=120?'buy':t.ev>=100?'warn':'skip')}>{t.rank}</span></td></tr>)}</tbody></table></div></div><div className="grid" style={{marginTop:14}}><div className="card"><h3>結果入力</h3><label>3連単結果</label><input placeholder="例 1-3-2" value={result} onChange={e=>setResult(e.target.value)}/><label>払戻</label><input value={pay} onChange={e=>setPay(Number(e.target.value))}/><label>投資額</label><input value={stake} onChange={e=>setStake(Number(e.target.value))}/><button onClick={save} style={{marginTop:10}}>結果保存</button></div><div className="card"><h3>成績</h3><div>総投資 {totalStake.toLocaleString()}円</div><div>総回収 {totalPay.toLocaleString()}円</div><div>回収率 {totalStake?((totalPay/totalStake)*100).toFixed(1):0}%</div><div>保存 {saved.length}件</div></div></div></div>}
+import type { Racer, RaceWeather, Venue } from './types';
+
+export const venues: Venue[] = [
+  { id: 'kiryu', name: '桐生', region: '関東', night: true },
+  { id: 'toda', name: '戸田', region: '関東' },
+  { id: 'edogawa', name: '江戸川', region: '関東' },
+  { id: 'heiwajima', name: '平和島', region: '関東' },
+  { id: 'tamagawa', name: '多摩川', region: '関東' },
+  { id: 'hamanako', name: '浜名湖', region: '東海' },
+  { id: 'gamagori', name: '蒲郡', region: '東海', night: true },
+  { id: 'tokoname', name: '常滑', region: '東海' },
+  { id: 'tsu', name: '津', region: '東海' },
+  { id: 'mikuni', name: '三国', region: '北陸' },
+  { id: 'biwako', name: 'びわこ', region: '近畿' },
+  { id: 'suminoe', name: '住之江', region: '近畿', night: true },
+  { id: 'amagasaki', name: '尼崎', region: '近畿' },
+  { id: 'naruto', name: '鳴門', region: '四国' },
+  { id: 'marugame', name: '丸亀', region: '四国', night: true },
+  { id: 'kojima', name: '児島', region: '中国' },
+  { id: 'miyajima', name: '宮島', region: '中国' },
+  { id: 'tokuyama', name: '徳山', region: '中国' },
+  { id: 'shimonoseki', name: '下関', region: '中国', night: true },
+  { id: 'wakamatsu', name: '若松', region: '九州', night: true },
+  { id: 'ashiya', name: '芦屋', region: '九州' },
+  { id: 'fukuoka', name: '福岡', region: '九州' },
+  { id: 'karatsu', name: '唐津', region: '九州' },
+  { id: 'omura', name: '大村', region: '九州', night: true }
+];
+
+export const defaultRacers: Racer[] = [
+  { lane: 1, name: '山田 太郎', className: 'A1', nationalWinRate: 6.8, localWinRate: 7.1, avgStart: 0.14, motorRate: 41.2, boatRate: 37.5, exhibitionTime: 6.72, tilt: -0.5, weight: 52.0, oddsWin: 2.1 },
+  { lane: 2, name: '鈴木 一郎', className: 'A2', nationalWinRate: 5.9, localWinRate: 5.6, avgStart: 0.16, motorRate: 34.8, boatRate: 31.2, exhibitionTime: 6.78, tilt: -0.5, weight: 53.1, oddsWin: 7.8 },
+  { lane: 3, name: '佐藤 次郎', className: 'A1', nationalWinRate: 6.3, localWinRate: 6.0, avgStart: 0.13, motorRate: 39.1, boatRate: 35.2, exhibitionTime: 6.74, tilt: 0, weight: 52.4, oddsWin: 5.4 },
+  { lane: 4, name: '田中 三郎', className: 'B1', nationalWinRate: 4.8, localWinRate: 4.9, avgStart: 0.18, motorRate: 29.7, boatRate: 28.3, exhibitionTime: 6.84, tilt: 0, weight: 54.0, oddsWin: 18.2 },
+  { lane: 5, name: '高橋 四郎', className: 'A2', nationalWinRate: 5.4, localWinRate: 5.1, avgStart: 0.15, motorRate: 32.5, boatRate: 33.0, exhibitionTime: 6.81, tilt: 0.5, weight: 52.8, oddsWin: 22.5 },
+  { lane: 6, name: '伊藤 五郎', className: 'B1', nationalWinRate: 4.2, localWinRate: 4.0, avgStart: 0.19, motorRate: 27.1, boatRate: 25.9, exhibitionTime: 6.89, tilt: 0.5, weight: 55.2, oddsWin: 48.0 }
+];
+
+export const defaultWeather: RaceWeather = {
+  weather: '晴れ',
+  windDirection: '向かい風',
+  windSpeed: 3,
+  waveHeight: 2
+};

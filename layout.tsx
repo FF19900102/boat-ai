@@ -1,1 +1,42 @@
-*{box-sizing:border-box}body{margin:0;background:#f4f6f8;color:#111827;font-family:Arial,'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif}.wrap{max-width:1180px;margin:0 auto;padding:24px}.header{background:#08111f;color:white;padding:20px;border-radius:18px;margin-bottom:18px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.card{background:white;border:1px solid #e5e7eb;border-radius:16px;padding:16px;box-shadow:0 6px 18px rgba(0,0,0,.05)}button{border:0;border-radius:12px;padding:12px 14px;background:#0f766e;color:white;font-weight:700;cursor:pointer}button.secondary{background:#374151}input,select{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:10px}.row{display:grid;grid-template-columns:70px 1fr repeat(5,110px);gap:8px;align-items:end;margin:8px 0}.table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid #e5e7eb;text-align:left}th{background:#f9fafb}.pill{display:inline-block;border-radius:999px;padding:4px 10px;background:#e0f2fe;font-size:12px;font-weight:700}.buy{background:#dcfce7}.warn{background:#fef3c7}.skip{background:#fee2e2}.muted{color:#6b7280}.big{font-size:28px;font-weight:800}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.tab{background:white;color:#111827;border:1px solid #d1d5db}.active{background:#0f766e;color:white}@media(max-width:900px){.row{grid-template-columns:1fr 1fr}.hide-sm{display:none}}
+:root {
+  --bg: #07111f;
+  --panel: #0e1d33;
+  --panel2: #102846;
+  --line: rgba(255,255,255,.1);
+  --text: #f8fbff;
+  --muted: #93a4bb;
+  --accent: #3aa5ff;
+  --good: #33d17a;
+  --warn: #f6c445;
+  --bad: #ff6b6b;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: linear-gradient(180deg, #05101d, #08192e); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+button, input, select { font: inherit; }
+.container { max-width: 1220px; margin: 0 auto; padding: 24px; }
+.header { display:flex; align-items:center; justify-content:space-between; gap: 16px; padding: 18px 24px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: rgba(7,17,31,.9); backdrop-filter: blur(12px); z-index: 10; }
+.logo { font-weight: 900; letter-spacing: .04em; font-size: 22px; }
+.sub { color: var(--muted); font-size: 13px; }
+.grid { display:grid; gap: 16px; }
+.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.card { background: rgba(14,29,51,.86); border: 1px solid var(--line); border-radius: 18px; padding: 18px; box-shadow: 0 12px 30px rgba(0,0,0,.18); }
+.card h2, .card h3 { margin: 0 0 12px; }
+.badge { display:inline-flex; align-items:center; border:1px solid var(--line); border-radius:999px; padding: 5px 10px; color: var(--muted); font-size:12px; gap:6px; }
+.btn { border: 0; border-radius: 12px; padding: 10px 14px; background: var(--accent); color: #00172b; font-weight: 800; cursor:pointer; }
+.btn.secondary { background: #18314f; color: var(--text); border: 1px solid var(--line); }
+.venue { cursor:pointer; transition:.15s; }
+.venue:hover, .venue.active { transform: translateY(-2px); border-color: rgba(58,165,255,.7); background: rgba(16,40,70,.92); }
+.race-button { border:1px solid var(--line); background:#10233d; color:var(--text); border-radius:14px; padding:12px; cursor:pointer; font-weight:800; }
+.race-button.active { border-color: var(--accent); background:#153b67; }
+.table-wrap { overflow:auto; }
+table { width:100%; border-collapse: collapse; min-width: 760px; }
+th, td { border-bottom:1px solid var(--line); padding:10px; text-align:left; font-size:14px; }
+th { color: var(--muted); font-size:12px; }
+input, select { width:100%; background:#08172a; border:1px solid var(--line); color:var(--text); border-radius:10px; padding:8px; }
+.kpi { display:flex; flex-direction:column; gap:6px; }
+.kpi strong { font-size: 26px; }
+.good { color: var(--good); } .warn { color: var(--warn); } .bad { color: var(--bad); }
+.tabs { display:flex; gap:8px; flex-wrap:wrap; }
+.small { font-size: 12px; color: var(--muted); }
+@media (max-width: 820px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } .container { padding: 14px; } }
