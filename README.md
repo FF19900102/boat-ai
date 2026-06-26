@@ -1,3 +1,21 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = { reactStrictMode: true };
-module.exports = nextConfig;
+{
+  "name": "boat-ai",
+  "version": "0.6.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@types/node": "20.11.30",
+    "@types/react": "18.2.67",
+    "@types/react-dom": "18.2.22",
+    "next": "14.2.5",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "typescript": "5.4.5"
+  },
+  "devDependencies": {}
+}
