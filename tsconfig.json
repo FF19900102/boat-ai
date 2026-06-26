@@ -1,21 +1,20 @@
-import { Venue, Boat } from './types'
-
-export const venues: Venue[] = [
-  { id: 'kiryu', name: '桐生', night: true }, { id: 'toda', name: '戸田' }, { id: 'edogawa', name: '江戸川' },
-  { id: 'heiwajima', name: '平和島' }, { id: 'tamagawa', name: '多摩川' }, { id: 'hamanako', name: '浜名湖' },
-  { id: 'gamagori', name: '蒲郡', night: true }, { id: 'tokoname', name: '常滑' }, { id: 'tsu', name: '津' },
-  { id: 'mikuni', name: '三国' }, { id: 'biwako', name: 'びわこ' }, { id: 'suminoe', name: '住之江', night: true },
-  { id: 'amagasaki', name: '尼崎' }, { id: 'naruto', name: '鳴門' }, { id: 'marugame', name: '丸亀', night: true },
-  { id: 'kojima', name: '児島' }, { id: 'miyajima', name: '宮島' }, { id: 'tokuyama', name: '徳山' },
-  { id: 'shimonoseki', name: '下関', night: true }, { id: 'wakamatsu', name: '若松', night: true }, { id: 'ashiya', name: '芦屋' },
-  { id: 'fukuoka', name: '福岡' }, { id: 'karatsu', name: '唐津' }, { id: 'omura', name: '大村', night: true }
-]
-
-export const sampleBoats: Boat[] = [
-  { lane: 1, name: '選手A', className: 'A1', nationalWin: 6.8, localWin: 6.5, avgST: 0.14, motorRate: 42, boatRate: 36, exhibition: 6.72, tilt: 0, weight: 52.0 },
-  { lane: 2, name: '選手B', className: 'A2', nationalWin: 5.9, localWin: 5.6, avgST: 0.16, motorRate: 33, boatRate: 31, exhibition: 6.78, tilt: 0, weight: 53.1 },
-  { lane: 3, name: '選手C', className: 'B1', nationalWin: 5.2, localWin: 5.9, avgST: 0.15, motorRate: 38, boatRate: 34, exhibition: 6.75, tilt: 0, weight: 51.5 },
-  { lane: 4, name: '選手D', className: 'A2', nationalWin: 5.7, localWin: 4.8, avgST: 0.17, motorRate: 30, boatRate: 29, exhibition: 6.81, tilt: 0, weight: 52.4 },
-  { lane: 5, name: '選手E', className: 'B1', nationalWin: 4.8, localWin: 5.0, avgST: 0.18, motorRate: 28, boatRate: 27, exhibition: 6.83, tilt: 0, weight: 54.0 },
-  { lane: 6, name: '選手F', className: 'B1', nationalWin: 4.4, localWin: 4.1, avgST: 0.19, motorRate: 25, boatRate: 26, exhibition: 6.86, tilt: 0, weight: 52.8 }
-]
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [{ "name": "next" }]
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}

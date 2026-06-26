@@ -1,10 +1,21 @@
-export type Venue = { id: string; name: string; region: string; water: string };
-export type Boat = {
-  frame: number; name: string; classRank: string; nationalRate: number; localRate: number;
-  avgST: number; motorRate: number; boatRate: number; exhibition: number; tilt: number; weight: number; course: number;
-};
-export type Weather = { weather: string; windDir: string; windSpeed: number; wave: number };
-export type RaceResult = { order: string; payout: number; stake: number; bought: string };
-export type Prediction = { frame:number; name:string; score:number; win:number; top2:number; top3:number; label:string };
-export type Ticket = { key:string; probability:number; odds:number; ev:number; judge:string };
-export type SavedRace = { id:string; date:string; venue:string; raceNo:number; boats:Boat[]; weather:Weather; tickets:Ticket[]; result?:RaceResult; createdAt:string };
+{
+  "name": "boat-ai",
+  "version": "0.3.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "typescript": "latest"
+  },
+  "devDependencies": {}
+}
