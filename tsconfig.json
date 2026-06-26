@@ -1,61 +1,48 @@
-import { Racer, Ticket, Weather } from './types';
-
-const laneBias: Record<number, number> = { 1: 18, 2: 7, 3: 4, 4: 1, 5: -3, 6: -7 };
-const classBias: Record<string, number> = { A1: 10, A2: 5, B1: 0, B2: -5 };
-
-export function scoreRacer(r: Racer, weather: Weather) {
-  const win = r.nationalWin * 9 + r.localWin * 5;
-  const st = Math.max(0, (0.22 - r.avgSt) * 180);
-  const motor = r.motor2 * 0.48 + r.boat2 * 0.25;
-  const exhibit = Math.max(0, (6.95 - r.exhibition) * 45);
-  const entry = (7 - r.entry) * 1.5;
-  const windPenalty = weather.windSpeed >= 5 && r.lane === 1 ? -6 : 0;
-  const wavePenalty = weather.wave >= 5 && r.lane >= 5 ? -3 : 0;
-  return Math.max(1, win + st + motor + exhibit + entry + (laneBias[r.lane] || 0) + (classBias[r.className] || 0) + windPenalty + wavePenalty);
+import { Boat, Prediction, Ticket, Weather } from './types';
+const clamp=(v:number,min:number,max:number)=>Math.max(min,Math.min(max,v));
+export function scoreBoat(b:Boat,w:Weather){
+  const frameBonus=[0,18,9,5,1,-3,-7][b.frame] ?? 0;
+  const rate=b.nationalRate*10+b.localRate*6;
+  const motor=b.motorRate*.55+b.boatRate*.25;
+  const st=(0.28-clamp(b.avgST,.05,.35))*120;
+  const ex=(6.95-clamp(b.exhibition,6.45,7.1))*70;
+  const windPenalty=w.windSpeed>=5&&b.frame===1?-6:0;
+  const outsideBonus=w.windSpeed>=5&&b.frame>=3?2:0;
+  return Math.max(1, rate+motor+st+ex+frameBonus+windPenalty+outsideBonus-b.weight*.12+b.tilt*2);
 }
-
-export function calcLaneProbabilities(racers: Racer[], weather: Weather) {
-  const scores = racers.map((r) => ({ racer: r, score: scoreRacer(r, weather) }));
-  const total = scores.reduce((s, x) => s + x.score, 0);
-  return scores.map((x) => {
-    const first = x.score / total;
-    const in2 = Math.min(0.96, first * 1.72 + 0.05);
-    const in3 = Math.min(0.99, first * 2.32 + 0.12);
-    return { ...x, first, in2, in3 };
-  }).sort((a,b)=>b.first-a.first);
+export function predict(boats:Boat[], weather:Weather): Prediction[] {
+  const raw=boats.map(b=>({b,score:scoreBoat(b,weather)}));
+  const exp=raw.map(x=>Math.exp(x.score/28));
+  const sum=exp.reduce((a,b)=>a+b,0);
+  return raw.map((x,i)=>{
+    const win=exp[i]/sum*100;
+    return {frame:x.b.frame,name:x.b.name,score:+x.score.toFixed(1),win:+win.toFixed(1),top2:+clamp(win*1.62,0,92).toFixed(1),top3:+clamp(win*2.05,0,98).toFixed(1),label:win>=32?'本命':win>=18?'対抗':win>=10?'穴':'厳しい'};
+  }).sort((a,b)=>b.win-a.win);
 }
-
-function permutations(lanes: number[]) {
-  const out: number[][] = [];
-  for (const a of lanes) for (const b of lanes) for (const c of lanes) {
-    if (a !== b && b !== c && a !== c) out.push([a,b,c]);
+export function makeTickets(preds:Prediction[]): Ticket[]{
+  const p=new Map(preds.map(x=>[x.frame,x.win/100]));
+  const frames=[1,2,3,4,5,6];
+  const tickets:Ticket[]=[];
+  for(const a of frames)for(const b of frames)for(const c of frames){
+    if(a===b||a===c||b===c)continue;
+    const pa=p.get(a)??0, pb=p.get(b)??0, pc=p.get(c)??0;
+    const prob=pa*(pb/(1-pa))*(pc/(1-pa-pb))*100;
+    const odds=estimateOdds(prob,a,b,c);
+    const ev=prob/100*odds*100;
+    tickets.push({key:`${a}-${b}-${c}`,probability:+prob.toFixed(2),odds:+odds.toFixed(1),ev:+ev.toFixed(0),judge:ev>=120?'買い候補':ev>=100?'注意':'買わない'});
   }
-  return out;
+  return tickets.sort((a,b)=>b.ev-a.ev).slice(0,30);
 }
-
-export function generateTickets(racers: Racer[], weather: Weather, oddsMap: Record<string, number>): Ticket[] {
-  const probs = calcLaneProbabilities(racers, weather);
-  const pmap = new Map(probs.map((p) => [p.racer.lane, p]));
-  return permutations(racers.map(r=>r.lane)).map(([a,b,c]) => {
-    const pa = pmap.get(a)!; const pb = pmap.get(b)!; const pc = pmap.get(c)!;
-    const probability = pa.first * Math.max(0.01, pb.in2 - pb.first * 0.55) * Math.max(0.01, pc.in3 - pc.in2 * 0.35) * 1.65;
-    const combo = `${a}-${b}-${c}`;
-    const odds = oddsMap[combo] || autoOdds(probability);
-    const ev = probability * odds * 100;
-    const judge = ev >= 120 ? '買い候補' : ev >= 100 ? '注意' : '買わない';
-    return { combo, probability, odds, ev, judge };
-  }).sort((a,b)=>b.ev-a.ev);
+function estimateOdds(prob:number,a:number,b:number,c:number){
+  const base=prob<=0?999:78/prob;
+  const pop=(a===1?-.8:0)+(b===1?-.25:0)+(a>=4?.7:0)+(b>=5?.8:0)+(c>=5?.4:0);
+  return clamp(base+pop,3,450);
 }
-
-export function autoOdds(probability: number) {
-  const fair = probability > 0 ? 1 / probability : 999;
-  return Math.max(3.0, Math.min(250, Math.round((fair * 0.86 + 2) * 10) / 10));
-}
-
-export function aiComment(topTicket: Ticket | undefined) {
-  if (!topTicket) return 'データ不足';
-  if (topTicket.ev >= 140) return '期待値が高い買い目あり。購入候補。';
-  if (topTicket.ev >= 120) return '買い候補あり。ただし資金配分は抑えめ。';
-  if (topTicket.ev >= 100) return '妙味は薄い。無理買い注意。';
-  return '期待値不足。見送り推奨。';
+export function summary(tickets:Ticket[]){
+  const best=tickets[0];
+  if(!best)return {message:'データ不足',grade:'-'};
+  if(best.ev>=140)return {message:`${best.key} を中心に強く検討`,grade:'★★★★★'};
+  if(best.ev>=120)return {message:`${best.key} は買い候補`,grade:'★★★★☆'};
+  if(best.ev>=100)return {message:'妙味は薄め。少額か見送り',grade:'★★★☆☆'};
+  return {message:'見送り推奨',grade:'★☆☆☆☆'};
 }

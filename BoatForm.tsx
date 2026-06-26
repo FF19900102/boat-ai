@@ -1,0 +1,1 @@
+export default function Header(){return <div className="header"><div><div className="brand">Boat AI</div><div className="sub">確率・期待値・結果検証で戦う競艇AI</div></div><div className="pill">Ver 1 実コード / LocalStorage保存</div></div>}

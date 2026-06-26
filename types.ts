@@ -1,8 +1,4 @@
 'use client';
-import { Racer, Ticket, Weather } from '@/lib/types';
-import { generateTickets } from '@/lib/boatAi';
-export default function TicketTable({racers,weather,oddsMap,setOddsMap,onTickets}:{racers:Racer[];weather:Weather;oddsMap:Record<string,number>;setOddsMap:(m:Record<string,number>)=>void;onTickets:(t:Ticket[])=>void}){
- const tickets=generateTickets(racers,weather,oddsMap); onTickets(tickets);
- const setOdds=(combo:string,v:string)=>setOddsMap({...oddsMap,[combo]:Number(v)});
- return <div className="scroll"><table className="table"><thead><tr><th>買い目</th><th>的中確率</th><th>オッズ</th><th>期待値</th><th>判定</th></tr></thead><tbody>{tickets.slice(0,30).map(t=><tr key={t.combo} className={t.judge==='買い候補'?'buy':t.judge==='注意'?'watch':'skip'}><td><b>{t.combo}</b></td><td>{(t.probability*100).toFixed(2)}%</td><td><input className="input" style={{maxWidth:90}} type="number" step="0.1" value={oddsMap[t.combo] ?? t.odds} onChange={e=>setOdds(t.combo,e.target.value)} /></td><td className={t.ev>=120?'good':t.ev>=100?'warn':'bad'}>{t.ev.toFixed(1)}</td><td>{t.judge}</td></tr>)}</tbody></table></div>
-}
+import { Prediction, Ticket } from '@/lib/types';
+export function PredictionTable({predictions}:{predictions:Prediction[]}){return <table><thead><tr><th>順位</th><th>艇</th><th>選手</th><th className="right">1着率</th><th className="right">2連対</th><th className="right">3連対</th><th>評価</th></tr></thead><tbody>{predictions.map((p,i)=><tr key={p.frame}><td className={i===0?'rank1':i===1?'rank2':i===2?'rank3':''}>{i+1}</td><td>{p.frame}号艇</td><td>{p.name}</td><td className="right">{p.win}%</td><td className="right">{p.top2}%</td><td className="right">{p.top3}%</td><td>{p.label}</td></tr>)}</tbody></table>}
+export function TicketTable({tickets}:{tickets:Ticket[]}){return <table><thead><tr><th>買い目</th><th className="right">的中確率</th><th className="right">推定オッズ</th><th className="right">期待値</th><th>判定</th></tr></thead><tbody>{tickets.slice(0,20).map(t=><tr key={t.key}><td><b>{t.key}</b></td><td className="right">{t.probability}%</td><td className="right">{t.odds}</td><td className={`right ${t.ev>=120?'green':t.ev>=100?'yellow':'red'}`}>{t.ev}</td><td>{t.judge}</td></tr>)}</tbody></table>}

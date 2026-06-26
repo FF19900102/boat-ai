@@ -1,9 +1,10 @@
-export type Venue = { id: string; name: string; region: string; night?: boolean };
-export type Racer = {
-  lane: number; name: string; className: string; nationalWin: number; localWin: number;
-  avgSt: number; motor2: number; boat2: number; exhibition: number; tilt: number; weight: number; entry: number;
+export type Venue = { id: string; name: string; region: string; water: string };
+export type Boat = {
+  frame: number; name: string; classRank: string; nationalRate: number; localRate: number;
+  avgST: number; motorRate: number; boatRate: number; exhibition: number; tilt: number; weight: number; course: number;
 };
-export type Weather = { condition: string; windDirection: string; windSpeed: number; wave: number };
-export type Ticket = { combo: string; probability: number; odds: number; ev: number; judge: '買い候補'|'注意'|'買わない' };
-export type RaceResult = { result: string; payout: number; stake: number; bought: string; hit: boolean; profit: number };
-export type SavedRace = { id: string; date: string; venue: string; raceNo: number; tickets: Ticket[]; result?: RaceResult; createdAt: string };
+export type Weather = { weather: string; windDir: string; windSpeed: number; wave: number };
+export type RaceResult = { order: string; payout: number; stake: number; bought: string };
+export type Prediction = { frame:number; name:string; score:number; win:number; top2:number; top3:number; label:string };
+export type Ticket = { key:string; probability:number; odds:number; ev:number; judge:string };
+export type SavedRace = { id:string; date:string; venue:string; raceNo:number; boats:Boat[]; weather:Weather; tickets:Ticket[]; result?:RaceResult; createdAt:string };

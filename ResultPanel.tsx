@@ -1,6 +1,16 @@
 'use client';
-import { Weather } from '@/lib/types';
-export default function WeatherForm({weather,setWeather}:{weather:Weather;setWeather:(w:Weather)=>void}){
- const set=(k:keyof Weather,v:string)=>setWeather({...weather,[k]:k==='windSpeed'||k==='wave'?Number(v):v});
- return <div className="grid grid4"><label><span className="label">天候</span><select className="input" value={weather.condition} onChange={e=>set('condition',e.target.value)}><option>晴</option><option>曇</option><option>雨</option></select></label><label><span className="label">風向</span><input className="input" value={weather.windDirection} onChange={e=>set('windDirection',e.target.value)} /></label><label><span className="label">風速 m</span><input className="input" type="number" value={weather.windSpeed} onChange={e=>set('windSpeed',e.target.value)} /></label><label><span className="label">波高 cm</span><input className="input" type="number" value={weather.wave} onChange={e=>set('wave',e.target.value)} /></label></div>
+import { Boat } from '@/lib/types';
+export default function BoatForm({boats,onChange}:{boats:Boat[],onChange:(boats:Boat[])=>void}){
+ const set=(idx:number,key:keyof Boat,val:string)=>{const next=[...boats];(next[idx] as any)[key]=key==='name'||key==='classRank'?val:Number(val);onChange(next)};
+ return <div>{boats.map((b,i)=><div className="boatRow" key={b.frame}>
+  <div><label>枠</label><div className="stat">{b.frame}</div></div>
+  <div><label>選手</label><input value={b.name} onChange={e=>set(i,'name',e.target.value)}/></div>
+  <div><label>級</label><input value={b.classRank} onChange={e=>set(i,'classRank',e.target.value)}/></div>
+  <div><label>全国</label><input type="number" step="0.01" value={b.nationalRate} onChange={e=>set(i,'nationalRate',e.target.value)}/></div>
+  <div><label>当地</label><input type="number" step="0.01" value={b.localRate} onChange={e=>set(i,'localRate',e.target.value)}/></div>
+  <div><label>ST</label><input type="number" step="0.01" value={b.avgST} onChange={e=>set(i,'avgST',e.target.value)}/></div>
+  <div><label>モーター%</label><input type="number" step="0.1" value={b.motorRate} onChange={e=>set(i,'motorRate',e.target.value)}/></div>
+  <div><label>展示</label><input type="number" step="0.01" value={b.exhibition} onChange={e=>set(i,'exhibition',e.target.value)}/></div>
+  <div><label>体重</label><input type="number" step="0.1" value={b.weight} onChange={e=>set(i,'weight',e.target.value)}/></div>
+ </div>)}</div>
 }
