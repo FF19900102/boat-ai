@@ -1,45 +1,102 @@
-import { Boat, Venue } from './types';
+import { Boat, Prediction, Trifecta, Weather } from './types';
 
-export const venues: Venue[] = [
-  { id: 'kiryu', name: '桐生', region: '関東', night: true },
-  { id: 'toda', name: '戸田', region: '関東' },
-  { id: 'edogawa', name: '江戸川', region: '関東' },
-  { id: 'heiwajima', name: '平和島', region: '関東' },
-  { id: 'tamagawa', name: '多摩川', region: '関東' },
-  { id: 'hamanako', name: '浜名湖', region: '東海' },
-  { id: 'gamagori', name: '蒲郡', region: '東海', night: true },
-  { id: 'tokoname', name: '常滑', region: '東海' },
-  { id: 'tsu', name: '津', region: '近畿' },
-  { id: 'mikuni', name: '三国', region: '北陸' },
-  { id: 'biwako', name: 'びわこ', region: '近畿' },
-  { id: 'suminoe', name: '住之江', region: '近畿', night: true },
-  { id: 'amagasaki', name: '尼崎', region: '近畿' },
-  { id: 'naruto', name: '鳴門', region: '四国' },
-  { id: 'marugame', name: '丸亀', region: '四国', night: true },
-  { id: 'kojima', name: '児島', region: '中国' },
-  { id: 'miyajima', name: '宮島', region: '中国' },
-  { id: 'tokuyama', name: '徳山', region: '中国' },
-  { id: 'shimonoseki', name: '下関', region: '中国', night: true },
-  { id: 'wakamatsu', name: '若松', region: '九州', night: true },
-  { id: 'ashiya', name: '芦屋', region: '九州' },
-  { id: 'fukuoka', name: '福岡', region: '九州' },
-  { id: 'karatsu', name: '唐津', region: '九州' },
-  { id: 'omura', name: '大村', region: '九州', night: true }
-];
+function clamp(value: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, value));
+}
 
-export function createDefaultBoats(): Boat[] {
-  return Array.from({ length: 6 }, (_, i) => ({
-    frame: i + 1,
-    name: `選手${i + 1}`,
-    className: i === 0 ? 'A1' : i < 3 ? 'A2' : 'B1',
-    nationalRate: [6.8, 5.9, 5.6, 5.1, 4.8, 4.2][i],
-    localRate: [6.4, 5.5, 5.8, 4.9, 4.5, 4.0][i],
-    avgSt: [0.14, 0.16, 0.15, 0.18, 0.17, 0.19][i],
-    motorRate: [42, 36, 39, 31, 28, 25][i],
-    boatRate: [38, 33, 34, 29, 30, 24][i],
-    exhibition: [6.72, 6.79, 6.76, 6.84, 6.81, 6.88][i],
-    tilt: 0,
-    weight: [52, 53, 52, 54, 53, 55][i],
-    course: i + 1
-  }));
+function softmax(scores: number[]) {
+  const max = Math.max(...scores);
+  const exps = scores.map((s) => Math.exp((s - max) / 12));
+  const sum = exps.reduce((a, b) => a + b, 0);
+  return exps.map((e) => e / sum);
+}
+
+export function boatScore(boat: Boat, weather: Weather) {
+  const frameBonus = [18, 9, 5, 0, -4, -8][boat.frame - 1] ?? 0;
+  const courseBonus = [10, 5, 2, -1, -3, -5][boat.course - 1] ?? 0;
+  const stScore = clamp((0.22 - boat.avgSt) * 120, -8, 12);
+  const exhibitionScore = clamp((6.9 - boat.exhibition) * 18, -8, 10);
+  const windPenalty = weather.windSpeed >= 5 && boat.frame === 1 ? -5 : 0;
+  const wavePenalty = weather.wave >= 5 && boat.frame >= 5 ? -3 : 0;
+
+  return (
+    boat.nationalRate * 6 +
+    boat.localRate * 3 +
+    boat.motorRate * 0.35 +
+    boat.boatRate * 0.18 +
+    stScore +
+    exhibitionScore +
+    frameBonus +
+    courseBonus +
+    windPenalty +
+    wavePenalty
+  );
+}
+
+export function predictBoats(boats: Boat[], weather: Weather): Prediction[] {
+  const scores = boats.map((b) => boatScore(b, weather));
+  const probs = softmax(scores);
+  return boats
+    .map((boat, i) => {
+      const win = probs[i] * 100;
+      return {
+        ...boat,
+        score: Math.round(scores[i] * 10) / 10,
+        winRate: Math.round(win * 10) / 10,
+        top2Rate: Math.round(clamp(win * 1.72, 5, 86) * 10) / 10,
+        top3Rate: Math.round(clamp(win * 2.25, 10, 96) * 10) / 10
+      };
+    })
+    .sort((a, b) => b.winRate - a.winRate);
+}
+
+function find(predictions: Prediction[], frame: number) {
+  const p = predictions.find((x) => x.frame === frame);
+  if (!p) throw new Error('frame not found');
+  return p;
+}
+
+export function generateTrifecta(predictions: Prediction[]): Trifecta[] {
+  const frames = predictions.map((p) => p.frame);
+  const rows: Trifecta[] = [];
+  for (const first of frames) {
+    for (const second of frames) {
+      for (const third of frames) {
+        if (first === second || first === third || second === third) continue;
+        const p1 = find(predictions, first).winRate / 100;
+        const p2 = find(predictions, second).top2Rate / 100;
+        const p3 = find(predictions, third).top3Rate / 100;
+        const probability = Math.max(0.001, p1 * p2 * p3 * 0.78);
+        const odds = estimateOdds(probability, first, second, third);
+        const ev = probability * odds * 100;
+        rows.push({
+          key: `${first}-${second}-${third}`,
+          first,
+          second,
+          third,
+          probability: Math.round(probability * 10000) / 100,
+          odds: Math.round(odds * 10) / 10,
+          ev: Math.round(ev),
+          rank: ev >= 120 ? '買い候補' : ev >= 100 ? '注意' : '見送り'
+        });
+      }
+    }
+  }
+  return rows.sort((a, b) => b.ev - a.ev);
+}
+
+function estimateOdds(probability: number, first: number, second: number, third: number) {
+  const base = 0.75 / probability;
+  const outsideBonus = first >= 4 ? 1.25 : first === 1 ? 0.82 : 1;
+  const disorder = first > second ? 1.12 : 1;
+  const thirdBonus = third >= 5 ? 1.08 : 1;
+  return clamp(base * outsideBonus * disorder * thirdBonus, 3, 450);
+}
+
+export function verdict(rows: Trifecta[]) {
+  const best = rows[0];
+  if (!best) return { label: 'データ不足', className: 'skip' };
+  if (best.ev >= 120) return { label: `購入候補 ${best.key}`, className: 'buy' };
+  if (best.ev >= 100) return { label: `注意 ${best.key}`, className: 'watch' };
+  return { label: '見送り推奨', className: 'skip' };
 }
