@@ -1,1 +1,1 @@
-import{NextResponse}from'next/server';import{getBoatDataProvider}from'@/services/dataProviderFactory';export async function GET(req:Request){const venueId=new URL(req.url).searchParams.get('venueId');if(!venueId)return NextResponse.json({ok:false,error:'venueId required'},{status:400});return NextResponse.json({ok:true,data:await getBoatDataProvider().getRaces(venueId)})}
+import{NextResponse}from'next/server';import{runBacktest}from'@/services/backtestService';export async function POST(){return NextResponse.json({ok:true,data:await runBacktest()})}

@@ -1,12 +1,5 @@
-import {BacktestSummary} from '@/types/boat';
-import {yen} from '@/lib/format';
-export default function BacktestSummaryPanel({summary}:{summary:BacktestSummary}){
-  return <div className="grid split3">
-    <div className="card"><div className="muted">検証レース</div><div className="kpi">{summary.raceCount}</div><div className="mini">購入対象 {summary.betRaceCount}R</div></div>
-    <div className="card"><div className="muted">的中率</div><div className="kpi">{summary.hitRate}%</div><div className="mini">的中 {summary.hitCount}R</div></div>
-    <div className={summary.returnRate>=100?'card success-card':'card danger-card'}><div className="muted">回収率</div><div className="kpi">{summary.returnRate}%</div><div className="mini">収支 {yen(summary.profit)}</div></div>
-    <div className="card"><div className="muted">投資</div><div className="score">{yen(summary.investment)}</div></div>
-    <div className="card"><div className="muted">払戻</div><div className="score">{yen(summary.payout)}</div></div>
-    <div className="card"><div className="muted">平均EV</div><div className="score">{summary.averageEv}</div></div>
-  </div>
-}
+import{AiWeights,Entry,Prediction,TrifectaPrediction,Weather,OddsMap}from'@/lib/types';import{defaultWeights}from'@/ai/weights';
+function laneBias(lane:number){return({1:22,2:10,3:7,4:3,5:-3,6:-8} as Record<number,number>)[lane]??0}
+function weatherBias(lane:number,w?:Weather){if(!w)return 0;let s=0;if(w.windSpeed>=5&&lane===1)s-=5;if(w.windSpeed>=5&&lane>=3)s+=2;if(w.waveHeight>=4&&lane>=5)s-=3;return s}
+export function calculatePredictions(entries:Entry[],weather?:Weather,weights:AiWeights=defaultWeights):Prediction[]{const raw=entries.map(e=>{const score=e.nationalWinRate*weights.nationalWinRate+e.localWinRate*weights.localWinRate+e.motorRate*weights.motorRate+e.boatRate*weights.boatRate+(.25-e.avgStart)*weights.avgStart+(6.95-e.exhibitionTime)*weights.exhibitionTime+laneBias(e.lane)*weights.laneBias+weatherBias(e.lane,weather)*weights.weatherBias;return{lane:e.lane,score:Math.max(1,Number(score.toFixed(2)))}});const total=raw.reduce((s,r)=>s+r.score,0);return raw.map(r=>{const firstRate=r.score/total;const top2Rate=Math.min(.92,firstRate*1.72);const top3Rate=Math.min(.98,firstRate*2.38);return{lane:r.lane,score:r.score,firstRate,top2Rate,top3Rate,label:firstRate>=.28?'本命':firstRate>=.18?'対抗':firstRate>=.11?'穴':'厳しめ'}}).sort((a,b)=>b.firstRate-a.firstRate)}
+export function buildTrifectaRanking(predictions:Prediction[],odds:OddsMap):TrifectaPrediction[]{const byLane=new Map(predictions.map(p=>[p.lane,p]));const lanes=predictions.map(p=>p.lane);const rows:TrifectaPrediction[]=[];for(const a of lanes)for(const b of lanes)for(const c of lanes){if(a===b||b===c||a===c)continue;const pa=byLane.get(a)!;const pb=byLane.get(b)!;const pc=byLane.get(c)!;const probability=pa.firstRate*(pb.top2Rate/1.6)*(pc.top3Rate/2.2);const key=`${a}-${b}-${c}`;const odd=odds[key]??0;const expectedValue=probability*odd*100;rows.push({combination:key,probability,odds:odd,expectedValue,judgment:expectedValue>=120?'buy':expectedValue>=100?'watch':'skip'})}return rows.sort((a,b)=>b.expectedValue-a.expectedValue)}

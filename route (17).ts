@@ -1,0 +1,1 @@
+import AiLeagueTable from'@/components/AiLeagueTable';import{runAiLeague}from'@/ai/modelLeague';import{raceService}from'@/services/raceService';export default function Page(){const rows=runAiLeague(raceService.listAllRaces(),raceService.listVenues());return <main className='container'><h1 className='title'>管理・AIリーグ</h1><AiLeagueTable rows={rows}/></main>}

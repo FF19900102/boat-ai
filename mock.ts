@@ -1,1 +1,1 @@
-import{NextResponse}from'next/server';import{getBoatDataProvider}from'@/services/dataProviderFactory';export async function GET(_:Request,{params}:{params:{raceId:string}}){const result=await getBoatDataProvider().getResult(params.raceId);return result?NextResponse.json({ok:true,data:result}):NextResponse.json({ok:false,error:'result not available'},{status:404})}
+import{NextResponse}from'next/server';export async function GET(){return new NextResponse('id,raceId,combination,stake,payout\n',{headers:{'content-type':'text/csv'}})}

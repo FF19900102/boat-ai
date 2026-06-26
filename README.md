@@ -1,1 +1,10 @@
-'use client';import{useEffect,useState}from'react';import{clearBetRecords,loadBetRecords}from'@/lib/storage';import{BetRecord}from'@/lib/types';import{yen}from'@/lib/format';export default function StatsClient(){const[rows,setRows]=useState<BetRecord[]>([]);useEffect(()=>setRows(loadBetRecords()),[]);const stake=rows.reduce((s,r)=>s+r.stake,0),payout=rows.reduce((s,r)=>s+r.payout,0),profit=payout-stake,roi=stake?payout/stake*100:0,hitRate=rows.length?rows.filter(r=>r.hit).length/rows.length*100:0;return <><div className='grid'><div className='card'><div className='muted'>総投資</div><div className='kpi'>{yen(stake)}</div></div><div className='card'><div className='muted'>総払戻</div><div className='kpi'>{yen(payout)}</div></div><div className='card'><div className='muted'>総収支</div><div className={profit>=0?'kpi good':'kpi bad'}>{yen(profit)}</div></div><div className='card'><div className='muted'>回収率</div><div className='kpi'>{roi.toFixed(1)}%</div></div><div className='card'><div className='muted'>的中率</div><div className='kpi'>{hitRate.toFixed(1)}%</div></div></div><div className='card section'><div className='row' style={{justifyContent:'space-between'}}><h2>購入履歴</h2><button className='btn btn-sub' onClick={()=>{clearBetRecords();setRows([])}}>履歴削除</button></div><table className='table'><tbody>{rows.map(r=><tr key={r.id}><td>{r.venueName}</td><td>{r.raceTitle}</td><td>{r.combination}</td><td>{yen(r.stake)}</td><td>{yen(r.payout)}</td></tr>)}</tbody></table></div></>}
+# Boat AI v2.3
+
+v2.3では、Prisma/PostgreSQLへ移行するためのDB接続レイヤーを追加します。
+
+## 追加内容
+- Prisma接続
+- DB状態確認API
+- DB管理画面
+- BetRepositoryのPrisma版
+- PostgreSQL移行手順
