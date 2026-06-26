@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { venues, makeEntries } from "@/lib/mockData";
 import { BoatEntry, SavedRace, Weather } from "@/lib/types";
 import { aiComment, probabilities, trifectaTickets } from "@/lib/boatAi";
-import { clearRaces, loadSavedRaces, saveRace } from "@/lib/storage";
+import { clearRaces, exportSavedRaces, loadSavedRaces, replaceSavedRaces, saveRace } from "@/lib/storage";
 
 type Screen = "home" | "races" | "predict" | "dashboard";
 const today = new Date().toISOString().slice(0, 10);
@@ -97,5 +97,35 @@ function Probability({ probs }: any) { return <div className="card p-4 lg:col-sp
 function EntryTable({ entries, updateEntry }: any) { const cols: [keyof BoatEntry,string][] = [["name","選手"],["grade","級"],["nationalWinRate","全国"],["localWinRate","当地"],["avgST","ST"],["motorRate","M2"],["boatRate","B2"],["exhibitionTime","展示"],["tilt","チルト"],["weight","体重"],["course","進入"]]; return <div className="card p-4"><h3 className="font-black mb-3">出走表入力</h3><div className="overflow-x-auto"><table className="w-full"><thead><tr><th className="th">枠</th>{cols.map(c=><th className="th" key={c[0]}>{c[1]}</th>)}</tr></thead><tbody>{entries.map((e:any,i:number)=><tr key={e.lane}><td className="td font-black">{e.lane}</td>{cols.map(([k])=><td className="td" key={k}><input className="field min-w-20" value={e[k]} type={k==="name"||k==="grade"?"text":"number"} step="0.01" onChange={ev=>updateEntry(i,k,ev.target.value)}/></td>)}</tr>)}</tbody></table></div></div>; }
 function Tickets({ tickets, oddsMap, setOddsMap, boughtTickets, setBoughtTickets }: any) { function toggle(combo:string){ setBoughtTickets((prev:string[])=>prev.includes(combo)?prev.filter(x=>x!==combo):[...prev,combo]); } return <div className="card p-4"><h3 className="font-black mb-3">3連単 期待値ランキング</h3><div className="overflow-x-auto"><table className="w-full"><thead><tr><th className="th">買う</th><th className="th">買い目</th><th className="th">確率</th><th className="th">オッズ</th><th className="th">期待値</th><th className="th">判定</th></tr></thead><tbody>{tickets.map((t:any)=><tr key={t.combo}><td className="td"><input type="checkbox" checked={boughtTickets.includes(t.combo)} onChange={()=>toggle(t.combo)}/></td><td className="td font-black">{t.combo}</td><td className="td">{(t.probability*100).toFixed(2)}%</td><td className="td"><input className="field w-24" type="number" step="0.1" value={oddsMap[t.combo] || t.odds} onChange={e=>setOddsMap({...oddsMap,[t.combo]:Number(e.target.value)})}/></td><td className="td font-black">{t.ev.toFixed(0)}</td><td className="td">{t.rank}</td></tr>)}</tbody></table></div></div>; }
 function ResultBox({ stake, setStake, resultCombo, setResultCombo, payout, setPayout, totalStake, hit, profit }: any) { return <div className="card p-4"><h3 className="font-black mb-3">結果入力・収支</h3><div className="grid gap-3 sm:grid-cols-5"><input className="field" type="number" value={stake} onChange={e=>setStake(Number(e.target.value))} placeholder="1点金額"/><input className="field" value={resultCombo} onChange={e=>setResultCombo(e.target.value)} placeholder="結果 1-2-3"/><input className="field" type="number" value={payout} onChange={e=>setPayout(Number(e.target.value))} placeholder="払戻金"/><div className="rounded-xl bg-slate-100 p-3 text-sm">投資 <b>{totalStake.toLocaleString()}</b>円</div><div className={`rounded-xl p-3 text-sm ${resultCombo ? hit ? "bg-green-100" : "bg-red-100" : "bg-slate-100"}`}>{resultCombo ? (hit ? "的中" : "不的中") : "結果待ち"} <b>{profit.toLocaleString()}</b>円</div></div></div>; }
-function Dashboard({ saved, reload, clear }: any) { const count=saved.length; const totalStake=saved.reduce((s:any,r:any)=>s+(r.stake||0),0); const payout=saved.reduce((s:any,r:any)=>s+(r.hit?r.payout||0:0),0); const hits=saved.filter((r:any)=>r.hit).length; const roi=totalStake?Math.round(payout/totalStake*100):0; return <div className="space-y-4"><div className="flex justify-between"><h2 className="text-2xl font-black">成績</h2><div className="flex gap-2"><button className="btn btn-sub" onClick={reload}>更新</button><button className="btn btn-sub" onClick={clear}>削除</button></div></div><div className="grid gap-3 sm:grid-cols-4"><Stat title="保存レース" value={`${count}`}/><Stat title="的中率" value={`${count?Math.round(hits/count*100):0}%`}/><Stat title="回収率" value={`${roi}%`}/><Stat title="収支" value={`${(payout-totalStake).toLocaleString()}円`}/></div><div className="card p-4 overflow-x-auto"><table className="w-full"><thead><tr><th className="th">日付</th><th className="th">場</th><th className="th">R</th><th className="th">購入</th><th className="th">結果</th><th className="th">収支</th></tr></thead><tbody>{saved.map((r:any)=><tr key={r.id}><td className="td">{r.date}</td><td className="td">{r.venueName}</td><td className="td">{r.raceNo}R</td><td className="td">{r.boughtTickets.join(", ")}</td><td className="td">{r.resultCombo || "未"}</td><td className="td">{(r.profit || 0).toLocaleString()}円</td></tr>)}</tbody></table></div></div>; }
+function Dashboard({ saved, reload, clear }: any) {
+  const count=saved.length;
+  const totalStake=saved.reduce((s:any,r:any)=>s+(r.stake||0),0);
+  const payout=saved.reduce((s:any,r:any)=>s+(r.hit?r.payout||0:0),0);
+  const hits=saved.filter((r:any)=>r.hit).length;
+  const roi=totalStake?Math.round(payout/totalStake*100):0;
+  const venueRows = Object.values(saved.reduce((acc:any,r:any)=>{
+    const key=r.venueName || "不明";
+    acc[key] ||= { venue:key, races:0, stake:0, payout:0, hits:0, profit:0 };
+    acc[key].races += 1;
+    acc[key].stake += r.stake || 0;
+    acc[key].payout += r.hit ? (r.payout || 0) : 0;
+    acc[key].hits += r.hit ? 1 : 0;
+    acc[key].profit += r.profit || 0;
+    return acc;
+  }, {})).sort((a:any,b:any)=>b.profit-a.profit);
+  function downloadJson(){
+    const blob = new Blob([exportSavedRaces()], {type:"application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href=url; a.download=`boat-ai-history-${new Date().toISOString().slice(0,10)}.json`; a.click();
+    URL.revokeObjectURL(url);
+  }
+  function importJson(e:any){
+    const file=e.target.files?.[0]; if(!file) return;
+    const reader=new FileReader();
+    reader.onload=()=>{ try { const data=JSON.parse(String(reader.result)); if(!Array.isArray(data)) throw new Error("array"); replaceSavedRaces(data); reload(); alert("取込完了"); } catch { alert("JSON形式が違います"); } };
+    reader.readAsText(file);
+  }
+  return <div className="space-y-4"><div className="flex flex-wrap justify-between gap-3"><h2 className="text-2xl font-black">成績</h2><div className="flex flex-wrap gap-2"><button className="btn btn-sub" onClick={reload}>更新</button><button className="btn btn-sub" onClick={downloadJson}>履歴DL</button><label className="btn btn-sub cursor-pointer">履歴取込<input type="file" accept="application/json" className="hidden" onChange={importJson}/></label><button className="btn btn-sub" onClick={clear}>削除</button></div></div><div className="grid gap-3 sm:grid-cols-4"><Stat title="保存レース" value={`${count}`}/><Stat title="的中率" value={`${count?Math.round(hits/count*100):0}%`}/><Stat title="回収率" value={`${roi}%`}/><Stat title="収支" value={`${(payout-totalStake).toLocaleString()}円`}/></div><div className="card p-4 overflow-x-auto"><h3 className="mb-3 font-black">競艇場別成績</h3><table className="w-full"><thead><tr><th className="th">場</th><th className="th">R数</th><th className="th">的中率</th><th className="th">回収率</th><th className="th">収支</th></tr></thead><tbody>{venueRows.map((v:any)=><tr key={v.venue}><td className="td font-bold">{v.venue}</td><td className="td">{v.races}</td><td className="td">{Math.round(v.hits/v.races*100)}%</td><td className="td">{v.stake?Math.round(v.payout/v.stake*100):0}%</td><td className="td">{v.profit.toLocaleString()}円</td></tr>)}</tbody></table></div><div className="card p-4 overflow-x-auto"><h3 className="mb-3 font-black">レース履歴</h3><table className="w-full"><thead><tr><th className="th">日付</th><th className="th">場</th><th className="th">R</th><th className="th">購入</th><th className="th">結果</th><th className="th">収支</th></tr></thead><tbody>{saved.map((r:any)=><tr key={r.id}><td className="td">{r.date}</td><td className="td">{r.venueName}</td><td className="td">{r.raceNo}R</td><td className="td">{r.boughtTickets.join(", ")}</td><td className="td">{r.resultCombo || "未"}</td><td className="td">{(r.profit || 0).toLocaleString()}円</td></tr>)}</tbody></table></div></div>;
+}
 function Stat({ title, value }: any) { return <div className="card p-4"><p className="text-sm text-slate-500">{title}</p><b className="text-2xl">{value}</b></div>; }
