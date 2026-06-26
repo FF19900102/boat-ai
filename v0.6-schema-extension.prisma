@@ -1,0 +1,13 @@
+import { NextResponse } from 'next/server';
+import { getBoatDataProvider } from '@/services/dataProviderFactory';
+
+export async function GET(_: Request, { params }: { params: { venueId: string } }) {
+  const provider = getBoatDataProvider();
+  const weather = await provider.getWeather(params.venueId);
+
+  if (!weather) {
+    return NextResponse.json({ ok: false, error: 'weather not found' }, { status: 404 });
+  }
+
+  return NextResponse.json({ ok: true, data: weather });
+}
