@@ -1,1 +1,14 @@
-*{box-sizing:border-box}body{margin:0;background:#f5f7fb;color:#0f172a;font-family:Arial,'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif}.wrap{max-width:1180px;margin:0 auto;padding:24px}.header{background:#08111f;color:white}.header-inner{max-width:1180px;margin:0 auto;padding:18px 24px;display:flex;justify-content:space-between;align-items:center}.brand{font-size:24px;font-weight:800}.sub{color:#94a3b8;font-size:13px}.card{background:white;border:1px solid #e2e8f0;border-radius:16px;padding:20px;box-shadow:0 8px 24px rgba(15,23,42,.06)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}.venue{cursor:pointer;text-decoration:none;color:inherit}.venue:hover .card{border-color:#2563eb}.badge{display:inline-block;background:#dbeafe;color:#1d4ed8;padding:4px 9px;border-radius:999px;font-size:12px;font-weight:700}.title{font-size:30px;margin:0 0 6px}.muted{color:#64748b}.btn{display:inline-block;background:#2563eb;color:white;text-decoration:none;border-radius:12px;padding:10px 14px;font-weight:700}.race-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px}.race{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:16px;text-align:center;text-decoration:none;color:#0f172a;font-weight:800}.race:hover{border-color:#2563eb}.section{margin-top:22px}.topline{display:flex;justify-content:space-between;gap:12px;align-items:end;flex-wrap:wrap}table{width:100%;border-collapse:collapse;background:white;border-radius:14px;overflow:hidden}th,td{padding:10px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:14px}th{background:#f8fafc}.pill{border-radius:999px;padding:4px 8px;background:#ecfdf5;color:#047857;font-size:12px;font-weight:700}
+import './globals.css'
+
+export const metadata = {
+  title: 'Boat AI',
+  description: '競艇AI予想アプリ'
+}
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="ja">
+      <body>{children}</body>
+    </html>
+  )
+}
