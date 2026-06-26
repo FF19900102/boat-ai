@@ -1,42 +1,14 @@
-'use client';
+import './globals.css';
 
-import { useMemo, useState } from 'react';
-import { PredictionTable } from '@/components/PredictionTable';
-import { RaceSelector } from '@/components/RaceSelector';
-import { VenueList } from '@/components/VenueList';
-import { sampleRacers, venues } from '@/lib/sampleData';
-import { predictRace } from '@/lib/predict';
+export const metadata = {
+  title: 'Boat AI',
+  description: '競艇AI分析アプリ',
+};
 
-export default function Home() {
-  const [selectedVenueId, setSelectedVenueId] = useState('hamanako');
-  const [selectedRace, setSelectedRace] = useState(1);
-  const predictions = useMemo(() => predictRace(sampleRacers), []);
-  const venue = venues.find((v) => v.id === selectedVenueId);
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="container">
-      <header className="hero">
-        <p className="badge">Boat AI / STEP 1</p>
-        <h1>競艇AI分析</h1>
-        <p>開催場 → レース → AI確率まで動く土台です。</p>
-      </header>
-
-      <section className="panel">
-        <h2>本日開催</h2>
-        <VenueList venues={venues} selectedVenueId={selectedVenueId} onSelect={setSelectedVenueId} />
-      </section>
-
-      <section className="panel">
-        <h2>{venue?.name} レース選択</h2>
-        <RaceSelector selectedRace={selectedRace} onSelect={setSelectedRace} />
-      </section>
-
-      <section className="panel highlight">
-        <h2>{venue?.name} {selectedRace}R</h2>
-        <p>次のSTEPで、ここに出走表入力・オッズ・期待値を入れます。</p>
-      </section>
-
-      <PredictionTable predictions={predictions} />
-    </main>
+    <html lang="ja">
+      <body>{children}</body>
+    </html>
   );
 }

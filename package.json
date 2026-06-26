@@ -1,17 +1,48 @@
-import { Boat } from './types';
-export function scoreBoat(b:Boat){
-  const frameBonus = [0,18,8,4,1,-2,-5][b.frame] ?? 0;
-  const stScore = Math.max(0,(0.25-b.avgST)*120);
-  const exScore = b.exhibition ? Math.max(0,(7.05-b.exhibition)*35) : 0;
-  const score = b.nationalWin*8 + b.localWin*5 + b.motorRate*0.45 + b.boatRate*0.25 + stScore + exScore + frameBonus;
-  return Math.max(1, Math.round(score*10)/10);
+import { Boat, Exacta3, Prediction } from './types';
+
+export const defaultBoats: Boat[] = [1,2,3,4,5,6].map((n)=>({
+  frame:n,name:`${n}号艇`,className:'A1',nationalRate:5.5,localRate:5.5,avgST:0.16,motorRate:35,boatRate:33,exhibition:6.80,tilt:0,weight:52
+}));
+
+function frameBonus(frame:number){return ({1:18,2:7,3:4,4:1,5:-3,6:-7} as any)[frame] ?? 0}
+
+export function predictBoats(boats: Boat[]): Prediction[] {
+  const raw = boats.map((b)=>{
+    const score =
+      b.nationalRate * 10 +
+      b.localRate * 5 +
+      b.motorRate * 0.55 +
+      b.boatRate * 0.25 +
+      Math.max(0, (7.05 - b.exhibition) * 45) +
+      Math.max(0, (0.22 - b.avgST) * 160) +
+      frameBonus(b.frame);
+    return {...b, score: Math.max(1, score)};
+  });
+  const total = raw.reduce((s,b)=>s+b.score,0);
+  return raw.map((b)=>{
+    const winProb = b.score / total;
+    return {
+      ...b,
+      winProb,
+      top2Prob: Math.min(0.95, winProb * 1.72),
+      top3Prob: Math.min(0.98, winProb * 2.35),
+    };
+  }).sort((a,b)=>b.winProb-a.winProb);
 }
-export function calcProbabilities(boats:Boat[]){
-  const scored = boats.map(b=>({...b,score:scoreBoat(b)}));
-  const total = scored.reduce((s,b)=>s+(b.score||0),0)||1;
-  return scored.map(b=>{
-    const p1 = (b.score||0)/total*100;
-    return {...b,p1:round(p1),p2:round(Math.min(96,p1*1.85+8)),p3:round(Math.min(99,p1*2.45+18))};
-  }).sort((a,b)=>(b.p1||0)-(a.p1||0));
+
+export function generateTrifecta(preds: Prediction[], oddsMap: Record<string, number>): Exacta3[] {
+  const list: Exacta3[] = [];
+  for (const a of preds) for (const b of preds) for (const c of preds) {
+    if (a.frame===b.frame || a.frame===c.frame || b.frame===c.frame) continue;
+    const key = `${a.frame}-${b.frame}-${c.frame}`;
+    const restAfterA = preds.filter(x=>x.frame!==a.frame).reduce((s,x)=>s+x.score,0);
+    const pB = b.score / restAfterA;
+    const restAfterAB = preds.filter(x=>x.frame!==a.frame && x.frame!==b.frame).reduce((s,x)=>s+x.score,0);
+    const pC = c.score / restAfterAB;
+    const probability = a.winProb * pB * pC;
+    const odds = oddsMap[key] || 0;
+    const ev = odds ? probability * odds * 100 : 0;
+    list.push({key, probability, odds, ev, decision: ev>=120?'買い候補':ev>=100?'注意':'見送り'});
+  }
+  return list.sort((x,y)=>y.ev-x.ev || y.probability-x.probability);
 }
-function round(n:number){return Math.round(n*10)/10}

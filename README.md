@@ -1,2 +1,3 @@
-# Boat AI code2
-出走表入力・保存・AIスコア簡易計算まで。
+/** @type {import('next').NextConfig} */
+const nextConfig = { reactStrictMode: true };
+module.exports = nextConfig;
