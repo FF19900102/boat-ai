@@ -1,18 +1,21 @@
-# Boat AI step real 3
-
-## 追加した機能
-- 購入予定リスト
-- 期待値上位買い候補の一括追加
-- 複数買い目の投資額管理
-- 結果入力時に複数買い目から的中判定
-- 成績ダッシュボード
-- 競艇場別成績
-- 履歴一覧
-- バックアップJSON出力
-- バックアップJSON読込
-- 入力途中のレース内容をlocalStorageへ自動保存
-
-## 使い方
-1. ZIPを展開
-2. 中身をGitHubへ上書きアップロード
-3. Vercelでデプロイ
+{
+  "name": "boat-ai",
+  "version": "0.4.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "typescript": "latest"
+  },
+  "devDependencies": {}
+}
