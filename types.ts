@@ -1,48 +1,36 @@
 'use client';
-import { useMemo, useState } from 'react';
-import type { Racer, RaceWeather, SavedRace } from '@/lib/types';
-import { generateTrifectaTickets } from '@/lib/ai';
+import type { RaceMeta } from '@/services/boatDataClient';
 
-export function ResultPanel({ venue, raceNo, racers, weather }: { venue: string; raceNo: number; racers: Racer[]; weather: RaceWeather }) {
-  const [first, setFirst] = useState(1);
-  const [second, setSecond] = useState(2);
-  const [third, setThird] = useState(3);
-  const [payout, setPayout] = useState(0);
-  const [betAmount, setBetAmount] = useState(1000);
-  const [message, setMessage] = useState('');
-  const tickets = useMemo(() => generateTrifectaTickets(racers, weather).slice(0, 5), [racers, weather]);
+type Props = {
+  raceNo: number;
+  races?: RaceMeta[];
+  onSelect: (raceNo: number) => void;
+};
 
-  function save() {
-    const resultCombo = `${first}-${second}-${third}`;
-    const hit = tickets.some((t) => t.combination === resultCombo);
-    const profit = hit ? payout - betAmount : -betAmount;
-    const race: SavedRace = {
-      id: `${Date.now()}`,
-      date: new Date().toISOString(),
-      venue,
-      raceNo,
-      racers,
-      weather,
-      tickets,
-      result: { first, second, third, payout, betAmount, hit, profit }
-    };
-    const old = JSON.parse(localStorage.getItem('boat-ai-races') || '[]') as SavedRace[];
-    localStorage.setItem('boat-ai-races', JSON.stringify([race, ...old].slice(0, 200)));
-    setMessage(hit ? `的中 +${profit.toLocaleString()}円` : `不的中 ${profit.toLocaleString()}円`);
-  }
+export function RaceSelector({ raceNo, races, onSelect }: Props) {
+  const list = races && races.length ? races : Array.from({ length: 12 }, (_, i) => ({
+    venueId: '',
+    raceNo: i + 1,
+    status: 'before' as const,
+    startTime: '',
+    title: `${i + 1}R`
+  }));
 
   return (
     <section className="card">
-      <h2>結果入力・保存</h2>
-      <div className="grid grid-3">
-        <label>1着<input type="number" min="1" max="6" value={first} onChange={(e) => setFirst(Number(e.target.value))} /></label>
-        <label>2着<input type="number" min="1" max="6" value={second} onChange={(e) => setSecond(Number(e.target.value))} /></label>
-        <label>3着<input type="number" min="1" max="6" value={third} onChange={(e) => setThird(Number(e.target.value))} /></label>
-        <label>払戻金<input type="number" value={payout} onChange={(e) => setPayout(Number(e.target.value))} /></label>
-        <label>投資額<input type="number" value={betAmount} onChange={(e) => setBetAmount(Number(e.target.value))} /></label>
-        <button className="btn" onClick={save}>結果を保存</button>
+      <div className="section-title">
+        <h2>レース選択</h2>
+        <span className="small">12R対応</span>
       </div>
-      {message && <p className="badge">{message}</p>}
+      <div className="grid grid-3">
+        {list.map((race) => (
+          <button key={race.raceNo} className={`race-button ${raceNo === race.raceNo ? 'active' : ''}`} onClick={() => onSelect(race.raceNo)}>
+            <b>{race.raceNo}R</b>
+            <span>{race.startTime || '--:--'}</span>
+            <em>{race.status === 'closed' ? '終了' : race.status === 'open' ? '発売中' : '前'}</em>
+          </button>
+        ))}
+      </div>
     </section>
   );
 }

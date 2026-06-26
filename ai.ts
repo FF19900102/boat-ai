@@ -1,7 +1,16 @@
 'use client';
-import { Boat } from '@/lib/types';
-const fields:[keyof Boat,string,string][]=[['name','選手名','text'],['className','級別','text'],['nationalWin','全国勝率','number'],['localWin','当地勝率','number'],['avgST','平均ST','number'],['motorRate','モーター2連率','number'],['boatRate','ボート2連率','number'],['exhibition','展示タイム','number'],['tilt','チルト','number'],['weight','体重','number'],['course','進入','number']];
-export default function BoatInput({boats,setBoats}:{boats:Boat[];setBoats:(b:Boat[])=>void}){
- const update=(i:number,k:keyof Boat,v:string)=>{const next=[...boats];(next[i] as any)[k]= k==='name'||k==='className'?v:Number(v);setBoats(next)};
- return <div className="card"><h2>出走表入力</h2><div style={{overflowX:'auto'}}><table className="table"><thead><tr><th>枠</th>{fields.map(f=><th key={String(f[0])}>{f[1]}</th>)}</tr></thead><tbody>{boats.map((b,i)=><tr key={b.frame}><td><b>{b.frame}</b></td>{fields.map(([k,label,type])=><td key={String(k)}><input className="input" type={type} step="0.01" value={(b as any)[k]} onChange={e=>update(i,k,e.target.value)} style={{minWidth:k==='name'?120:80}} /></td>)}</tr>)}</tbody></table></div></div>
+import type { RaceWeather } from '@/lib/types';
+
+export function WeatherPanel({ weather, onChange }: { weather: RaceWeather; onChange: (weather: RaceWeather) => void }) {
+  return (
+    <section className="card">
+      <h2>水面・気象</h2>
+      <div className="grid grid-2">
+        <label>天候<select value={weather.weather} onChange={(e) => onChange({ ...weather, weather: e.target.value })}><option>晴れ</option><option>曇り</option><option>雨</option><option>雪</option></select></label>
+        <label>風向<select value={weather.windDirection} onChange={(e) => onChange({ ...weather, windDirection: e.target.value })}><option>向かい風</option><option>追い風</option><option>左横風</option><option>右横風</option><option>無風</option></select></label>
+        <label>風速 m<input type="number" value={weather.windSpeed} onChange={(e) => onChange({ ...weather, windSpeed: Number(e.target.value) })} /></label>
+        <label>波高 cm<input type="number" value={weather.waveHeight} onChange={(e) => onChange({ ...weather, waveHeight: Number(e.target.value) })} /></label>
+      </div>
+    </section>
+  );
 }

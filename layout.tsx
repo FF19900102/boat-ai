@@ -40,3 +40,56 @@ input, select { width:100%; background:#08172a; border:1px solid var(--line); co
 .tabs { display:flex; gap:8px; flex-wrap:wrap; }
 .small { font-size: 12px; color: var(--muted); }
 @media (max-width: 820px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } .container { padding: 14px; } }
+
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.race-button {
+  display: grid;
+  gap: 4px;
+  text-align: left;
+}
+
+.race-button span {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.race-button em {
+  font-style: normal;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.sync-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+}
+
+.sync-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn.secondary {
+  background: #1f2937;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+@media (max-width: 720px) {
+  .sync-card {
+    display: grid;
+  }
+}

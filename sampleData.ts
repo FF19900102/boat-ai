@@ -1,30 +1,41 @@
 'use client';
-import { useEffect, useState } from 'react';
-import type { SavedRace } from '@/lib/types';
+import type { Racer } from '@/lib/types';
 
-export function Dashboard() {
-  const [races, setRaces] = useState<SavedRace[]>([]);
-  useEffect(() => {
-    setRaces(JSON.parse(localStorage.getItem('boat-ai-races') || '[]'));
-  }, []);
-  const totalBet = races.reduce((s, r) => s + (r.result?.betAmount || 0), 0);
-  const totalPayout = races.reduce((s, r) => s + (r.result?.hit ? r.result.payout : 0), 0);
-  const hits = races.filter((r) => r.result?.hit).length;
-  const roi = totalBet ? (totalPayout / totalBet) * 100 : 0;
+export function RacerTable({ racers, onChange }: { racers: Racer[]; onChange: (racers: Racer[]) => void }) {
+  function update(index: number, key: keyof Racer, value: string) {
+    const next = [...racers];
+    const old = next[index];
+    next[index] = { ...old, [key]: key === 'name' || key === 'className' ? value : Number(value) } as Racer;
+    onChange(next);
+  }
 
   return (
     <section className="card">
-      <h2>成績ダッシュボード</h2>
-      <div className="grid grid-3">
-        <div className="kpi"><span className="small">保存レース</span><strong>{races.length}</strong></div>
-        <div className="kpi"><span className="small">的中率</span><strong>{races.length ? ((hits / races.length) * 100).toFixed(1) : '0.0'}%</strong></div>
-        <div className="kpi"><span className="small">回収率</span><strong className={roi >= 100 ? 'good' : 'bad'}>{roi.toFixed(1)}%</strong></div>
-      </div>
-      <div className="table-wrap" style={{ marginTop: 14 }}>
+      <h2>出走表・展示データ</h2>
+      <div className="table-wrap">
         <table>
-          <thead><tr><th>日付</th><th>場</th><th>R</th><th>結果</th><th>収支</th></tr></thead>
+          <thead>
+            <tr>
+              <th>枠</th><th>選手</th><th>級</th><th>全国</th><th>当地</th><th>平均ST</th><th>モーター</th><th>ボート</th><th>展示</th><th>チルト</th><th>体重</th><th>単勝目安</th>
+            </tr>
+          </thead>
           <tbody>
-            {races.slice(0, 10).map((r) => <tr key={r.id}><td>{new Date(r.date).toLocaleString('ja-JP')}</td><td>{r.venue}</td><td>{r.raceNo}R</td><td>{r.result?.first}-{r.result?.second}-{r.result?.third}</td><td className={(r.result?.profit || 0) >= 0 ? 'good' : 'bad'}>{r.result?.profit.toLocaleString()}円</td></tr>)}
+            {racers.map((r, i) => (
+              <tr key={r.lane}>
+                <td>{r.lane}</td>
+                <td><input value={r.name} onChange={(e) => update(i, 'name', e.target.value)} /></td>
+                <td><select value={r.className} onChange={(e) => update(i, 'className', e.target.value)}><option>A1</option><option>A2</option><option>B1</option><option>B2</option></select></td>
+                <td><input type="number" step="0.1" value={r.nationalWinRate} onChange={(e) => update(i, 'nationalWinRate', e.target.value)} /></td>
+                <td><input type="number" step="0.1" value={r.localWinRate} onChange={(e) => update(i, 'localWinRate', e.target.value)} /></td>
+                <td><input type="number" step="0.01" value={r.avgStart} onChange={(e) => update(i, 'avgStart', e.target.value)} /></td>
+                <td><input type="number" step="0.1" value={r.motorRate} onChange={(e) => update(i, 'motorRate', e.target.value)} /></td>
+                <td><input type="number" step="0.1" value={r.boatRate} onChange={(e) => update(i, 'boatRate', e.target.value)} /></td>
+                <td><input type="number" step="0.01" value={r.exhibitionTime} onChange={(e) => update(i, 'exhibitionTime', e.target.value)} /></td>
+                <td><input type="number" step="0.5" value={r.tilt} onChange={(e) => update(i, 'tilt', e.target.value)} /></td>
+                <td><input type="number" step="0.1" value={r.weight} onChange={(e) => update(i, 'weight', e.target.value)} /></td>
+                <td><input type="number" step="0.1" value={r.oddsWin} onChange={(e) => update(i, 'oddsWin', e.target.value)} /></td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
