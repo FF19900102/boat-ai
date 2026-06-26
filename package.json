@@ -1,92 +1,27 @@
-export type Racer = {
-  frame: number;
-  name: string;
-  className: string;
-  nationalWin: number;
-  localWin: number;
-  avgSt: number;
-  motorRate: number;
-  boatRate: number;
-  exhibition: number;
-  tilt: number;
-  weight: number;
-  odds: Record<string, number>;
-};
-
-export type Weather = { wind: number; wave: number };
-export type Prediction = Racer & { score: number; winProb: number; top2Prob: number; top3Prob: number };
-export type Ticket = { key: string; prob: number; odds: number; ev: number; judge: '買い候補' | '注意' | '買わない' };
-
-const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n));
-
-export function calcPredictions(racers: Racer[], weather: Weather): Prediction[] {
-  const raw = racers.map((r) => {
-    const frameBonus = [0, 18, 8, 3, -3, -7, -11][r.frame] ?? 0;
-    const stScore = clamp((0.22 - r.avgSt) * 100, -8, 12);
-    const exScore = clamp((6.9 - r.exhibition) * 18, -8, 12);
-    const windRisk = weather.wind >= 5 && r.frame === 1 ? -5 : 0;
-    const waveRisk = weather.wave >= 5 && r.frame >= 5 ? -3 : 0;
-    const score =
-      r.nationalWin * 8 +
-      r.localWin * 4 +
-      r.motorRate * 0.34 +
-      r.boatRate * 0.18 +
-      stScore +
-      exScore +
-      frameBonus +
-      windRisk +
-      waveRisk;
-    return { ...r, score: Math.max(1, score) };
-  });
-  const sum = raw.reduce((a, b) => a + b.score, 0) || 1;
-  return raw
-    .map((r) => {
-      const winProb = r.score / sum;
-      return {
-        ...r,
-        winProb,
-        top2Prob: clamp(winProb * 1.75, 0, 0.92),
-        top3Prob: clamp(winProb * 2.35, 0, 0.98)
-      };
-    })
-    .sort((a, b) => b.winProb - a.winProb);
+import {Bet,Racer,RaceMeta} from './types'
+const clamp=(n:number,min:number,max:number)=>Math.max(min,Math.min(max,n))
+export function scoreRacer(r:Racer,meta:RaceMeta){
+  const laneBonus={1:18,2:8,3:4,4:0,5:-5,6:-9}[r.lane]??0
+  const win=r.nationalWin*7+r.localWin*4
+  const motor=r.motorRate*.32+r.boatRate*.15
+  const st=clamp((0.22-r.avgST)*170, -10, 18)
+  const ex=clamp((6.95-r.exhibition)*45, -12, 16)
+  const weather= meta.windSpeed>=5 && r.lane===1 ? -5 : meta.windSpeed>=5 && r.lane>=3 ? 3 : 0
+  return clamp(50+laneBonus+win+motor+st+ex+weather,1,180)
 }
-
-export function makeTickets(preds: Prediction[]): Ticket[] {
-  const byFrame = [...preds].sort((a, b) => a.frame - b.frame);
-  const tickets: Ticket[] = [];
-  for (const a of byFrame) {
-    for (const b of byFrame) {
-      for (const c of byFrame) {
-        if (a.frame === b.frame || a.frame === c.frame || b.frame === c.frame) continue;
-        const key = `${a.frame}-${b.frame}-${c.frame}`;
-        const prob = a.winProb * (b.top2Prob / Math.max(0.01, 1 - a.winProb)) * (c.top3Prob / 2.2);
-        const odds = a.odds[key] || 0;
-        const ev = odds > 0 ? prob * odds * 100 : 0;
-        tickets.push({
-          key,
-          prob,
-          odds,
-          ev,
-          judge: ev >= 120 ? '買い候補' : ev >= 100 ? '注意' : '買わない'
-        });
-      }
-    }
+export function probabilities(racers:Racer[],meta:RaceMeta){
+  const scores=racers.map(r=>scoreRacer(r,meta)); const total=scores.reduce((a,b)=>a+b,0)||1
+  return racers.map((r,i)=>({lane:r.lane,name:r.name,score:Math.round(scores[i]),winProb:scores[i]/total,top2:clamp(scores[i]/total*1.85,0,0.9),top3:clamp(scores[i]/total*2.55,0,0.97)})).sort((a,b)=>b.winProb-a.winProb)
+}
+export function generateBets(racers:Racer[],meta:RaceMeta,oddsMap:Record<string,number>):Bet[]{
+  const probs=probabilities(racers,meta); const map=new Map(probs.map(p=>[p.lane,p.winProb]))
+  const lanes=racers.map(r=>r.lane); const bets:Bet[]=[]
+  for(const a of lanes)for(const b of lanes)for(const c of lanes){if(a===b||a===c||b===c)continue
+    const pa=map.get(a)||0, pb=map.get(b)||0, pc=map.get(c)||0
+    const prob=pa*(pb/(1-pa))*0.92*(pc/(1-pa-pb+0.001))*0.78
+    const key=`${a}-${b}-${c}`; const odds=Number(oddsMap[key]||0); const ev=odds?prob*odds*100:0
+    bets.push({key,prob,odds,ev,judge:ev>=120?'買い候補':ev>=100?'注意':'買わない'})
   }
-  return tickets.sort((a, b) => b.ev - a.ev || b.prob - a.prob);
+  return bets.sort((a,b)=>b.ev-a.ev || b.prob-a.prob)
 }
-
-export const defaultRacers = (): Racer[] => [1,2,3,4,5,6].map((frame) => ({
-  frame,
-  name: `${frame}号艇`,
-  className: frame <= 2 ? 'A1' : frame <= 4 ? 'A2' : 'B1',
-  nationalWin: frame === 1 ? 6.4 : 5.8 - frame * 0.18,
-  localWin: frame === 1 ? 6.1 : 5.4 - frame * 0.12,
-  avgSt: 0.15 + frame * 0.01,
-  motorRate: 42 - frame * 2,
-  boatRate: 36 - frame,
-  exhibition: 6.72 + frame * 0.03,
-  tilt: 0,
-  weight: 52 + frame,
-  odds: {}
-}));
+export const defaultRacers=():Racer[]=>[1,2,3,4,5,6].map(lane=>({lane,name:`${lane}号艇`,className:'A1',nationalWin:lane===1?6.8:5.2,localWin:lane===1?6.2:5.0,avgST:0.16,motorRate:35,boatRate:32,exhibition:6.82+lane*0.02,tilt:0,weight:52,course:lane}))

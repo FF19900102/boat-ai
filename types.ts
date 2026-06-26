@@ -1,18 +1,30 @@
-export function RaceSelector({ selectedRace, onSelect }: {
-  selectedRace: number;
-  onSelect: (race: number) => void;
-}) {
-  return (
-    <div className="raceGrid">
-      {Array.from({ length: 12 }, (_, i) => i + 1).map((race) => (
-        <button
-          key={race}
-          className={selectedRace === race ? 'race active' : 'race'}
-          onClick={() => onSelect(race)}
-        >
-          {race}R
-        </button>
-      ))}
-    </div>
-  );
-}
+'use client'
+import {useMemo,useState,useEffect} from 'react'
+import {defaultRacers,generateBets,probabilities} from '../lib/boatAi'
+import {Racer,RaceMeta,SavedRace} from '../lib/types'
+const venues=['桐生','戸田','江戸川','平和島','多摩川','浜名湖','蒲郡','常滑','津','三国','びわこ','住之江','尼崎','鳴門','丸亀','児島','宮島','徳山','下関','若松','芦屋','福岡','唐津','大村']
+export default function Page(){
+ const today=new Date().toISOString().slice(0,10)
+ const [meta,setMeta]=useState<RaceMeta>({date:today,venue:'浜名湖',raceNo:1,weather:'晴',windDir:'向かい風',windSpeed:2,wave:2})
+ const [racers,setRacers]=useState<Racer[]>(defaultRacers())
+ const [odds,setOdds]=useState<Record<string,number>>({})
+ const [saved,setSaved]=useState<SavedRace[]>([])
+ const [resultOrder,setResultOrder]=useState('1-2-3'); const [payout,setPayout]=useState(0); const [stake,setStake]=useState(1000)
+ useEffect(()=>{const raw=localStorage.getItem('boat-ai-races'); if(raw)setSaved(JSON.parse(raw))},[])
+ const probs=useMemo(()=>probabilities(racers,meta),[racers,meta])
+ const bets=useMemo(()=>generateBets(racers,meta,odds),[racers,meta,odds])
+ const topBets=bets.filter(b=>b.odds>0).slice(0,20)
+ const saveRace=()=>{const race:SavedRace={id:crypto.randomUUID(),meta,racers,bets:topBets,createdAt:new Date().toISOString()}; const next=[race,...saved]; setSaved(next); localStorage.setItem('boat-ai-races',JSON.stringify(next))}
+ const saveResult=()=>{const hit=topBets.some(b=>b.key===resultOrder&&b.judge==='買い候補'); const profit=hit?payout-stake:-stake; const race:SavedRace={id:crypto.randomUUID(),meta,racers,bets:topBets,result:{order:resultOrder,payout,stake,hit,profit},createdAt:new Date().toISOString()}; const next=[race,...saved]; setSaved(next); localStorage.setItem('boat-ai-races',JSON.stringify(next))}
+ const totalStake=saved.reduce((a,r)=>a+(r.result?.stake||0),0), totalPay=saved.reduce((a,r)=>a+(r.result?.hit?r.result.payout:0),0), hits=saved.filter(r=>r.result?.hit).length, results=saved.filter(r=>r.result).length
+ return <main className="wrap"><div className="header"><div className="brand"><h1>Boat AI</h1><p>確率・期待値・結果検証</p></div><button className="btn primary" onClick={saveRace}>予想を保存</button></div>
+ <div className="card"><h2 className="sectionTitle">本日開催場</h2><div className="grid">{venues.map(v=><button key={v} className={'btn '+(meta.venue===v?'active':'')} onClick={()=>setMeta({...meta,venue:v})}>{v}</button>)}</div></div>
+ <div className="card"><h2 className="sectionTitle">レース選択</h2><div className="grid">{Array.from({length:12},(_,i)=>i+1).map(n=><button key={n} className={'btn '+(meta.raceNo===n?'active':'')} onClick={()=>setMeta({...meta,raceNo:n})}>{n}R</button>)}</div></div>
+ <div className="cols"><section className="card"><h2 className="sectionTitle">出走表・展示・気象</h2><div className="row" style={{marginBottom:12}}><div><div className="label">日付</div><input className="input" value={meta.date} onChange={e=>setMeta({...meta,date:e.target.value})}/></div><div><div className="label">天候</div><input className="input" value={meta.weather} onChange={e=>setMeta({...meta,weather:e.target.value})}/></div><div><div className="label">風向</div><input className="input" value={meta.windDir} onChange={e=>setMeta({...meta,windDir:e.target.value})}/></div><div><div className="label">風速m</div><input className="input" type="number" value={meta.windSpeed} onChange={e=>setMeta({...meta,windSpeed:+e.target.value})}/></div><div><div className="label">波cm</div><input className="input" type="number" value={meta.wave} onChange={e=>setMeta({...meta,wave:+e.target.value})}/></div></div>
+ <table className="table"><thead><tr><th>艇</th><th>選手</th><th>級</th><th>全国</th><th>当地</th><th>ST</th><th>M%</th><th>B%</th><th>展示</th></tr></thead><tbody>{racers.map((r,i)=><tr key={r.lane}><td>{r.lane}</td>{(['name','className','nationalWin','localWin','avgST','motorRate','boatRate','exhibition'] as const).map(k=><td key={k}><input className="input" value={r[k] as any} type={typeof r[k]==='number'?'number':'text'} step="0.01" onChange={e=>{const next=[...racers];(next[i] as any)[k]=typeof r[k]==='number'?+e.target.value:e.target.value;setRacers(next)}}/></td>)}</tr>)}</tbody></table></section>
+ <section className="card"><h2 className="sectionTitle">AI確率</h2><table className="table"><thead><tr><th>艇</th><th>スコア</th><th>1着</th><th>2連</th><th>3連</th></tr></thead><tbody>{probs.map(p=><tr key={p.lane}><td><span className="pill">{p.lane}号艇</span></td><td>{p.score}</td><td>{(p.winProb*100).toFixed(1)}%</td><td>{(p.top2*100).toFixed(1)}%</td><td>{(p.top3*100).toFixed(1)}%</td></tr>)}</tbody></table></section></div>
+ <div className="card"><h2 className="sectionTitle">3連単オッズ入力・期待値ランキング</h2><p className="small">よく買う目だけオッズ入力でもOK。期待値120以上を買い候補にします。</p><div className="grid">{bets.slice(0,60).map(b=><div key={b.key}><div className="label">{b.key} / 確率 {(b.prob*100).toFixed(2)}%</div><input className="input" type="number" placeholder="オッズ" value={odds[b.key]||''} onChange={e=>setOdds({...odds,[b.key]:+e.target.value})}/></div>)}</div></div>
+ <div className="cols"><section className="card"><h2 className="sectionTitle">推奨買い目</h2><table className="table"><thead><tr><th>買い目</th><th>確率</th><th>オッズ</th><th>期待値</th><th>判定</th></tr></thead><tbody>{topBets.map(b=><tr key={b.key}><td>{b.key}</td><td>{(b.prob*100).toFixed(2)}%</td><td>{b.odds}</td><td>{b.ev.toFixed(0)}</td><td><span className={'pill '+(b.ev>=120?'good':b.ev>=100?'warn':'bad')}>{b.judge}</span></td></tr>)}</tbody></table>{topBets.filter(b=>b.ev>=120).length===0&&<p className="pill bad">このレースは見送り</p>}</section>
+ <section className="card"><h2 className="sectionTitle">結果入力</h2><div className="grid"><div><div className="label">確定3連単</div><input className="input" value={resultOrder} onChange={e=>setResultOrder(e.target.value)}/></div><div><div className="label">払戻金</div><input className="input" type="number" value={payout} onChange={e=>setPayout(+e.target.value)}/></div><div><div className="label">投資額</div><input className="input" type="number" value={stake} onChange={e=>setStake(+e.target.value)}/></div></div><button className="btn primary" style={{marginTop:12}} onClick={saveResult}>結果を保存</button></section></div>
+ <div className="card"><h2 className="sectionTitle">成績</h2><div className="grid"><div><div className="small">保存レース</div><div className="stat">{saved.length}</div></div><div><div className="small">的中率</div><div className="stat">{results?((hits/results)*100).toFixed(1):0}%</div></div><div><div className="small">回収率</div><div className="stat">{totalStake?((totalPay/totalStake)*100).toFixed(1):0}%</div></div><div><div className="small">収支</div><div className="stat">{totalPay-totalStake}円</div></div></div></div>
+ </main>}

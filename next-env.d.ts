@@ -1,28 +1,5 @@
-export type Boat = {
-  frame: number;
-  name: string;
-  className: string;
-  nationalRate: number;
-  localRate: number;
-  avgST: number;
-  motorRate: number;
-  boatRate: number;
-  exhibition: number;
-  tilt: number;
-  weight: number;
-};
-
-export type Prediction = Boat & {
-  score: number;
-  winProb: number;
-  top2Prob: number;
-  top3Prob: number;
-};
-
-export type Exacta3 = {
-  key: string;
-  probability: number;
-  odds: number;
-  ev: number;
-  decision: '買い候補' | '注意' | '見送り';
-};
+export type Racer={lane:number;name:string;className:string;nationalWin:number;localWin:number;avgST:number;motorRate:number;boatRate:number;exhibition:number;tilt:number;weight:number;course:number}
+export type RaceMeta={date:string;venue:string;raceNo:number;weather:string;windDir:string;windSpeed:number;wave:number}
+export type Bet={key:string;prob:number;odds:number;ev:number;judge:string}
+export type SavedRace={id:string;meta:RaceMeta;racers:Racer[];bets:Bet[];result?:RaceResult;createdAt:string}
+export type RaceResult={order:string;payout:number;stake:number;hit:boolean;profit:number}
