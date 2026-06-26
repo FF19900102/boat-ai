@@ -1,12 +1,3 @@
-# Boat AI STEP2
-
-Next.js版の実コード。
-
-## 入った機能
-- トップ画面
-- 本日開催場一覧
-- レース選択
-- STEP3への導線
-
-## GitHubアップロード
-ZIPを展開して中身を全部アップロード。
+/** @type {import('next').NextConfig} */
+const nextConfig = {};
+module.exports = nextConfig;

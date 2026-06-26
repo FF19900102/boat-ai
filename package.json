@@ -1,17 +1,47 @@
-export const venues = [
-  { id: 'hamanako', name: '浜名湖', status: '開催中', races: 12 },
-  { id: 'gamagori', name: '蒲郡', status: 'ナイター', races: 12 },
-  { id: 'tokoname', name: '常滑', status: '開催中', races: 12 },
-  { id: 'heiwajima', name: '平和島', status: '開催中', races: 12 },
-  { id: 'toda', name: '戸田', status: '開催中', races: 12 },
-  { id: 'kiryu', name: '桐生', status: 'ナイター', races: 12 },
-];
+import { Prediction, Racer } from './types';
 
-export const defaultBoats = [
-  { lane: 1, name: '選手A', winRate: 6.8, localRate: 6.4, st: 0.14, motor: 42, boat: 36, exhibition: 6.72 },
-  { lane: 2, name: '選手B', winRate: 5.9, localRate: 5.7, st: 0.16, motor: 35, boat: 31, exhibition: 6.76 },
-  { lane: 3, name: '選手C', winRate: 6.1, localRate: 6.0, st: 0.15, motor: 38, boat: 33, exhibition: 6.74 },
-  { lane: 4, name: '選手D', winRate: 5.4, localRate: 5.2, st: 0.17, motor: 31, boat: 35, exhibition: 6.79 },
-  { lane: 5, name: '選手E', winRate: 4.8, localRate: 4.9, st: 0.18, motor: 29, boat: 30, exhibition: 6.83 },
-  { lane: 6, name: '選手F', winRate: 4.3, localRate: 4.2, st: 0.19, motor: 27, boat: 29, exhibition: 6.86 },
-];
+function laneBonus(lane: number) {
+  const bonus: Record<number, number> = { 1: 18, 2: 7, 3: 4, 4: 1, 5: -3, 6: -6 };
+  return bonus[lane] ?? 0;
+}
+
+function classBonus(className: string) {
+  if (className === 'A1') return 8;
+  if (className === 'A2') return 4;
+  if (className === 'B1') return 0;
+  return -3;
+}
+
+export function predictRace(racers: Racer[]): Prediction[] {
+  const raw = racers.map((r) => {
+    const stScore = Math.max(0, (0.24 - r.avgST) * 120);
+    const exhibitionScore = Math.max(0, (6.95 - r.exhibitionTime) * 35);
+    const score =
+      r.nationalWinRate * 8 +
+      r.localWinRate * 4 +
+      r.motorRate * 0.35 +
+      r.boatRate * 0.15 +
+      stScore +
+      exhibitionScore +
+      laneBonus(r.lane) +
+      classBonus(r.className);
+
+    return { racer: r, score: Math.max(1, score) };
+  });
+
+  const total = raw.reduce((sum, item) => sum + item.score, 0);
+
+  return raw
+    .map(({ racer, score }) => {
+      const firstRate = (score / total) * 100;
+      return {
+        lane: racer.lane,
+        name: racer.name,
+        score: Math.round(score * 10) / 10,
+        firstRate: Math.round(firstRate * 10) / 10,
+        top2Rate: Math.min(95, Math.round(firstRate * 1.75 * 10) / 10),
+        top3Rate: Math.min(99, Math.round(firstRate * 2.45 * 10) / 10)
+      };
+    })
+    .sort((a, b) => b.firstRate - a.firstRate);
+}
