@@ -1,0 +1,2 @@
+import {Race} from '@/types/boat';
+export default function EntryTable({race}:{race:Race}){return <table className="table"><thead><tr><th>枠</th><th>選手</th><th>級</th><th>全国</th><th>当地</th><th>ST</th><th>モーター</th><th>展示</th></tr></thead><tbody>{race.racers.map(r=><tr key={r.lane}><td><span className={`lane lane${r.lane}`}>{r.lane}</span></td><td>{r.name}</td><td>{r.className}</td><td>{r.nationalWin}</td><td>{r.localWin}</td><td>{r.avgSt}</td><td>{r.motorRate}%</td><td>{r.exhibition}</td></tr>)}</tbody></table>}

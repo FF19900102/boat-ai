@@ -1,0 +1,2 @@
+import {TrifectaPick} from '@/types/boat';
+export default function ExpectedValueTable({picks}:{picks:TrifectaPick[]}){return <table className="table"><thead><tr><th>買い目</th><th>確率</th><th>オッズ</th><th>期待値</th><th>判定</th></tr></thead><tbody>{picks.slice(0,12).map(p=><tr key={p.combo}><td><strong>{p.combo}</strong></td><td>{p.probability}%</td><td>{p.odds}</td><td className={p.ev>=120?'good':p.ev>=100?'warn':'muted'}>{p.ev}</td><td>{p.judgement}</td></tr>)}</tbody></table>}

@@ -1,2 +1,2 @@
-import Link from 'next/link';
-export default function Header(){return <div className="container header"><Link href="/" className="brand">Boat AI</Link><div className="nav"><Link href="/">開催場</Link><Link href="/data">データ取得</Link><Link href="/dashboard">成績</Link><Link href="/settings">設定</Link></div></div>}
+import ApiConnectionPanel from '@/components/ApiConnectionPanel';
+export default function ApiPreviewPage(){return <><div className="card"><h1>APIプレビュー</h1><p className="muted">リアルタイムデータ接続前の設計確認画面です。</p></div><div style={{marginTop:16}}><ApiConnectionPanel/></div></>}

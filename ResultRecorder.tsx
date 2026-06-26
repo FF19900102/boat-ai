@@ -1,28 +1,26 @@
-import { strategyLabels, strategyIds } from '@/lib/strategyEngine';
+import Link from 'next/link';
+import { getTodayVenues } from '@/services/boatrace/client';
 
-export default function LearningPage() {
+export default async function HomePage() {
+  const venues = await getTodayVenues();
   return (
-    <>
-      <div className="section-title"><h2>AI学習ロードマップ</h2><span className="badge">Step 13</span></div>
-      <div className="grid grid-2">
-        {strategyIds.map(id => (
-          <div className="card" key={id}>
-            <h3 style={{ marginTop: 0 }}>{strategyLabels[id].name}</h3>
-            <p className="sub">{strategyLabels[id].description}</p>
-            <div style={{ height: 12 }} />
-            <span className="badge">今後：結果保存から重み調整</span>
-          </div>
+    <main className="container">
+      <section className="hero">
+        <span className="badge">Step20 / 実装版</span>
+        <h1>Boat AI</h1>
+        <p>開催場選択、レース選択、出走表、AI確率、3連単期待値ランキング、結果保存の土台まで入っています。</p>
+        <Link href="/venues" className="button">本日の開催場を見る</Link>
+      </section>
+      <div className="section-title"><h2>本日開催</h2><span className="muted">{venues.length}場</span></div>
+      <div className="grid grid-3">
+        {venues.map((venue) => (
+          <Link className="card" href={`/venues/${venue.id}`} key={venue.id}>
+            <span className="badge">{venue.area}</span>
+            <h3>{venue.name}</h3>
+            <p className="muted">水質：{venue.water}</p>
+          </Link>
         ))}
       </div>
-      <div className="section-title"><h2>次に接続するデータ</h2></div>
-      <div className="card">
-        <div className="grid grid-4">
-          <div className="kpi"><span>出走表</span><strong>API化</strong></div>
-          <div className="kpi"><span>展示</span><strong>速報</strong></div>
-          <div className="kpi"><span>オッズ</span><strong>自動/手動</strong></div>
-          <div className="kpi"><span>結果</span><strong>自動反映</strong></div>
-        </div>
-      </div>
-    </>
+    </main>
   );
 }

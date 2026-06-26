@@ -1,2 +1,2 @@
-import { BoatProbability } from '@/types/boat';
-export function ProbabilityTable({items}:{items:BoatProbability[]}){return <div className="card"><h2>AI確率</h2><table className="table"><thead><tr><th>枠</th><th>選手</th><th>スコア</th><th>1着率</th><th>2連対</th><th>3連対</th></tr></thead><tbody>{items.map(p=><tr key={p.frame}><td>{p.frame}</td><td>{p.name}</td><td>{p.score}</td><td className="good">{p.first}%</td><td>{p.top2}%</td><td>{p.top3}%</td></tr>)}</tbody></table></div>}
+import {estimateRaceStatus} from '@/services/resultWatcher';
+export default function RaceTimeline({deadline}:{deadline:string}){const s=estimateRaceStatus(deadline);const items=['出走表','展示','オッズ','締切','結果'];return <div className="card"><h3>レース進行</h3><p className="muted">現在：{s.message}</p><div className="status">{items.map((x,i)=><span key={x} className="pill">{i+1}. {x}</span>)}</div><p className="mini">次回チェック目安：{s.nextPollSec}秒</p></div>}

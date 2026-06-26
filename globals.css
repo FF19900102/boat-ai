@@ -1,3 +1,13 @@
-import { NextResponse } from 'next/server';
-import { getTodayVenues } from '@/services/raceService';
-export async function GET(){return NextResponse.json({venues:await getTodayVenues()});}
+import {TrifectaPick} from '@/types/boat';
+import {EV_RULES} from '@/lib/constants';
+
+export type PurchaseLine = { combo:string; ev:number; odds:number; probability:number; amount:number; reason:string };
+export type PurchasePlan = { judgement:'購入候補'|'少額'|'見送り'; total:number; lines:PurchaseLine[]; message:string };
+
+export function createPurchasePlan(picks:TrifectaPick[], unit=EV_RULES.defaultBetUnit):PurchasePlan{
+  const strong=picks.filter(p=>p.ev>=EV_RULES.buy).slice(0,EV_RULES.maxPicks);
+  if(strong.length===0) return {judgement:'見送り',total:0,lines:[],message:'期待値120以上がないため見送り推奨'};
+  const lines=strong.map((p,i)=>({combo:p.combo,ev:p.ev,odds:p.odds,probability:p.probability,amount:p.ev>=EV_RULES.buyStrong?unit*2:unit,reason:i===0?'最上位EV':'EV基準クリア'}));
+  const total=lines.reduce((s,l)=>s+l.amount,0);
+  return {judgement:strong[0].ev>=EV_RULES.buyStrong?'購入候補':'少額',total,lines,message:`${lines.length}点、合計${total}円`};
+}

@@ -1,2 +1,3 @@
-import {Prediction} from '@/types/boat';
-export default function PredictionTable({predictions}:{predictions:Prediction[]}){return <table className="table"><thead><tr><th>順位</th><th>艇</th><th>選手</th><th>AIスコア</th><th>1着率</th><th>2連対</th><th>3連対</th></tr></thead><tbody>{predictions.map(p=><tr key={p.lane}><td>{p.rank}</td><td><span className={`lane lane${p.lane}`}>{p.lane}</span></td><td>{p.name}</td><td>{p.score}</td><td>{p.first}%</td><td>{p.top2}%</td><td>{p.top3}%</td></tr>)}</tbody></table>}
+'use client';
+import {useEffect,useState} from 'react';
+export default function LiveStatusPanel(){const[time,setTime]=useState('');useEffect(()=>{const f=()=>setTime(new Date().toLocaleTimeString('ja-JP',{hour12:false}));f();const id=setInterval(f,30000);return()=>clearInterval(id)},[]);return <div className="card"><div className="row"><div><h3>速報監視</h3><p className="mini">現在は手動/モック。次工程で結果速報取得APIを接続。</p></div><span className="pill">最終確認 {time}</span></div><div className="bar"><span style={{width:'62%'}}/></div></div>}

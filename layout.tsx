@@ -1,41 +1,40 @@
-import { ApiStatusCard } from '@/components/ApiStatusCard';
-import { OddsWorkbench } from '@/components/OddsWorkbench';
-import { PredictionTable } from '@/components/PredictionTable';
-import { ResultRecorder } from '@/components/ResultRecorder';
-import { StrategyPanel } from '@/components/StrategyPanel';
-import { WeatherPanel } from '@/components/WeatherPanel';
-import { makeTrifectaPredictions, predictRace } from '@/lib/aiEngine';
-import { getRace } from '@/lib/mockData';
-import { evaluateStrategies, makeRaceCommentary } from '@/lib/strategyEngine';
+import { getRaceById } from '@/services/boatrace/client';
+import { calculateProbabilities, generateTrifecta } from '@/ai/predict';
+import { EntryTable } from '@/components/race/EntryTable';
+import { ExpectedValueTable } from '@/components/race/ExpectedValueTable';
+import { ProbabilityTable } from '@/components/race/ProbabilityTable';
+import { ResultRecorder } from '@/components/race/ResultRecorder';
+import { WeatherCard } from '@/components/race/WeatherCard';
 
-export default function RaceDetailPage({ params }: { params: { venue: string; raceNo: string } }) {
-  const race = getRace(params.venue, Number(params.raceNo));
-  const predictions = predictRace(race);
-  const trifecta = makeTrifectaPredictions(race);
-  const strategies = evaluateStrategies(race);
-  const comments = makeRaceCommentary(race, strategies[0]);
-  const buyCount = trifecta.filter(i => i.expectedValue >= 120).length;
+export default async function RacePage({ params }: { params: { raceId: string } }) {
+  const race = await getRaceById(params.raceId);
+  const probabilities = calculateProbabilities(race.entries, race.weather);
+  const trifecta = generateTrifecta(probabilities);
   const top = trifecta[0];
 
   return (
-    <>
-      <div className="section-title">
-        <h2>{race.venueName} {race.raceNo}R AI予想</h2>
-        <span className="badge">締切 {race.deadline}</span>
+    <main className="container">
+      <section className="hero">
+        <span className="badge">{race.venueName} {race.raceNo}R</span>
+        <h1>{race.title}</h1>
+        <p>締切 {race.deadline} / 距離 {race.distance}m</p>
+        <div className="grid grid-3">
+          <div><div className="muted">AI本命</div><div className="kpi green">{probabilities[0].lane}号艇</div></div>
+          <div><div className="muted">最上位買い目</div><div className="kpi green">{top.combination}</div></div>
+          <div><div className="muted">期待値</div><div className="kpi yellow">{top.expectedValue}</div></div>
+        </div>
+      </section>
+      <div className="section-title"><h2>レース分析</h2><span className="muted">AI計算 初期版</span></div>
+      <div className="grid grid-2">
+        <WeatherCard weather={race.weather} />
+        <ProbabilityTable rows={probabilities} />
       </div>
-      <WeatherPanel race={race} />
-      <div style={{ height: 14 }} />
-      <StrategyPanel strategies={strategies} comments={comments} />
-      <div className="section-title"><h2>AI確率ランキング</h2><span className="badge">1着・2連対・3連対</span></div>
-      <PredictionTable predictions={predictions} />
-      <div className="section-title"><h2>3連単 期待値ランキング</h2><span className="badge">120通り計算 / 買い候補 {buyCount}点</span></div>
-      {top && <div className="alert">最上位：{top.combination} / 期待値 {top.expectedValue.toFixed(1)} / {top.expectedValue >= 120 ? '購入候補' : '見送り寄り'}</div>}
-      <div style={{height: 14}} />
-      <OddsWorkbench race={race} initialItems={trifecta} />
-      <div style={{height: 18}} />
-      <ResultRecorder race={race} topItems={trifecta} />
-      <div style={{height: 18}} />
-      <ApiStatusCard />
-    </>
+      <div style={{ height: 16 }} />
+      <EntryTable entries={race.entries} />
+      <div style={{ height: 16 }} />
+      <ExpectedValueTable rows={trifecta} />
+      <div style={{ height: 16 }} />
+      <ResultRecorder raceId={race.id} topCombination={top.combination} />
+    </main>
   );
 }

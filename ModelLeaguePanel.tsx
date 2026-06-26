@@ -1,0 +1,2 @@
+import Link from 'next/link';import {Venue} from '@/types/boat';
+export default function VenueCard({venue}:{venue:Venue}){return <Link className="card" href={`/venue/${venue.id}`}><div className="row"><strong>{venue.name}</strong><span className="pill">{venue.area}</span></div><p className="muted">天候 {venue.weather} / 風 {venue.wind}m / 波 {venue.wave}cm</p><span className="pill">本日開催</span></Link>}

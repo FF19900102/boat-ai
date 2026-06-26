@@ -1,23 +1,3 @@
-import { BoatProbability } from "@/lib/types";
-
-export function ProbabilityTable({ rows }: { rows: BoatProbability[] }) {
-  return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
-      <table className="w-full">
-        <thead><tr><th className="th">順位</th><th className="th">艇</th><th className="th">選手</th><th className="th">1着率</th><th className="th">2着以内</th><th className="th">3着以内</th></tr></thead>
-        <tbody>
-          {rows.map((r) => (
-            <tr key={r.lane}>
-              <td className="td font-black">{r.rank}</td>
-              <td className="td font-black">{r.lane}</td>
-              <td className="td">{r.racerName}</td>
-              <td className="td font-bold">{(r.firstRate * 100).toFixed(1)}%</td>
-              <td className="td">{(r.top2Rate * 100).toFixed(1)}%</td>
-              <td className="td">{(r.top3Rate * 100).toFixed(1)}%</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
+'use client';
+import {useEffect,useState} from 'react';import {calcStats,loadResults} from '@/services/storage';import {RaceResult} from '@/types/boat';
+export default function Dashboard(){const[results,setResults]=useState<RaceResult[]>([]);useEffect(()=>setResults(loadResults()),[]);const s=calcStats(results);return <><div className="card"><h1>成績ダッシュボード</h1><p className="muted">localStorage保存の成績です。</p></div><div className="grid venues" style={{marginTop:16}}><div className="card"><p className="muted">レース数</p><div className="score">{s.count}</div></div><div className="card"><p className="muted">的中率</p><div className="score">{s.hitRate}%</div></div><div className="card"><p className="muted">回収率</p><div className="score">{s.roi}%</div></div><div className="card"><p className="muted">収支</p><div className={s.profit>=0?'score good':'score bad'}>{s.profit}円</div></div></div></>}
