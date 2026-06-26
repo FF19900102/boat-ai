@@ -1,3 +1,1 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {};
-module.exports = nextConfig;
+{"scripts":{"dev":"next dev","build":"next build","start":"next start","lint":"next lint"},"dependencies":{"@types/node":"latest","@types/react":"latest","@types/react-dom":"latest","next":"latest","react":"latest","react-dom":"latest","typescript":"latest"},"devDependencies":{}}

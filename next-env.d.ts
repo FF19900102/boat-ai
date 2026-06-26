@@ -1,29 +1,8 @@
-import { Venue, Racer, Weather } from './types';
-
-export const venues: Venue[] = [
-  { id:'01', name:'桐生', area:'群馬', status:'ナイター' },{ id:'02', name:'戸田', area:'埼玉', status:'開催' },
-  { id:'03', name:'江戸川', area:'東京', status:'開催' },{ id:'04', name:'平和島', area:'東京', status:'開催' },
-  { id:'05', name:'多摩川', area:'東京', status:'開催' },{ id:'06', name:'浜名湖', area:'静岡', status:'開催' },
-  { id:'07', name:'蒲郡', area:'愛知', status:'ナイター' },{ id:'08', name:'常滑', area:'愛知', status:'開催' },
-  { id:'09', name:'津', area:'三重', status:'開催' },{ id:'10', name:'三国', area:'福井', status:'モーニング' },
-  { id:'11', name:'びわこ', area:'滋賀', status:'開催' },{ id:'12', name:'住之江', area:'大阪', status:'ナイター' }
-];
-
-const names = ['山田 太郎','鈴木 一成','田中 翔','佐藤 健','高橋 誠','伊藤 大輔','加藤 翼','中村 亮','小林 優','渡辺 航'];
-export function makeRacers(seed:number): Racer[] {
-  return Array.from({length:6},(_,i)=>({
-    lane:i+1,
-    name:names[(seed+i)%names.length],
-    className:['A1','A2','B1','B1','A2','B2'][(seed+i)%6],
-    nationalWin:Number((4.2+(((seed+i*7)%28)/10)).toFixed(2)),
-    localWin:Number((3.8+(((seed+i*5)%32)/10)).toFixed(2)),
-    st:Number((0.11+(((seed+i*3)%12)/100)).toFixed(2)),
-    motorRate:Number((24+((seed+i*11)%44)).toFixed(1)),
-    boatRate:Number((22+((seed+i*13)%42)).toFixed(1)),
-    exhibition:Number((6.60+(((seed+i*4)%23)/100)).toFixed(2)),
-    tilt:[-0.5,0,0,0,0.5,1][(seed+i)%6],
-    weight:Number((50+((seed+i*2)%8)).toFixed(1)),
-    entry:i+1
-  }));
-}
-export const defaultWeather: Weather = { weather:'晴れ', windDir:'向かい風', windSpeed:2, wave:2 };
+export type Boat={lane:number;name:string;className:string;national:number;local:number;motor:number;boat:number;st:number;exhibition:number;odds:number};
+export type Bet={ticket:string;prob:number;odds:number;ev:number;judge:string};
+export const venues=['桐生','戸田','江戸川','平和島','多摩川','浜名湖','蒲郡','常滑','津','三国','びわこ','住之江','尼崎','鳴門','丸亀','児島','宮島','徳山','下関','若松','芦屋','福岡','唐津','大村'];
+export function defaultBoats():Boat[]{return [1,2,3,4,5,6].map(n=>({lane:n,name:`${n}号艇`,className:'A1',national:5.8,local:5.5,motor:35,boat:33,st:0.16,exhibition:6.8+n*0.02,odds:n===1?2.2:8+n*3}))}
+export function laneBonus(lane:number){return ({1:18,2:7,3:3,4:0,5:-4,6:-8} as any)[lane]??0}
+export function scoreBoat(b:Boat){const ex=Math.max(0,(7.05-b.exhibition)*28);const st=Math.max(0,(0.25-b.st)*130);return b.national*8+b.local*4+b.motor*.45+b.boat*.25+ex+st+laneBonus(b.lane)}
+export function probabilities(boats:Boat[]){const scores=boats.map(b=>Math.max(1,scoreBoat(b)));const total=scores.reduce((a,b)=>a+b,0);return boats.map((b,i)=>({...b,score:scores[i],winProb:scores[i]/total,top2:Math.min(.95,(scores[i]/total)*1.85),top3:Math.min(.98,(scores[i]/total)*2.65)})).sort((a,b)=>b.winProb-a.winProb)}
+export function trifectaBets(boats:Boat[]):Bet[]{const probs=probabilities(boats);const map=new Map(probs.map(p=>[p.lane,p]));const bets:Bet[]=[];for(const a of boats){for(const b of boats){for(const c of boats){if(a.lane===b.lane||a.lane===c.lane||b.lane===c.lane)continue;const pa=map.get(a.lane)!.winProb;const pb=map.get(b.lane)!.top2/2;const pc=map.get(c.lane)!.top3/3;const prob=pa*pb*pc*1.25;const odds=(a.odds+b.odds+c.odds)*1.8+(a.lane===1?2:15);const ev=prob*odds*100;const judge=ev>=120?'買い候補':ev>=100?'注意':'見送り';bets.push({ticket:`${a.lane}-${b.lane}-${c.lane}`,prob,odds,ev,judge});}}}return bets.sort((a,b)=>b.ev-a.ev).slice(0,20)}
