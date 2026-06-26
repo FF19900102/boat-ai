@@ -1,47 +1,17 @@
-import { Prediction, Racer } from './types';
-
-function laneBonus(lane: number) {
-  const bonus: Record<number, number> = { 1: 18, 2: 7, 3: 4, 4: 1, 5: -3, 6: -6 };
-  return bonus[lane] ?? 0;
+import { Boat } from './types';
+export function scoreBoat(b:Boat){
+  const frameBonus = [0,18,8,4,1,-2,-5][b.frame] ?? 0;
+  const stScore = Math.max(0,(0.25-b.avgST)*120);
+  const exScore = b.exhibition ? Math.max(0,(7.05-b.exhibition)*35) : 0;
+  const score = b.nationalWin*8 + b.localWin*5 + b.motorRate*0.45 + b.boatRate*0.25 + stScore + exScore + frameBonus;
+  return Math.max(1, Math.round(score*10)/10);
 }
-
-function classBonus(className: string) {
-  if (className === 'A1') return 8;
-  if (className === 'A2') return 4;
-  if (className === 'B1') return 0;
-  return -3;
+export function calcProbabilities(boats:Boat[]){
+  const scored = boats.map(b=>({...b,score:scoreBoat(b)}));
+  const total = scored.reduce((s,b)=>s+(b.score||0),0)||1;
+  return scored.map(b=>{
+    const p1 = (b.score||0)/total*100;
+    return {...b,p1:round(p1),p2:round(Math.min(96,p1*1.85+8)),p3:round(Math.min(99,p1*2.45+18))};
+  }).sort((a,b)=>(b.p1||0)-(a.p1||0));
 }
-
-export function predictRace(racers: Racer[]): Prediction[] {
-  const raw = racers.map((r) => {
-    const stScore = Math.max(0, (0.24 - r.avgST) * 120);
-    const exhibitionScore = Math.max(0, (6.95 - r.exhibitionTime) * 35);
-    const score =
-      r.nationalWinRate * 8 +
-      r.localWinRate * 4 +
-      r.motorRate * 0.35 +
-      r.boatRate * 0.15 +
-      stScore +
-      exhibitionScore +
-      laneBonus(r.lane) +
-      classBonus(r.className);
-
-    return { racer: r, score: Math.max(1, score) };
-  });
-
-  const total = raw.reduce((sum, item) => sum + item.score, 0);
-
-  return raw
-    .map(({ racer, score }) => {
-      const firstRate = (score / total) * 100;
-      return {
-        lane: racer.lane,
-        name: racer.name,
-        score: Math.round(score * 10) / 10,
-        firstRate: Math.round(firstRate * 10) / 10,
-        top2Rate: Math.min(95, Math.round(firstRate * 1.75 * 10) / 10),
-        top3Rate: Math.min(99, Math.round(firstRate * 2.45 * 10) / 10)
-      };
-    })
-    .sort((a, b) => b.firstRate - a.firstRate);
-}
+function round(n:number){return Math.round(n*10)/10}
