@@ -1,2 +1,30 @@
-import {estimateRaceStatus} from '@/services/resultWatcher';
-export default function RaceTimeline({deadline}:{deadline:string}){const s=estimateRaceStatus(deadline);const items=['出走表','展示','オッズ','締切','結果'];return <div className="card"><h3>レース進行</h3><p className="muted">現在：{s.message}</p><div className="status">{items.map((x,i)=><span key={x} className="pill">{i+1}. {x}</span>)}</div><p className="mini">次回チェック目安：{s.nextPollSec}秒</p></div>}
+import { Entry } from '@/lib/types';
+
+export default function EntryTable({ entries }: { entries: Entry[] }) {
+  return (
+    <div className="card">
+      <h2>出走表</h2>
+      <table className="table">
+        <thead>
+          <tr><th>艇</th><th>選手</th><th>級</th><th>全国</th><th>当地</th><th>Motor</th><th>Boat</th><th>ST</th><th>展示</th><th>体重</th></tr>
+        </thead>
+        <tbody>
+          {entries.map(e => (
+            <tr key={e.lane}>
+              <td>{e.lane}</td>
+              <td>{e.racerName}</td>
+              <td>{e.className}</td>
+              <td>{e.nationalWinRate}</td>
+              <td>{e.localWinRate}</td>
+              <td>{e.motorRate}%</td>
+              <td>{e.boatRate}%</td>
+              <td>{e.avgStart}</td>
+              <td>{e.exhibitionTime}</td>
+              <td>{e.weight}kg</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}

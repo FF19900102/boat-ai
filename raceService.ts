@@ -1,1 +1,21 @@
-*{box-sizing:border-box}body{margin:0;background:#07111f;color:#e5eefc;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:inherit;text-decoration:none}.container{max-width:1180px;margin:0 auto;padding:24px}.grid{display:grid;gap:16px}.card{background:#0f1b2e;border:1px solid #223655;border-radius:18px;padding:18px;box-shadow:0 12px 40px #0004}.btn{display:inline-flex;align-items:center;justify-content:center;border-radius:12px;padding:10px 14px;background:#1e63ff;color:white;font-weight:700}.muted{color:#94a3b8}.title{font-size:32px;font-weight:900;margin:0 0 8px}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:10px;border-bottom:1px solid #223655;text-align:left}.badge{padding:4px 8px;border-radius:999px;background:#16345f;font-size:12px}.good{color:#4ade80}.warn{color:#facc15}.bad{color:#fb7185}input,select{background:#081426;color:#e5eefc;border:1px solid #2a4167;border-radius:10px;padding:8px;width:100%}
+import Link from 'next/link';
+import { Venue } from '@/lib/types';
+
+export default function VenueCard({ venue }: { venue: Venue }) {
+  return (
+    <Link href={`/venues?venue=${venue.id}`} className="card">
+      <div style={{display:'flex', justifyContent:'space-between', gap:12}}>
+        <div>
+          <h3 style={{margin:'0 0 8px', fontSize:22}}>{venue.name}</h3>
+          <p className="muted" style={{margin:0}}>{venue.region}</p>
+        </div>
+        <span className="badge">{venue.isOpenToday ? '本日開催' : '休み'}</span>
+      </div>
+      <div style={{marginTop:14, display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:8}}>
+        <div><div className="muted">風</div><b>{venue.weather.windSpeed}m</b></div>
+        <div><div className="muted">波</div><b>{venue.weather.waveHeight}cm</b></div>
+        <div><div className="muted">天候</div><b>{venue.weather.condition}</b></div>
+      </div>
+    </Link>
+  );
+}

@@ -1,9 +1,9 @@
 import StatsClient from '@/components/StatsClient';
 
-export default function HistoryPage() {
+export default function DashboardPage() {
   return (
     <main className="container">
-      <h1 className="title">購入履歴</h1>
+      <h1 className="title">成績ダッシュボード</h1>
       <StatsClient />
     </main>
   );

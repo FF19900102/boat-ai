@@ -1,6 +1,6 @@
-import { Header } from '@/components/Header';
-import { ProbabilityTable } from '@/components/ProbabilityTable';
-import { TrifectaTable } from '@/components/TrifectaTable';
-import { calculateProbabilities, generateTrifecta } from '@/ai/probability';
-import { getRace } from '@/services/raceService';
-export default async function RaceDetail({params}:{params:{id:string}}){const [venue,...rest]=params.id.split('-');const raceNo=Number(rest.at(-1)??1);const race=await getRace(venue,raceNo);const probs=calculateProbabilities(race);const picks=generateTrifecta(race);const buy=picks.filter(p=>p.verdict==='BUY').length;return <main className="container"><Header/><section className="card"><h1 className="title">{race.venueName} {race.raceNo}R</h1><p className="muted">{race.title} / 締切 {race.deadline} / {race.weather.weather} {race.weather.windDirection}{race.weather.windSpeed}m 波{race.weather.waveHeight}cm</p><h2>{buy>0?'買い候補あり':'見送り優勢'}</h2></section><div className="grid" style={{gridTemplateColumns:'1fr',marginTop:16}}><div className="card"><h2>出走表</h2><table className="table"><thead><tr><th>枠</th><th>選手</th><th>級</th><th>全国</th><th>当地</th><th>ST</th><th>モーター</th><th>展示</th></tr></thead><tbody>{race.racers.map(r=><tr key={r.frame}><td>{r.frame}</td><td>{r.name}</td><td>{r.class}</td><td>{r.nationalWinRate}</td><td>{r.localWinRate}</td><td>{r.avgST}</td><td>{r.motorRate}%</td><td>{r.exhibitionTime}</td></tr>)}</tbody></table></div><ProbabilityTable items={probs}/><TrifectaTable items={picks}/></div></main>}
+import { NextResponse } from 'next/server';
+import { raceService } from '@/services/raceService';
+
+export async function GET() {
+  return NextResponse.json(raceService.listVenues());
+}

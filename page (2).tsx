@@ -1,2 +1,24 @@
-import {venues} from '@/lib/mockData';import VenueCard from '@/components/VenueCard';import {todayLabel} from '@/lib/format';
-export default function Home(){return <><div className="card"><h1>Boat AI</h1><p className="muted">{todayLabel()} 本日の開催場を選択してください。</p><p className="mini">現在はモックデータで動作。データ取得層を追加済みなので、公式/有料APIへ差し替え可能です。</p></div><h2 className="section-title">本日開催</h2><div className="grid venues">{venues.filter(v=>v.isOpen).map(v=><VenueCard key={v.id} venue={v}/>)}</div></>}
+import Link from 'next/link';
+import { raceService } from '@/services/raceService';
+import VenueCard from '@/components/VenueCard';
+
+export default function HomePage() {
+  const venues = raceService.listTodayVenues();
+
+  return (
+    <main className="container">
+      <section className="card" style={{marginBottom:20}}>
+        <h1 className="title">Boat AI v0.3</h1>
+        <p className="muted">確率・期待値・結果検証で戦う競艇AI。まずは本日開催場からレースを選択してください。</p>
+        <div className="row">
+          <Link className="btn" href="/venues">開催場を選ぶ</Link>
+          <Link className="btn btn-sub" href="/dashboard">成績を見る</Link>
+        </div>
+      </section>
+      <h2>本日開催</h2>
+      <div className="grid">
+        {venues.map(v => <VenueCard key={v.id} venue={v} />)}
+      </div>
+    </main>
+  );
+}

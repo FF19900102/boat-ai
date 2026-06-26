@@ -1,20 +1,26 @@
-import Link from 'next/link';
-import { getTodayVenues } from '@/services/boatrace/client';
+import RaceCard from '@/components/RaceCard';
+import VenueCard from '@/components/VenueCard';
+import { raceService } from '@/services/raceService';
 
-export default async function VenuesPage() {
-  const venues = await getTodayVenues();
+export default function VenuesPage({ searchParams }: { searchParams: { venue?: string } }) {
+  const venues = raceService.listVenues();
+  const selected = searchParams.venue ? raceService.getVenue(searchParams.venue) : undefined;
+  const races = selected ? raceService.listRaces(selected.id) : [];
+
   return (
     <main className="container">
-      <div className="section-title"><h2>本日の開催場</h2><span className="muted">自動取得接続前のモック</span></div>
-      <div className="grid grid-3">
-        {venues.map((venue) => (
-          <Link className="card" href={`/venues/${venue.id}`} key={venue.id}>
-            <h3>{venue.name}</h3>
-            <p className="muted">{venue.area} / {venue.water}</p>
-            <span className="button">レース一覧</span>
-          </Link>
-        ))}
-      </div>
+      <h1 className="title">開催場・レース選択</h1>
+      {!selected ? (
+        <div className="grid">{venues.map(v => <VenueCard key={v.id} venue={v} />)}</div>
+      ) : (
+        <>
+          <div className="card" style={{marginBottom:16}}>
+            <h2 style={{marginTop:0}}>{selected.name}</h2>
+            <p className="muted">天候 {selected.weather.condition} / 風 {selected.weather.windDirection}{selected.weather.windSpeed}m / 波 {selected.weather.waveHeight}cm</p>
+          </div>
+          <div className="grid">{races.map(r => <RaceCard key={r.id} race={r} />)}</div>
+        </>
+      )}
     </main>
   );
 }

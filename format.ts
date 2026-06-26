@@ -1,4 +1,33 @@
-import {DataSourceReport} from '@/types/boat';
-const label={connected:'接続済み',mock:'モック',waiting:'待機',error:'エラー'} as const;
-const cls={connected:'source-ok',mock:'source-wait',waiting:'source-wait',error:'source-ng'} as const;
-export default function DataSourceBadge({sources}:{sources:DataSourceReport[]}){return <div className="card"><h3>データ取得状態</h3><div className="status">{sources.map(s=><span key={s.name} className="pill"><b>{s.name}</b>：<span className={cls[s.status]}>{label[s.status]}</span></span>)}</div><div style={{marginTop:10}}>{sources.map(s=><p key={s.name} className="mini">{s.name} / {s.updatedAt} / {s.message}</p>)}</div></div>}
+import EntryTable from '@/components/EntryTable';
+import PredictionTable from '@/components/PredictionTable';
+import TrifectaTable from '@/components/TrifectaTable';
+import BetForm from '@/components/BetForm';
+import { calculatePredictions, buildTrifectaRanking } from '@/ai/predictor';
+import { raceService } from '@/services/raceService';
+
+export default function RaceDetailPage({ params }: { params: { raceId: string } }) {
+  const race = raceService.getRace(params.raceId);
+  if (!race) {
+    return <main className="container"><div className="card">レースが見つかりません。</div></main>;
+  }
+  const venue = raceService.getVenue(race.venueId);
+  const predictions = calculatePredictions(race.entries, venue?.weather);
+  const trifecta = buildTrifectaRanking(predictions, race.odds);
+  const buyCount = trifecta.filter(t => t.expectedValue >= 120).length;
+  const top = trifecta[0];
+
+  return (
+    <main className="container">
+      <div className="card" style={{marginBottom:16}}>
+        <h1 className="title">{venue?.name} {race.title}</h1>
+        <p className="muted">締切 {race.deadline} / 買い候補 {buyCount}点 / {buyCount === 0 ? '見送り推奨' : '期待値候補あり'}</p>
+      </div>
+      <div style={{display:'grid', gap:16}}>
+        <EntryTable entries={race.entries} />
+        <PredictionTable predictions={predictions} />
+        <TrifectaTable rows={trifecta} />
+        <BetForm raceId={race.id} venueName={venue?.name ?? ''} raceTitle={race.title} defaultCombination={top?.combination ?? '1-2-3'} />
+      </div>
+    </main>
+  );
+}
