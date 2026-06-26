@@ -38,6 +38,8 @@ export type RaceResult = {
   hit: boolean;
   returnAmount: number;
   profit: number;
+  bestEv: number;
+  bestCombo: string;
   createdAt: string;
 };
 
@@ -113,4 +115,19 @@ export function grade(ev: number) {
   if (ev >= 100) return '★★★';
   if (ev >= 80) return '★★';
   return '★';
+}
+
+export function summarize(rows: RaceResult[], key: 'venue' | 'raceNo') {
+  const map = new Map<string, { name: string; races: number; hits: number; stake: number; ret: number; profit: number }>();
+  rows.forEach((r) => {
+    const name = String(r[key]);
+    const cur = map.get(name) || { name, races: 0, hits: 0, stake: 0, ret: 0, profit: 0 };
+    cur.races += 1;
+    cur.hits += r.hit ? 1 : 0;
+    cur.stake += r.stake;
+    cur.ret += r.returnAmount;
+    cur.profit += r.profit;
+    map.set(name, cur);
+  });
+  return Array.from(map.values()).sort((a, b) => b.profit - a.profit);
 }

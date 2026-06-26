@@ -1,7 +1,7 @@
 'use client';
 
-import { useMemo, useState, useEffect } from 'react';
-import { Boat, RaceResult, defaultBoats, venues, calcPredictions, generateTickets, grade } from '@/lib/boat';
+import { useMemo, useState, useEffect, ChangeEvent } from 'react';
+import { Boat, RaceResult, defaultBoats, venues, calcPredictions, generateTickets, grade, summarize } from '@/lib/boat';
 
 export default function BoatAIApp() {
   const today = new Date().toISOString().slice(0, 10);
@@ -36,12 +36,13 @@ export default function BoatAIApp() {
   const buyCandidates = tickets.filter((t) => t.ev >= 120).slice(0, 8);
   const best = tickets[0];
 
-  useEffect(() => {
-    if (!buyText && buyCandidates.length) setBuyText(buyCandidates.slice(0, 4).map((t) => t.combo).join('\n'));
-  }, [buyCandidates, buyText]);
-
   function updateBoat(index: number, key: keyof Boat, value: string) {
     setBoats((prev) => prev.map((b, i) => i === index ? { ...b, [key]: key === 'racer' || key === 'className' ? value : Number(value) } : b));
+  }
+
+  function applyRecommendations() {
+    const list = buyCandidates.length ? buyCandidates : topTickets.slice(0, 4);
+    setBuyText(list.slice(0, 4).map((t) => t.combo).join('\n'));
   }
 
   function saveResult() {
@@ -49,10 +50,55 @@ export default function BoatAIApp() {
     const hit = boughtTickets.includes(resultCombo);
     const returnAmount = hit ? payout : 0;
     const profit = returnAmount - stake;
-    const row: RaceResult = { venue, raceNo, resultCombo, payout, stake, boughtTickets, hit, returnAmount, profit, createdAt: new Date().toISOString() };
+    const row: RaceResult = {
+      venue,
+      raceNo,
+      resultCombo,
+      payout,
+      stake,
+      boughtTickets,
+      hit,
+      returnAmount,
+      profit,
+      bestEv: best?.ev || 0,
+      bestCombo: best?.combo || '',
+      createdAt: new Date().toISOString(),
+    };
     const next = [row, ...history];
     setHistory(next);
     localStorage.setItem('boat-ai-results', JSON.stringify(next));
+  }
+
+  function exportHistory() {
+    const blob = new Blob([JSON.stringify(history, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `boat-ai-history-${today}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importHistory(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const rows = JSON.parse(String(reader.result)) as RaceResult[];
+        setHistory(rows);
+        localStorage.setItem('boat-ai-results', JSON.stringify(rows));
+      } catch {
+        alert('JSONの読み込みに失敗しました');
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function clearHistory() {
+    if (!confirm('履歴をすべて削除しますか？')) return;
+    setHistory([]);
+    localStorage.removeItem('boat-ai-results');
   }
 
   const totalStake = history.reduce((s, h) => s + h.stake, 0);
@@ -60,6 +106,8 @@ export default function BoatAIApp() {
   const totalProfit = totalReturn - totalStake;
   const hitRate = history.length ? (history.filter((h) => h.hit).length / history.length) * 100 : 0;
   const roi = totalStake ? (totalReturn / totalStake) * 100 : 0;
+  const venueStats = summarize(history, 'venue');
+  const raceStats = summarize(history, 'raceNo');
 
   return (
     <main className="wrap">
@@ -68,7 +116,7 @@ export default function BoatAIApp() {
           <div className="brand">Boat AI</div>
           <div className="sub">確率・期待値・結果検証</div>
         </div>
-        <div className="actions"><button className="btn primary">{today}</button><button className="btn">v0.6</button></div>
+        <div className="actions"><button className="btn primary">{today}</button><button className="btn">v0.7</button></div>
       </div>
 
       <section className="grid g3">
@@ -107,8 +155,8 @@ export default function BoatAIApp() {
 
       <section className="grid g3" style={{marginTop:14}}>
         <div className="card"><h2 className="title">気象</h2><div className="grid g3"><div><label>天候</label><input value={weather.condition} onChange={(e)=>setWeather({...weather,condition:e.target.value})}/></div><div><label>風速m</label><input value={weather.wind} onChange={(e)=>setWeather({...weather,wind:Number(e.target.value)})}/></div><div><label>波高cm</label><input value={weather.wave} onChange={(e)=>setWeather({...weather,wave:Number(e.target.value)})}/></div></div></div>
-        <div className="card"><h2 className="title">オッズ入力</h2><textareaLike value={oddsText} onChange={setOddsText} /></div>
-        <div className="card"><h2 className="title">購入買い目</h2><textareaLike value={buyText} onChange={setBuyText} /></div>
+        <div className="card"><h2 className="title">オッズ入力</h2><TextareaLike value={oddsText} onChange={setOddsText} /></div>
+        <div className="card"><h2 className="title">購入買い目</h2><div className="actions" style={{marginBottom:8}}><button className="btn good" onClick={applyRecommendations}>推奨を反映</button></div><TextareaLike value={buyText} onChange={setBuyText} /></div>
       </section>
 
       <section className="grid g2" style={{marginTop:14}}>
@@ -143,14 +191,36 @@ export default function BoatAIApp() {
         </div>
       </section>
 
+      <section className="grid g2" style={{marginTop:14}}>
+        <div className="card">
+          <h2 className="title">競艇場別成績</h2>
+          <MiniStats rows={venueStats} suffix="" />
+        </div>
+        <div className="card">
+          <h2 className="title">レース番号別成績</h2>
+          <MiniStats rows={raceStats} suffix="R" />
+        </div>
+      </section>
+
       <section className="card" style={{marginTop:14}}>
-        <h2 className="title">履歴</h2>
-        <table className="table"><thead><tr><th>日時</th><th>場</th><th>R</th><th>結果</th><th>的中</th><th>投資</th><th>払戻</th><th>収支</th></tr></thead><tbody>{history.map((h,i)=><tr key={i}><td>{new Date(h.createdAt).toLocaleString('ja-JP')}</td><td>{h.venue}</td><td>{h.raceNo}R</td><td>{h.resultCombo}</td><td className={h.hit?'goodText':'badText'}>{h.hit?'的中':'不的中'}</td><td>{h.stake.toLocaleString()}</td><td>{h.returnAmount.toLocaleString()}</td><td className={h.profit>=0?'goodText':'badText'}>{h.profit.toLocaleString()}</td></tr>)}</tbody></table>
+        <div className="header" style={{marginBottom:8}}>
+          <h2 className="title" style={{margin:0}}>履歴</h2>
+          <div className="actions">
+            <button className="btn" onClick={exportHistory}>履歴出力</button>
+            <label className="btn" style={{margin:0}}>履歴読込<input type="file" accept="application/json" onChange={importHistory} style={{display:'none'}} /></label>
+            <button className="btn bad" onClick={clearHistory}>全削除</button>
+          </div>
+        </div>
+        <table className="table"><thead><tr><th>日時</th><th>場</th><th>R</th><th>結果</th><th>的中</th><th>投資</th><th>払戻</th><th>収支</th><th>最高EV</th></tr></thead><tbody>{history.map((h,i)=><tr key={i}><td>{new Date(h.createdAt).toLocaleString('ja-JP')}</td><td>{h.venue}</td><td>{h.raceNo}R</td><td>{h.resultCombo}</td><td className={h.hit?'goodText':'badText'}>{h.hit?'的中':'不的中'}</td><td>{h.stake.toLocaleString()}</td><td>{h.returnAmount.toLocaleString()}</td><td className={h.profit>=0?'goodText':'badText'}>{h.profit.toLocaleString()}</td><td>{h.bestCombo} / {h.bestEv?.toFixed?.(1) ?? '-'}</td></tr>)}</tbody></table>
       </section>
     </main>
   );
 }
 
-function textareaLike({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+function TextareaLike({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   return <textarea value={value} onChange={(e)=>onChange(e.target.value)} style={{width:'100%',minHeight:110,background:'#091129',border:'1px solid #2b3a68',borderRadius:10,color:'#eef3ff',padding:10}} />;
+}
+
+function MiniStats({ rows, suffix }: { rows: { name: string; races: number; hits: number; stake: number; ret: number; profit: number }[]; suffix: string }) {
+  return <table className="table"><thead><tr><th>項目</th><th>数</th><th>的中率</th><th>回収率</th><th>収支</th></tr></thead><tbody>{rows.map((r)=><tr key={r.name}><td>{r.name}{suffix}</td><td>{r.races}</td><td>{r.races ? ((r.hits/r.races)*100).toFixed(1) : '0.0'}%</td><td>{r.stake ? ((r.ret/r.stake)*100).toFixed(1) : '0.0'}%</td><td className={r.profit>=0?'goodText':'badText'}>{r.profit.toLocaleString()}</td></tr>)}</tbody></table>;
 }
