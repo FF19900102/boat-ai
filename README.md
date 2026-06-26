@@ -1,9 +1,7 @@
-# Boat AI Step 23
+# Boat AI Step 24
 
 追加内容
-- .env.example
-- PostgreSQL設定サンプル
-- APIサービス雛形
-- データベース設計メモ
-
-Step21を土台に追加してください。
+- Prisma導入メモ
+- GitHub Actions雛形
+- デプロイ手順
+- 今後のAI学習ロードマップ
