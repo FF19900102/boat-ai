@@ -1,28 +1,45 @@
-import { Prediction } from "@/lib/types";
+import { Venue, Boat } from './types';
 
-export function PredictionTable({ predictions }: { predictions: Prediction[] }) {
-  return (
-    <div className="card overflow-hidden">
-      <div className="p-4 text-lg font-black">AI確率ランキング</div>
-      <table className="w-full">
-        <thead>
-          <tr>
-            <th className="th">艇</th><th className="th">選手</th><th className="th">級</th><th className="th">1着率</th><th className="th">2連対</th><th className="th">3連対</th>
-          </tr>
-        </thead>
-        <tbody>
-          {predictions.map((p) => (
-            <tr key={p.lane}>
-              <td className="td font-black">{p.lane}</td>
-              <td className="td">{p.name}</td>
-              <td className="td">{p.className}</td>
-              <td className="td font-bold">{p.winRate.toFixed(1)}%</td>
-              <td className="td">{p.top2Rate.toFixed(1)}%</td>
-              <td className="td">{p.top3Rate.toFixed(1)}%</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+export const venues: Venue[] = [
+  { id: 'kiryu', name: '桐生', area: '群馬', night: true },
+  { id: 'toda', name: '戸田', area: '埼玉' },
+  { id: 'edogawa', name: '江戸川', area: '東京' },
+  { id: 'heiwajima', name: '平和島', area: '東京' },
+  { id: 'tamagawa', name: '多摩川', area: '東京' },
+  { id: 'hamanako', name: '浜名湖', area: '静岡' },
+  { id: 'gamagori', name: '蒲郡', area: '愛知', night: true },
+  { id: 'tokoname', name: '常滑', area: '愛知' },
+  { id: 'tsu', name: '津', area: '三重' },
+  { id: 'mikuni', name: '三国', area: '福井' },
+  { id: 'biwako', name: 'びわこ', area: '滋賀' },
+  { id: 'suminoe', name: '住之江', area: '大阪', night: true },
+  { id: 'amagasaki', name: '尼崎', area: '兵庫' },
+  { id: 'naruto', name: '鳴門', area: '徳島' },
+  { id: 'marugame', name: '丸亀', area: '香川', night: true },
+  { id: 'kojima', name: '児島', area: '岡山' },
+  { id: 'miyajima', name: '宮島', area: '広島' },
+  { id: 'tokuyama', name: '徳山', area: '山口' },
+  { id: 'shimonoseki', name: '下関', area: '山口', night: true },
+  { id: 'wakamatsu', name: '若松', area: '福岡', night: true },
+  { id: 'ashiya', name: '芦屋', area: '福岡' },
+  { id: 'fukuoka', name: '福岡', area: '福岡' },
+  { id: 'karatsu', name: '唐津', area: '佐賀' },
+  { id: 'omura', name: '大村', area: '長崎', night: true }
+];
+
+export function defaultBoats(): Boat[] {
+  return [1,2,3,4,5,6].map((frame) => ({
+    frame,
+    racer: `${frame}号艇 選手`,
+    className: frame <= 2 ? 'A1' : frame <= 4 ? 'A2' : 'B1',
+    nationalRate: [6.8,5.9,5.4,4.9,4.5,4.1][frame-1],
+    localRate: [6.4,5.6,5.2,4.8,4.3,3.9][frame-1],
+    avgSt: [0.13,0.15,0.16,0.17,0.18,0.19][frame-1],
+    motorRate: [42,35,37,31,28,25][frame-1],
+    boatRate: [38,33,35,30,27,23][frame-1],
+    exhibition: [6.72,6.78,6.76,6.83,6.86,6.88][frame-1],
+    tilt: 0,
+    weight: [52,53,52,54,55,52][frame-1],
+    oddsWin: [2.0,5.8,7.2,12.5,22.0,35.0][frame-1]
+  }));
 }

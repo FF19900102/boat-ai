@@ -1,15 +1,19 @@
-import Link from "next/link";
-import { Race } from "@/lib/types";
-
-export function RaceCard({ race }: { race: Race }) {
-  return (
-    <Link href={`/race/${race.venueId}/${race.raceNo}`} className="card block p-4 hover:border-blue-400">
-      <div className="flex items-center justify-between">
-        <div className="text-2xl font-black">{race.raceNo}R</div>
-        <div className="rounded-full bg-gray-100 px-3 py-1 text-xs font-bold">締切 {race.deadline}</div>
-      </div>
-      <div className="mt-2 text-sm text-gray-600">{race.title}</div>
-      <div className="mt-3 text-xs text-gray-500">風 {race.wind}m / 波 {race.wave}cm</div>
-    </Link>
-  );
-}
+export type Venue = { id: string; name: string; area: string; night?: boolean };
+export type Boat = {
+  frame: number;
+  racer: string;
+  className: string;
+  nationalRate: number;
+  localRate: number;
+  avgSt: number;
+  motorRate: number;
+  boatRate: number;
+  exhibition: number;
+  tilt: number;
+  weight: number;
+  oddsWin: number;
+};
+export type Weather = { weather: string; windDirection: string; windSpeed: number; wave: number };
+export type Prediction = { frame: number; racer: string; score: number; win: number; top2: number; top3: number };
+export type Trifecta = { combo: string; probability: number; odds: number; ev: number; decision: '買い候補' | '注意' | '買わない' };
+export type ResultRecord = { id: string; date: string; venue: string; raceNo: number; result: string; bought: string; stake: number; payout: number; hit: boolean; profit: number; createdAt: string };
