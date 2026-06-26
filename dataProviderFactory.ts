@@ -1,13 +1,1 @@
-import { NextResponse } from 'next/server';
-import { getBoatDataProvider } from '@/services/dataProviderFactory';
-
-export async function GET(_: Request, { params }: { params: { raceId: string } }) {
-  const provider = getBoatDataProvider();
-  const result = await provider.getResult(params.raceId);
-
-  if (!result) {
-    return NextResponse.json({ ok: false, error: 'result not available yet' }, { status: 404 });
-  }
-
-  return NextResponse.json({ ok: true, data: result });
-}
+import Link from'next/link';export default function Header(){return <header className='header'><div className='header-inner'><Link href='/' className='logo'>Boat AI</Link><nav className='nav'><Link href='/venues'>開催場</Link><Link href='/live'>ライブ</Link><Link href='/dashboard'>成績</Link><Link href='/history'>履歴</Link><Link href='/backtest'>検証</Link><Link href='/results'>結果</Link><Link href='/settings'>AI設定</Link></nav></div></header>}

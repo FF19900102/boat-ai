@@ -1,2 +1,1 @@
-/// <reference types="next" />
-/// <reference types="next/image-types/global" />
+import{TrifectaPrediction}from'@/lib/types';import{evLabel,percent}from'@/lib/format';export default function TrifectaTable({rows}:{rows:TrifectaPrediction[]}){return <div className='card'><h2>期待値ランキング</h2><table className='table'><thead><tr><th>買い目</th><th>確率</th><th>オッズ</th><th>EV</th><th>判定</th></tr></thead><tbody>{rows.slice(0,30).map(r=><tr key={r.combination}><td><b>{r.combination}</b></td><td>{percent(r.probability,2)}</td><td>{r.odds.toFixed(1)}</td><td className={r.expectedValue>=120?'good':r.expectedValue>=100?'warn':'bad'}>{r.expectedValue.toFixed(1)}</td><td>{evLabel(r.expectedValue)}</td></tr>)}</tbody></table></div>}

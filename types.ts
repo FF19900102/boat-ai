@@ -1,15 +1,1 @@
-import Link from 'next/link';
-
-export default function Header() {
-  return (
-    <header className="header">
-      <div className="header-inner">
-        <Link href="/" className="logo">Boat AI</Link>
-        <nav className="nav">
-          <Link href="/venues">開催場</Link>
-          <Link href="/dashboard">成績</Link>
-        </nav>
-      </div>
-    </header>
-  );
-}
+import{NextResponse}from'next/server';import{saveRaceResult}from'@/services/resultService';export async function POST(req:Request){const b=await req.json();if(!b.raceId||!b.trifecta)return NextResponse.json({ok:false,error:'raceId and trifecta required'},{status:400});return NextResponse.json({ok:true,data:await saveRaceResult({raceId:String(b.raceId),trifecta:String(b.trifecta),payout:Number(b.payout??0)})})}

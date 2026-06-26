@@ -1,0 +1,1 @@
+import{NextResponse}from'next/server';import{getBoatDataProvider}from'@/services/dataProviderFactory';export async function GET(_:Request,{params}:{params:{raceId:string}}){const race=await getBoatDataProvider().getRace(params.raceId);return race?NextResponse.json({ok:true,data:race}):NextResponse.json({ok:false,error:'not found'},{status:404})}
