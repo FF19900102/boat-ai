@@ -1,8 +1,1 @@
-import { NextResponse } from 'next/server';
-import { raceService } from '@/services/raceService';
-
-export async function GET(_: Request, { params }: { params: { raceId: string } }) {
-  const race = raceService.getRace(params.raceId);
-  if (!race) return NextResponse.json({ error: 'not found' }, { status: 404 });
-  return NextResponse.json(race);
-}
+import{NextResponse}from'next/server';import{raceService}from'@/services/raceService';import{calculatePredictions,buildTrifectaRanking}from'@/ai/predictor';export async function GET(_:Request,{params}:{params:{raceId:string}}){const race=raceService.getRace(params.raceId);if(!race)return NextResponse.json({error:'not found'},{status:404});const venue=raceService.getVenue(race.venueId);const predictions=calculatePredictions(race.entries,venue?.weather);const trifecta=buildTrifectaRanking(predictions,race.odds);return NextResponse.json({predictions,trifecta:trifecta.slice(0,30)})}

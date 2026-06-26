@@ -1,6 +1,1 @@
-import { NextResponse } from 'next/server';
-import { raceService } from '@/services/raceService';
-
-export async function GET() {
-  return NextResponse.json(raceService.listVenues());
-}
+import{NextResponse}from'next/server';import{externalBoatRaceClient}from'@/services/externalBoatRaceClient';export async function GET(req:Request){const{searchParams}=new URL(req.url);const venueId=searchParams.get('venueId');if(!venueId)return NextResponse.json({error:'venueId required'},{status:400});return NextResponse.json(await externalBoatRaceClient.getRaces(venueId))}
