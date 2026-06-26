@@ -1,15 +1,10 @@
-import './globals.css';
-import type { Metadata } from 'next';
+import AiWeightsForm from '@/components/client/AiWeightsForm';
 
-export const metadata: Metadata = {
-  title: 'Boat AI',
-  description: '競艇AI分析アプリ'
-};
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function SettingsPage() {
   return (
-    <html lang="ja">
-      <body>{children}</body>
-    </html>
+    <main className="container">
+      <h1 className="title">AI設定</h1>
+      <AiWeightsForm />
+    </main>
   );
 }
