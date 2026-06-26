@@ -1,19 +1,28 @@
-export type Venue = { id: string; name: string; area: string; night?: boolean };
-export type Boat = {
-  frame: number;
-  racer: string;
-  className: string;
-  nationalRate: number;
-  localRate: number;
-  avgSt: number;
-  motorRate: number;
-  boatRate: number;
-  exhibition: number;
-  tilt: number;
-  weight: number;
-  oddsWin: number;
-};
-export type Weather = { weather: string; windDirection: string; windSpeed: number; wave: number };
-export type Prediction = { frame: number; racer: string; score: number; win: number; top2: number; top3: number };
-export type Trifecta = { combo: string; probability: number; odds: number; ev: number; decision: '買い候補' | '注意' | '買わない' };
-export type ResultRecord = { id: string; date: string; venue: string; raceNo: number; result: string; bought: string; stake: number; payout: number; hit: boolean; profit: number; createdAt: string };
+{
+  "name": "boat-ai",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@types/node": "^20.11.30",
+    "@types/react": "^18.2.67",
+    "@types/react-dom": "^18.2.22",
+    "autoprefixer": "^10.4.19",
+    "clsx": "^2.1.1",
+    "next": "^14.2.5",
+    "postcss": "^8.4.38",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.5",
+    "tailwindcss": "^3.4.4"
+  }
+}

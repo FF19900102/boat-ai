@@ -1,1 +1,43 @@
-:root{--bg:#f4f6fb;--card:#fff;--text:#162033;--muted:#667085;--line:#d8deea;--main:#0f5bff;--good:#0f9f6e;--warn:#d97706;--bad:#dc2626;--dark:#0f172a}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{max-width:1180px;margin:0 auto;padding:18px}.header{background:var(--dark);color:#fff;padding:18px;border-radius:18px;margin-bottom:16px;display:flex;justify-content:space-between;gap:12px;align-items:center}.header h1{margin:0;font-size:26px}.header p{margin:4px 0 0;color:#cbd5e1}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 6px 18px rgba(15,23,42,.05)}.btn{border:0;border-radius:12px;padding:10px 14px;background:var(--main);color:#fff;font-weight:700;cursor:pointer}.btn.secondary{background:#e8eefc;color:#17315d}.btn.good{background:var(--good)}.btn.warn{background:var(--warn)}.btn.bad{background:var(--bad)}.btn:disabled{opacity:.5;cursor:not-allowed}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.tab{background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;cursor:pointer}.tab.active{background:var(--dark);color:white}.venue{cursor:pointer;transition:.15s}.venue:hover{transform:translateY(-2px);border-color:var(--main)}.venue .name{font-size:20px;font-weight:800}.small{font-size:12px;color:var(--muted)}.section-title{font-size:18px;font-weight:800;margin:18px 0 10px}table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden}th,td{border-bottom:1px solid var(--line);padding:9px;text-align:left;font-size:13px}th{background:#eef2f8;color:#334155}input,select{width:100%;border:1px solid var(--line);border-radius:10px;padding:8px;background:#fff}.pill{display:inline-flex;border-radius:999px;padding:4px 9px;font-size:12px;font-weight:800}.pill.good{background:#dcfce7;color:#166534}.pill.warn{background:#fef3c7;color:#92400e}.pill.bad{background:#fee2e2;color:#991b1b}.rank{display:grid;gap:8px}.rankItem{display:grid;grid-template-columns:70px 1fr 90px 90px 90px;gap:8px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:10px;background:#fff}.bar{height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden}.bar>span{display:block;height:100%;background:var(--main)}.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}.metric{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}.metric b{font-size:24px;display:block}.footerNote{margin-top:18px;color:var(--muted);font-size:12px}.notice{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:14px;padding:12px;margin:10px 0}@media(max-width:760px){.rankItem{grid-template-columns:1fr 1fr}.hideMobile{display:none}th,td{font-size:12px;padding:7px}.header{display:block}}
+"use client";
+import { useState } from "react";
+import { RaceInput, RaceResult, TrifectaPick } from "@/lib/types";
+
+export function ResultForm({ race, picks, onSave }: { race: RaceInput; picks: TrifectaPick[]; onSave: (result: RaceResult) => void }) {
+  const [resultKey, setResultKey] = useState("1-2-3");
+  const [payout, setPayout] = useState(0);
+  const [stake, setStake] = useState(1000);
+  const [buyKey, setBuyKey] = useState(picks[0]?.key ?? "1-2-3");
+  const [buyAmount, setBuyAmount] = useState(100);
+
+  const save = () => {
+    const bought = [{ key: buyKey, amount: buyAmount }];
+    const hitBuy = bought.find((b) => b.key === resultKey);
+    const returnAmount = hitBuy ? Math.floor((payout / 100) * hitBuy.amount) : 0;
+    const result: RaceResult = {
+      raceId: race.id,
+      resultKey,
+      payout,
+      stake,
+      bought,
+      hit: !!hitBuy,
+      returnAmount,
+      profit: returnAmount - stake,
+      savedAt: new Date().toISOString(),
+    };
+    onSave(result);
+  };
+
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-4">
+      <h3 className="mb-3 text-lg font-black">結果入力・収支保存</h3>
+      <div className="grid gap-3 md:grid-cols-5">
+        <div><div className="label">確定3連単</div><input className="input" value={resultKey} onChange={(e)=>setResultKey(e.target.value)} /></div>
+        <div><div className="label">払戻金 / 100円</div><input className="input" type="number" value={payout} onChange={(e)=>setPayout(Number(e.target.value))} /></div>
+        <div><div className="label">投資額</div><input className="input" type="number" value={stake} onChange={(e)=>setStake(Number(e.target.value))} /></div>
+        <div><div className="label">購入買い目</div><input className="input" value={buyKey} onChange={(e)=>setBuyKey(e.target.value)} /></div>
+        <div><div className="label">購入金額</div><input className="input" type="number" value={buyAmount} onChange={(e)=>setBuyAmount(Number(e.target.value))} /></div>
+      </div>
+      <button className="btn btn-primary mt-4" onClick={save}>結果を保存</button>
+    </div>
+  );
+}

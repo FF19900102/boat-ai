@@ -1,45 +1,21 @@
-export type Venue = {
-  id: string;
-  name: string;
-  area: string;
-  today: boolean;
-};
-
-export type Racer = {
-  lane: number;
-  name: string;
-  className: string;
-  nationalRate: number;
-  localRate: number;
-  avgST: number;
-  motorRate: number;
-  boatRate: number;
-  exhibition: number;
-  tilt: number;
-  weight: number;
-};
-
-export type Race = {
-  venueId: string;
-  raceNo: number;
-  title: string;
-  deadline: string;
-  wind: number;
-  wave: number;
-  racers: Racer[];
-};
-
-export type Prediction = Racer & {
-  score: number;
-  winRate: number;
-  top2Rate: number;
-  top3Rate: number;
-};
-
-export type TrifectaPick = {
-  key: string;
-  probability: number;
-  odds: number;
-  ev: number;
-  rank: number;
-};
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [{ "name": "next" }],
+    "paths": { "@/*": ["./*"] }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}

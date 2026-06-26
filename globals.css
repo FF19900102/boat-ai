@@ -1,17 +1,5 @@
-import { Header } from "@/components/Header";
-import { VenueCard } from "@/components/VenueCard";
-import { venues } from "@/lib/mockData";
-
-export default function RacesPage() {
-  return (
-    <>
-      <Header />
-      <main className="mx-auto max-w-6xl px-4 py-8">
-        <h1 className="text-3xl font-black">全レース場</h1>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {venues.map((venue) => <VenueCard key={venue.id} venue={venue} />)}
-        </div>
-      </main>
-    </>
-  );
-}
+node_modules
+.next
+out
+.env*.local
+.DS_Store

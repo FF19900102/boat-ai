@@ -1,26 +1,12 @@
-{
-  "name": "boat-ai",
-  "version": "0.16.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+import type { Config } from "tailwindcss";
+const config: Config = {
+  content: ["./app/**/*.{js,ts,jsx,tsx,mdx}", "./components/**/*.{js,ts,jsx,tsx,mdx}"],
+  theme: {
+    extend: {
+      boxShadow: { soft: "0 10px 30px rgba(15,23,42,.08)" },
+      colors: { ink: "#0f172a" }
+    },
   },
-  "dependencies": {
-    "next": "14.2.5",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
-    "lucide-react": "^0.468.0"
-  },
-  "devDependencies": {
-    "typescript": "^5.5.4",
-    "@types/node": "^20.14.11",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "tailwindcss": "^3.4.7",
-    "postcss": "^8.4.40",
-    "autoprefixer": "^10.4.19"
-  }
-}
+  plugins: [],
+};
+export default config;

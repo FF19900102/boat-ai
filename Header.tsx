@@ -1,10 +1,15 @@
-import { NextResponse } from 'next/server';
-import { venues } from '@/lib/sampleData';
+import type { Metadata } from "next";
+import "./globals.css";
 
-export async function GET() {
-  return NextResponse.json({
-    venues,
-    source: 'mock-api-v1 / 後で公式・有料データAPIに差し替え',
-    updatedAt: new Date().toISOString()
-  });
+export const metadata: Metadata = {
+  title: "Boat AI",
+  description: "競艇の確率・期待値分析アプリ",
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="ja">
+      <body>{children}</body>
+    </html>
+  );
 }
