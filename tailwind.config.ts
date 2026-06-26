@@ -1,17 +1,45 @@
-import type { Race } from "@/lib/types";
+export type Venue = {
+  id: string;
+  name: string;
+  area: string;
+  today: boolean;
+};
 
-export default function RaceCard({ race }: { race: Race }) {
-  return (
-    <div className="card p-4 flex items-center justify-between gap-4">
-      <div>
-        <p className="text-2xl font-black">{race.raceNo}R</p>
-        <p className="text-sm text-slate-500">{race.title}</p>
-      </div>
-      <div className="text-right">
-        <p className="text-xs text-slate-500">締切予定</p>
-        <p className="text-lg font-black">{race.deadline}</p>
-      </div>
-      <button className="btn btn-primary">予想画面へ</button>
-    </div>
-  );
-}
+export type Racer = {
+  lane: number;
+  name: string;
+  className: string;
+  nationalRate: number;
+  localRate: number;
+  avgST: number;
+  motorRate: number;
+  boatRate: number;
+  exhibition: number;
+  tilt: number;
+  weight: number;
+};
+
+export type Race = {
+  venueId: string;
+  raceNo: number;
+  title: string;
+  deadline: string;
+  wind: number;
+  wave: number;
+  racers: Racer[];
+};
+
+export type Prediction = Racer & {
+  score: number;
+  winRate: number;
+  top2Rate: number;
+  top3Rate: number;
+};
+
+export type TrifectaPick = {
+  key: string;
+  probability: number;
+  odds: number;
+  ev: number;
+  rank: number;
+};
