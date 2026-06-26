@@ -1,133 +1,58 @@
-export type Boat = {
+export type Racer = {
   frame: number;
-  racer: string;
-  className: string;
-  nationalWin: number;
-  localWin: number;
-  avgSt: number;
+  name: string;
+  nationalRate: number;
+  localRate: number;
+  st: number;
   motorRate: number;
   boatRate: number;
   exhibition: number;
-  tilt: number;
-  weight: number;
-  entry: number;
 };
 
-export type Prediction = Boat & {
-  score: number;
-  winProb: number;
-  top2Prob: number;
-  top3Prob: number;
-};
-
-export type Ticket = {
-  combo: string;
-  prob: number;
-  odds: number;
-  ev: number;
-  judge: '買い候補' | '注意' | '買わない';
-};
-
-export type RaceResult = {
-  venue: string;
-  raceNo: number;
-  resultCombo: string;
-  payout: number;
-  stake: number;
-  boughtTickets: string[];
-  hit: boolean;
-  returnAmount: number;
-  profit: number;
-  bestEv: number;
-  bestCombo: string;
-  createdAt: string;
-};
+export type Bet = { combo: string; probability: number; odds: number; ev: number; judge: string };
 
 export const venues = ['桐生','戸田','江戸川','平和島','多摩川','浜名湖','蒲郡','常滑','津','三国','びわこ','住之江','尼崎','鳴門','丸亀','児島','宮島','徳山','下関','若松','芦屋','福岡','唐津','大村'];
 
-export const defaultBoats: Boat[] = Array.from({ length: 6 }, (_, i) => ({
-  frame: i + 1,
-  racer: `${i + 1}号艇`,
-  className: i === 0 ? 'A1' : i < 3 ? 'A2' : 'B1',
-  nationalWin: [6.8, 5.7, 5.5, 4.9, 4.6, 4.2][i],
-  localWin: [6.4, 5.4, 5.2, 4.8, 4.5, 4.1][i],
-  avgSt: [0.14, 0.16, 0.15, 0.17, 0.18, 0.19][i],
-  motorRate: [38, 34, 36, 31, 29, 27][i],
-  boatRate: [35, 33, 31, 30, 28, 26][i],
-  exhibition: [6.72, 6.78, 6.75, 6.81, 6.84, 6.87][i],
-  tilt: 0,
-  weight: [52, 53, 52, 54, 53, 55][i],
-  entry: i + 1,
-}));
-
-const frameBonus: Record<number, number> = { 1: 18, 2: 8, 3: 5, 4: 2, 5: -3, 6: -8 };
-const classBonus: Record<string, number> = { A1: 10, A2: 5, B1: 0, B2: -4 };
-
-export function calcPredictions(boats: Boat[], windSpeed: number, wave: number): Prediction[] {
-  const raw = boats.map((b) => {
-    const exhibitScore = Math.max(0, (6.95 - b.exhibition) * 45);
-    const stScore = Math.max(0, (0.23 - b.avgSt) * 95);
-    const weatherPenalty = b.frame === 1 && windSpeed >= 5 ? -5 : 0;
-    const roughPenalty = wave >= 5 && b.frame === 6 ? -3 : 0;
-    const score =
-      b.nationalWin * 8 +
-      b.localWin * 4 +
-      b.motorRate * 0.38 +
-      b.boatRate * 0.18 +
-      exhibitScore +
-      stScore +
-      (frameBonus[b.entry] ?? frameBonus[b.frame] ?? 0) +
-      (classBonus[b.className] ?? 0) +
-      weatherPenalty +
-      roughPenalty;
-    return { ...b, score: Math.max(1, score), winProb: 0, top2Prob: 0, top3Prob: 0 };
-  });
-  const total = raw.reduce((s, r) => s + r.score, 0);
-  return raw
-    .map((r) => {
-      const winProb = (r.score / total) * 100;
-      return { ...r, winProb, top2Prob: Math.min(95, winProb * 1.72), top3Prob: Math.min(99, winProb * 2.28) };
-    })
-    .sort((a, b) => b.winProb - a.winProb);
+export function defaultRacers(): Racer[] {
+  return Array.from({ length: 6 }, (_, i) => ({
+    frame: i + 1,
+    name: `${i + 1}号艇`,
+    nationalRate: 5 + (6 - i) * 0.15,
+    localRate: 5,
+    st: 0.16 + i * 0.01,
+    motorRate: 30,
+    boatRate: 30,
+    exhibition: 6.75 + i * 0.03,
+  }));
 }
 
-export function generateTickets(preds: Prediction[], oddsMap: Record<string, number>): Ticket[] {
-  const map = new Map(preds.map((p) => [p.frame, p]));
-  const frames = [1,2,3,4,5,6];
-  const tickets: Ticket[] = [];
-  for (const a of frames) for (const b of frames) for (const c of frames) {
-    if (a === b || b === c || a === c) continue;
-    const pa = map.get(a)!;
-    const pb = map.get(b)!;
-    const pc = map.get(c)!;
-    const combo = `${a}-${b}-${c}`;
-    const prob = (pa.winProb / 100) * (pb.top2Prob / 100) * (pc.top3Prob / 100) * 100 * 0.62;
-    const odds = oddsMap[combo] || 0;
-    const ev = odds > 0 ? prob * odds : 0;
-    tickets.push({ combo, prob, odds, ev, judge: ev >= 120 ? '買い候補' : ev >= 100 ? '注意' : '買わない' });
+export function scoreRacer(r: Racer): number {
+  const frameBonus = [18, 10, 6, 2, -3, -7][r.frame - 1] ?? 0;
+  const stScore = Math.max(0, (0.25 - r.st) * 100);
+  const exScore = Math.max(0, (7.05 - r.exhibition) * 30);
+  return r.nationalRate * 9 + r.localRate * 4 + r.motorRate * 0.35 + r.boatRate * 0.18 + stScore + exScore + frameBonus;
+}
+
+export function probabilities(racers: Racer[]) {
+  const scores = racers.map(scoreRacer);
+  const total = scores.reduce((a, b) => a + Math.max(1, b), 0);
+  return racers.map((r, i) => ({ ...r, score: scores[i], win: Math.max(1, scores[i]) / total }));
+}
+
+export function makeTrifecta(racers: Racer[], oddsMap: Record<string, number> = {}): Bet[] {
+  const ps = probabilities(racers);
+  const out: Bet[] = [];
+  for (const a of ps) for (const b of ps) for (const c of ps) {
+    if (a.frame === b.frame || a.frame === c.frame || b.frame === c.frame) continue;
+    const p = a.win * (b.win / (1 - a.win)) * (c.win / (1 - a.win - b.win));
+    const combo = `${a.frame}-${b.frame}-${c.frame}`;
+    const odds = oddsMap[combo] ?? autoOdds(p);
+    const ev = p * odds * 100;
+    out.push({ combo, probability: p, odds, ev, judge: ev >= 120 ? '買い候補' : ev >= 100 ? '注意' : '見送り' });
   }
-  return tickets.sort((a, b) => b.ev - a.ev || b.prob - a.prob);
+  return out.sort((x, y) => y.ev - x.ev);
 }
 
-export function grade(ev: number) {
-  if (ev >= 140) return '★★★★★';
-  if (ev >= 120) return '★★★★';
-  if (ev >= 100) return '★★★';
-  if (ev >= 80) return '★★';
-  return '★';
-}
-
-export function summarize(rows: RaceResult[], key: 'venue' | 'raceNo') {
-  const map = new Map<string, { name: string; races: number; hits: number; stake: number; ret: number; profit: number }>();
-  rows.forEach((r) => {
-    const name = String(r[key]);
-    const cur = map.get(name) || { name, races: 0, hits: 0, stake: 0, ret: 0, profit: 0 };
-    cur.races += 1;
-    cur.hits += r.hit ? 1 : 0;
-    cur.stake += r.stake;
-    cur.ret += r.returnAmount;
-    cur.profit += r.profit;
-    map.set(name, cur);
-  });
-  return Array.from(map.values()).sort((a, b) => b.profit - a.profit);
+function autoOdds(p: number) {
+  return Math.max(3, Math.round((0.78 / Math.max(0.001, p)) * 10) / 10);
 }
