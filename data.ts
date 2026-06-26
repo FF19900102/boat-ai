@@ -1,26 +1,3 @@
-import Link from 'next/link';
-import Header from '@/components/Header';
-import { getVenue, races } from '@/lib/data';
-
-export default function RaceList({ params }: { params: { venue: string } }) {
-  const venue = getVenue(params.venue);
-  return (
-    <>
-      <Header />
-      <main className="wrap">
-        <Link href="/" className="btn">← 開催場へ戻る</Link>
-        <div className="section">
-          <h1 className="title">{venue.name}</h1>
-          <p className="muted">レースを選択してください</p>
-        </div>
-        <section className="section race-grid">
-          {races.map((race) => (
-            <Link key={race.no} className="race" href={`/race/${venue.id}/${race.no}`}>
-              {race.no}R
-            </Link>
-          ))}
-        </section>
-      </main>
-    </>
-  );
-}
+'use client';
+import {useMemo,useState} from 'react';import Header from '../components/Header';import {venues,sampleRacers} from '../lib/data';import {predict,makeTickets} from '../lib/ai';
+export default function Page(){const [venue,setVenue]=useState('浜名湖');const [race,setRace]=useState(1);const racers=useMemo(()=>sampleRacers(venue,race),[venue,race]);const preds=useMemo(()=>predict(racers),[racers]);const tickets=useMemo(()=>makeTickets(preds),[preds]);const buy=tickets.filter(t=>t.ev>=120).slice(0,6);return <main className="wrap"><Header/><div className="card"><b>今日の開催場</b><div className="tabs">{venues.map(v=><button key={v} onClick={()=>setVenue(v)} className={venue===v?'active':''}>{v}</button>)}</div><b>{venue} レース選択</b><div className="tabs">{Array.from({length:12},(_,i)=><button key={i+1} onClick={()=>setRace(i+1)} className={race===i+1?'active':''}>{i+1}R</button>)}</div></div><div className="two" style={{marginTop:14}}><section className="card"><h2>{venue} {race}R 出走表</h2><table className="table"><thead><tr><th>枠</th><th>選手</th><th>級</th><th>全国</th><th>当地</th><th>モーター</th><th>展示</th><th>ST</th></tr></thead><tbody>{racers.map(r=><tr key={r.lane}><td><b>{r.lane}</b></td><td>{r.name}</td><td>{r.className}</td><td>{r.national}</td><td>{r.local}</td><td>{r.motor}%</td><td>{r.exhibition}</td><td>{r.st}</td></tr>)}</tbody></table></section><section className="card"><h2>AI確率</h2>{preds.map((p,i)=><div key={p.lane} style={{display:'flex',justifyContent:'space-between',borderBottom:'1px solid #eee',padding:'8px 0'}}><div><span className="rank">{i+1}</span>　{p.lane}号艇 {p.name}</div><div><b>{p.win}%</b><span className="muted"> / 3連対 {p.top3}%</span></div></div>)}</section></div><section className="card" style={{marginTop:14}}><h2>推奨買い目</h2>{buy.length?buy.map(t=><span key={t.key} className="pill" style={{marginRight:8,marginBottom:8}}>{t.key} EV{t.ev}</span>):<b className="bad">見送り</b>}</section><section className="card" style={{marginTop:14}}><h2>3連単 期待値ランキング</h2><table className="table"><thead><tr><th>買い目</th><th>的中確率</th><th>オッズ</th><th>期待値</th><th>判定</th></tr></thead><tbody>{tickets.map(t=><tr key={t.key}><td><b>{t.key}</b></td><td>{t.prob}%</td><td>{t.odds}倍</td><td className={t.ev>=120?'good':t.ev>=100?'warn':'bad'}>{t.ev}</td><td>{t.judge}</td></tr>)}</tbody></table></section></main>}

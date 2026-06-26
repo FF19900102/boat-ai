@@ -1,18 +1,1 @@
-export function summaryStats(rows){
- const count=rows.length;
- const stake=rows.reduce((a,r)=>a+Number(r.stake||0),0);
- const payout=rows.reduce((a,r)=>a+Number(r.payout||0),0);
- const profit=rows.reduce((a,r)=>a+Number(r.profit||0),0);
- const hits=rows.filter(r=>Number(r.payout||0)>0).length;
- return {count,stake,payout,profit,hits,hitRate:count?hits/count*100:0,returnRate:stake?payout/stake*100:0};
-}
-export function groupByVenue(rows){
- const map={};
- rows.forEach(r=>{ const k=r.venue||'未設定'; map[k]=map[k]||[]; map[k].push(r); });
- return Object.entries(map).map(([name,list])=>({name,...summaryStats(list)})).sort((a,b)=>b.count-a.count);
-}
-export function groupByEv(rows){
- const buckets={'EV120以上':[], 'EV100〜119':[], 'EV100未満':[], 'EV未記録':[]};
- rows.forEach(r=>{ const ev=Number(r.topEv); if(!ev) buckets['EV未記録'].push(r); else if(ev>=120) buckets['EV120以上'].push(r); else if(ev>=100) buckets['EV100〜119'].push(r); else buckets['EV100未満'].push(r); });
- return Object.entries(buckets).map(([name,list])=>({name,...summaryStats(list)}));
-}
+export default function Header(){return <div className="head"><div><div className="brand">Boat AI</div><div className="sub">確率・期待値・結果検証で競艇を分析</div></div><div className="pill">STEP 9</div></div>}
