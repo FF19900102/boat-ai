@@ -1,4 +1,101 @@
-:root{
-  --bg:#07111f;--panel:#0d1b2e;--panel2:#13243a;--line:#24364f;--text:#eef5ff;--muted:#91a3bc;--accent:#37d399;--bad:#ff6b6b;--warn:#ffd166;--blue:#5ab0ff;
+"use client";
+import { useMemo, useState } from "react";
+import { venues, makeEntries } from "@/lib/mockData";
+import { BoatEntry, SavedRace, Weather } from "@/lib/types";
+import { aiComment, probabilities, trifectaTickets } from "@/lib/boatAi";
+import { clearRaces, loadSavedRaces, saveRace } from "@/lib/storage";
+
+type Screen = "home" | "races" | "predict" | "dashboard";
+const today = new Date().toISOString().slice(0, 10);
+const defaultWeather: Weather = { weather: "晴", windDirection: "北", windSpeed: 2, waveHeight: 2 };
+
+export default function BoatApp() {
+  const [screen, setScreen] = useState<Screen>("home");
+  const [venueId, setVenueId] = useState("hamanako");
+  const [raceNo, setRaceNo] = useState(1);
+  const [entries, setEntries] = useState<BoatEntry[]>(makeEntries("hamanako", 1));
+  const [weather, setWeather] = useState<Weather>(defaultWeather);
+  const [oddsMap, setOddsMap] = useState<Record<string, number>>({});
+  const [boughtTickets, setBoughtTickets] = useState<string[]>([]);
+  const [stake, setStake] = useState(100);
+  const [resultCombo, setResultCombo] = useState("");
+  const [payout, setPayout] = useState(0);
+  const [saved, setSaved] = useState<SavedRace[]>([]);
+
+  const venue = venues.find((v) => v.id === venueId) || venues[0];
+  const probs = useMemo(() => probabilities(entries, weather), [entries, weather]);
+  const tickets = useMemo(() => trifectaTickets(entries, weather, oddsMap), [entries, weather, oddsMap]);
+  const topTickets = tickets.slice(0, 15);
+  const totalStake = boughtTickets.length * stake;
+  const hit = resultCombo ? boughtTickets.includes(resultCombo) : false;
+  const profit = resultCombo ? (hit ? payout : 0) - totalStake : 0;
+
+  function selectRace(vId: string, rNo: number) {
+    setVenueId(vId); setRaceNo(rNo); setEntries(makeEntries(vId, rNo)); setScreen("predict");
+    setBoughtTickets([]); setResultCombo(""); setPayout(0); setOddsMap({});
+  }
+  function updateEntry(i: number, key: keyof BoatEntry, value: string) {
+    setEntries((prev) => prev.map((e, idx) => idx === i ? { ...e, [key]: key === "name" || key === "grade" ? value : Number(value) } : e));
+  }
+  function storeRace() {
+    const race: SavedRace = {
+      id: `${Date.now()}`,
+      date: today,
+      venueId: venue.id,
+      venueName: venue.name,
+      raceNo,
+      weather,
+      entries,
+      tickets: topTickets,
+      boughtTickets,
+      stake: totalStake,
+      resultCombo: resultCombo || undefined,
+      payout: resultCombo ? payout : undefined,
+      hit: resultCombo ? hit : undefined,
+      profit: resultCombo ? profit : undefined,
+      createdAt: new Date().toISOString()
+    };
+    saveRace(race); setSaved(loadSavedRaces()); alert("保存しました");
+  }
+  function loadDashboard() { setSaved(loadSavedRaces()); setScreen("dashboard"); }
+
+  return <main className="min-h-screen">
+    <header className="bg-slate-950 text-white">
+      <div className="mx-auto max-w-7xl px-4 py-5 flex items-center justify-between">
+        <div><h1 className="text-2xl font-black">Boat AI</h1><p className="text-sm text-slate-300">確率・期待値・結果検証</p></div>
+        <div className="flex gap-2"><button className="btn bg-white/10" onClick={()=>setScreen("home")}>開催場</button><button className="btn bg-white/10" onClick={loadDashboard}>成績</button></div>
+      </div>
+    </header>
+
+    <section className="mx-auto max-w-7xl px-4 py-6">
+      {screen === "home" && <Home onPick={(id)=>{setVenueId(id); setScreen("races");}} />}
+      {screen === "races" && <RaceSelect venue={venue} onPick={(r)=>selectRace(venue.id, r)} />}
+      {screen === "predict" && <Predict venueName={venue.name} raceNo={raceNo} entries={entries} weather={weather} setWeather={setWeather} updateEntry={updateEntry} probs={probs} tickets={topTickets} oddsMap={oddsMap} setOddsMap={setOddsMap} boughtTickets={boughtTickets} setBoughtTickets={setBoughtTickets} stake={stake} setStake={setStake} resultCombo={resultCombo} setResultCombo={setResultCombo} payout={payout} setPayout={setPayout} totalStake={totalStake} hit={hit} profit={profit} storeRace={storeRace} />}
+      {screen === "dashboard" && <Dashboard saved={saved} reload={()=>setSaved(loadSavedRaces())} clear={()=>{clearRaces(); setSaved([]);}} />}
+    </section>
+  </main>;
 }
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#06101d,#091827 55%,#07111f);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}.wrap{max-width:1280px;margin:0 auto;padding:22px}.hero{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:18px}.title{font-size:34px;font-weight:900;letter-spacing:.02em}.sub{color:var(--muted);margin-top:6px}.grid{display:grid;gap:14px}.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid4{grid-template-columns:repeat(4,minmax(0,1fr))}.card{background:rgba(13,27,46,.92);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 12px 30px rgba(0,0,0,.18)}.sectionTitle{font-size:18px;font-weight:800;margin:0 0 12px}.btn{border:1px solid var(--line);background:#142740;color:var(--text);padding:11px 14px;border-radius:12px;font-weight:800;cursor:pointer}.btn:hover{border-color:var(--blue)}.btnPrimary{background:linear-gradient(135deg,#17b978,#37d399);color:#052013;border:none}.btnDanger{background:#402026;border-color:#72313c}.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#0b1728;border-radius:999px;padding:6px 10px;color:var(--muted);font-size:13px}.tabs{display:flex;gap:8px;flex-wrap:wrap}.tab{padding:10px 13px;border-radius:999px;border:1px solid var(--line);background:#0b1728;color:var(--muted);font-weight:800;cursor:pointer}.tab.active{background:var(--accent);color:#041911;border-color:var(--accent)}input,select{width:100%;padding:10px 9px;background:#081525;color:var(--text);border:1px solid var(--line);border-radius:10px}label{font-size:12px;color:var(--muted);display:block;margin-bottom:5px}.tableWrap{overflow:auto;border:1px solid var(--line);border-radius:14px}table{width:100%;border-collapse:collapse;min-width:760px}th,td{border-bottom:1px solid var(--line);padding:10px;text-align:left;white-space:nowrap}th{color:var(--muted);font-size:12px;background:#0a1728}td{font-size:14px}.rank1{color:var(--accent);font-weight:900}.good{color:var(--accent);font-weight:900}.warn{color:var(--warn);font-weight:900}.bad{color:var(--bad);font-weight:900}.muted{color:var(--muted)}.num{font-variant-numeric:tabular-nums}.venue{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:13px;border:1px solid var(--line);background:#0a1728;border-radius:14px;cursor:pointer}.venue.active{border-color:var(--accent);background:#102b27}.boatBadge{display:inline-flex;width:28px;height:28px;border-radius:8px;align-items:center;justify-content:center;font-weight:900;border:1px solid rgba(255,255,255,.25)}.b1{background:#fff;color:#111}.b2{background:#111;color:#fff}.b3{background:#d3212d;color:#fff}.b4{background:#2767d8;color:#fff}.b5{background:#ffd43b;color:#111}.b6{background:#229954;color:#fff}.summary{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.metric{background:#081525;border:1px solid var(--line);border-radius:14px;padding:12px}.metric .v{font-size:22px;font-weight:900;margin-top:4px}.small{font-size:12px}.footer{color:var(--muted);font-size:12px;margin-top:18px}@media(max-width:900px){.grid2,.grid3,.grid4{grid-template-columns:1fr}.summary{grid-template-columns:repeat(2,1fr)}.hero{display:block}.title{font-size:28px}}
+function Home({ onPick }: { onPick: (id:string)=>void }) {
+  return <div><div className="mb-5 flex items-end justify-between"><div><h2 className="text-2xl font-black">本日開催</h2><p className="text-slate-600">今は仮データ。後で公式データ取得に接続します。</p></div><span className="text-sm font-bold">{today}</span></div>
+    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{venues.map(v=><button key={v.id} onClick={()=>onPick(v.id)} className={`card p-4 text-left hover:border-blue-500 ${!v.active?"opacity-45":""}`}><div className="flex justify-between"><b className="text-lg">{v.name}</b><span className="rounded-full bg-slate-100 px-2 py-1 text-xs">{v.region}</span></div><p className="mt-2 text-sm text-slate-600">{v.water} / {v.active?"開催":"非開催"}</p></button>)}</div></div>;
+}
+function RaceSelect({ venue, onPick }: any) {
+  return <div><h2 className="text-2xl font-black mb-1">{venue.name}</h2><p className="text-slate-600 mb-5">レースを選択</p><div className="grid grid-cols-3 gap-3 sm:grid-cols-6">{Array.from({length:12},(_,i)=><button key={i} onClick={()=>onPick(i+1)} className="card p-5 text-center hover:border-blue-500"><b className="text-xl">{i+1}R</b></button>)}</div></div>;
+}
+function Predict(props: any) {
+  const { venueName, raceNo, entries, weather, setWeather, updateEntry, probs, tickets, oddsMap, setOddsMap, boughtTickets, setBoughtTickets, stake, setStake, resultCombo, setResultCombo, payout, setPayout, totalStake, hit, profit, storeRace } = props;
+  const topEv = tickets[0]?.ev || 0;
+  return <div className="space-y-6"><div className="card p-5"><div className="flex flex-wrap items-center justify-between gap-3"><div><h2 className="text-2xl font-black">{venueName} {raceNo}R</h2><p className="text-slate-600">AI判定：{aiComment(topEv)}</p></div><button className="btn btn-primary" onClick={storeRace}>保存</button></div></div>
+    <div className="grid gap-4 lg:grid-cols-4"><WeatherBox weather={weather} setWeather={setWeather}/><Probability probs={probs}/></div>
+    <EntryTable entries={entries} updateEntry={updateEntry}/>
+    <Tickets tickets={tickets} oddsMap={oddsMap} setOddsMap={setOddsMap} boughtTickets={boughtTickets} setBoughtTickets={setBoughtTickets}/>
+    <ResultBox stake={stake} setStake={setStake} resultCombo={resultCombo} setResultCombo={setResultCombo} payout={payout} setPayout={setPayout} totalStake={totalStake} hit={hit} profit={profit}/>
+  </div>;
+}
+function WeatherBox({ weather, setWeather }: any) { return <div className="card p-4 lg:col-span-1"><h3 className="font-black mb-3">気象</h3><div className="grid gap-2"><select className="field" value={weather.weather} onChange={e=>setWeather({...weather, weather:e.target.value})}>{["晴","曇","雨","雪"].map(x=><option key={x}>{x}</option>)}</select><input className="field" value={weather.windDirection} onChange={e=>setWeather({...weather, windDirection:e.target.value})} placeholder="風向"/><input className="field" type="number" value={weather.windSpeed} onChange={e=>setWeather({...weather, windSpeed:Number(e.target.value)})} placeholder="風速"/><input className="field" type="number" value={weather.waveHeight} onChange={e=>setWeather({...weather, waveHeight:Number(e.target.value)})} placeholder="波高"/></div></div>; }
+function Probability({ probs }: any) { return <div className="card p-4 lg:col-span-3"><h3 className="font-black mb-3">各艇確率</h3><div className="overflow-x-auto"><table className="w-full"><thead><tr><th className="th">艇</th><th className="th">選手</th><th className="th">1着率</th><th className="th">2着以内</th><th className="th">3着以内</th></tr></thead><tbody>{probs.map((p:any)=><tr key={p.lane}><td className="td font-black">{p.lane}</td><td className="td">{p.name}</td><td className="td">{(p.first*100).toFixed(1)}%</td><td className="td">{(p.top2*100).toFixed(1)}%</td><td className="td">{(p.top3*100).toFixed(1)}%</td></tr>)}</tbody></table></div></div>; }
+function EntryTable({ entries, updateEntry }: any) { const cols: [keyof BoatEntry,string][] = [["name","選手"],["grade","級"],["nationalWinRate","全国"],["localWinRate","当地"],["avgST","ST"],["motorRate","M2"],["boatRate","B2"],["exhibitionTime","展示"],["tilt","チルト"],["weight","体重"],["course","進入"]]; return <div className="card p-4"><h3 className="font-black mb-3">出走表入力</h3><div className="overflow-x-auto"><table className="w-full"><thead><tr><th className="th">枠</th>{cols.map(c=><th className="th" key={c[0]}>{c[1]}</th>)}</tr></thead><tbody>{entries.map((e:any,i:number)=><tr key={e.lane}><td className="td font-black">{e.lane}</td>{cols.map(([k])=><td className="td" key={k}><input className="field min-w-20" value={e[k]} type={k==="name"||k==="grade"?"text":"number"} step="0.01" onChange={ev=>updateEntry(i,k,ev.target.value)}/></td>)}</tr>)}</tbody></table></div></div>; }
+function Tickets({ tickets, oddsMap, setOddsMap, boughtTickets, setBoughtTickets }: any) { function toggle(combo:string){ setBoughtTickets((prev:string[])=>prev.includes(combo)?prev.filter(x=>x!==combo):[...prev,combo]); } return <div className="card p-4"><h3 className="font-black mb-3">3連単 期待値ランキング</h3><div className="overflow-x-auto"><table className="w-full"><thead><tr><th className="th">買う</th><th className="th">買い目</th><th className="th">確率</th><th className="th">オッズ</th><th className="th">期待値</th><th className="th">判定</th></tr></thead><tbody>{tickets.map((t:any)=><tr key={t.combo}><td className="td"><input type="checkbox" checked={boughtTickets.includes(t.combo)} onChange={()=>toggle(t.combo)}/></td><td className="td font-black">{t.combo}</td><td className="td">{(t.probability*100).toFixed(2)}%</td><td className="td"><input className="field w-24" type="number" step="0.1" value={oddsMap[t.combo] || t.odds} onChange={e=>setOddsMap({...oddsMap,[t.combo]:Number(e.target.value)})}/></td><td className="td font-black">{t.ev.toFixed(0)}</td><td className="td">{t.rank}</td></tr>)}</tbody></table></div></div>; }
+function ResultBox({ stake, setStake, resultCombo, setResultCombo, payout, setPayout, totalStake, hit, profit }: any) { return <div className="card p-4"><h3 className="font-black mb-3">結果入力・収支</h3><div className="grid gap-3 sm:grid-cols-5"><input className="field" type="number" value={stake} onChange={e=>setStake(Number(e.target.value))} placeholder="1点金額"/><input className="field" value={resultCombo} onChange={e=>setResultCombo(e.target.value)} placeholder="結果 1-2-3"/><input className="field" type="number" value={payout} onChange={e=>setPayout(Number(e.target.value))} placeholder="払戻金"/><div className="rounded-xl bg-slate-100 p-3 text-sm">投資 <b>{totalStake.toLocaleString()}</b>円</div><div className={`rounded-xl p-3 text-sm ${resultCombo ? hit ? "bg-green-100" : "bg-red-100" : "bg-slate-100"}`}>{resultCombo ? (hit ? "的中" : "不的中") : "結果待ち"} <b>{profit.toLocaleString()}</b>円</div></div></div>; }
+function Dashboard({ saved, reload, clear }: any) { const count=saved.length; const totalStake=saved.reduce((s:any,r:any)=>s+(r.stake||0),0); const payout=saved.reduce((s:any,r:any)=>s+(r.hit?r.payout||0:0),0); const hits=saved.filter((r:any)=>r.hit).length; const roi=totalStake?Math.round(payout/totalStake*100):0; return <div className="space-y-4"><div className="flex justify-between"><h2 className="text-2xl font-black">成績</h2><div className="flex gap-2"><button className="btn btn-sub" onClick={reload}>更新</button><button className="btn btn-sub" onClick={clear}>削除</button></div></div><div className="grid gap-3 sm:grid-cols-4"><Stat title="保存レース" value={`${count}`}/><Stat title="的中率" value={`${count?Math.round(hits/count*100):0}%`}/><Stat title="回収率" value={`${roi}%`}/><Stat title="収支" value={`${(payout-totalStake).toLocaleString()}円`}/></div><div className="card p-4 overflow-x-auto"><table className="w-full"><thead><tr><th className="th">日付</th><th className="th">場</th><th className="th">R</th><th className="th">購入</th><th className="th">結果</th><th className="th">収支</th></tr></thead><tbody>{saved.map((r:any)=><tr key={r.id}><td className="td">{r.date}</td><td className="td">{r.venueName}</td><td className="td">{r.raceNo}R</td><td className="td">{r.boughtTickets.join(", ")}</td><td className="td">{r.resultCombo || "未"}</td><td className="td">{(r.profit || 0).toLocaleString()}円</td></tr>)}</tbody></table></div></div>; }
+function Stat({ title, value }: any) { return <div className="card p-4"><p className="text-sm text-slate-500">{title}</p><b className="text-2xl">{value}</b></div>; }
