@@ -1,45 +1,17 @@
-export const stadiums = [
-  { id: 'hamanako', name: '浜名湖', status: '開催中', windBias: '中', races: 12 },
-  { id: 'gamagori', name: '蒲郡', status: 'ナイター', windBias: '低', races: 12 },
-  { id: 'tokoname', name: '常滑', status: '開催中', windBias: '中', races: 12 },
-  { id: 'heiwajima', name: '平和島', status: '開催中', windBias: '高', races: 12 },
-  { id: 'toda', name: '戸田', status: '開催中', windBias: '高', races: 12 },
-  { id: 'kiryu', name: '桐生', status: 'ナイター', windBias: '低', races: 12 },
-]
+export const venues = [
+  { id: 'hamanako', name: '浜名湖', status: '開催中', races: 12 },
+  { id: 'gamagori', name: '蒲郡', status: 'ナイター', races: 12 },
+  { id: 'tokoname', name: '常滑', status: '開催中', races: 12 },
+  { id: 'heiwajima', name: '平和島', status: '開催中', races: 12 },
+  { id: 'toda', name: '戸田', status: '開催中', races: 12 },
+  { id: 'kiryu', name: '桐生', status: 'ナイター', races: 12 },
+];
 
-const names = ['山田太郎', '鈴木一郎', '田中誠', '佐藤大輔', '加藤翔', '伊藤健']
-const classes = ['A1', 'A2', 'B1', 'A1', 'B1', 'A2']
-
-export function makeRace(stadium, raceNo) {
-  const base = raceNo * 0.07
-  return {
-    id: `${stadium.id}-${raceNo}`,
-    stadiumId: stadium.id,
-    stadiumName: stadium.name,
-    raceNo,
-    title: `${stadium.name} ${raceNo}R`,
-    weather: {
-      condition: raceNo % 3 === 0 ? '雨' : '晴',
-      windDirection: raceNo % 2 === 0 ? '向かい風' : '追い風',
-      windSpeed: Number((1.5 + (raceNo % 6) * 0.7).toFixed(1)),
-      wave: Number((1 + (raceNo % 4)).toFixed(1)),
-    },
-    boats: Array.from({ length: 6 }, (_, i) => {
-      const lane = i + 1
-      return {
-        lane,
-        name: names[i],
-        class: classes[i],
-        nationalWin: Number((7.1 - i * 0.42 + base).toFixed(2)),
-        localWin: Number((6.9 - i * 0.31 + base / 2).toFixed(2)),
-        avgST: Number((0.13 + i * 0.012 + (raceNo % 3) * 0.002).toFixed(3)),
-        motorRate: Number((45 - i * 2.7 + raceNo * 0.3).toFixed(1)),
-        boatRate: Number((38 - i * 1.8 + raceNo * 0.2).toFixed(1)),
-        exhibition: Number((6.72 + i * 0.035 - base / 20).toFixed(2)),
-        tilt: i === 5 ? 0.5 : 0,
-        weight: Number((52 + i * 0.8).toFixed(1)),
-        oddsWin: Number((1.8 + i * 1.6 + raceNo * 0.08).toFixed(1)),
-      }
-    }),
-  }
-}
+export const defaultBoats = [
+  { lane: 1, name: '選手A', winRate: 6.8, localRate: 6.4, st: 0.14, motor: 42, boat: 36, exhibition: 6.72 },
+  { lane: 2, name: '選手B', winRate: 5.9, localRate: 5.7, st: 0.16, motor: 35, boat: 31, exhibition: 6.76 },
+  { lane: 3, name: '選手C', winRate: 6.1, localRate: 6.0, st: 0.15, motor: 38, boat: 33, exhibition: 6.74 },
+  { lane: 4, name: '選手D', winRate: 5.4, localRate: 5.2, st: 0.17, motor: 31, boat: 35, exhibition: 6.79 },
+  { lane: 5, name: '選手E', winRate: 4.8, localRate: 4.9, st: 0.18, motor: 29, boat: 30, exhibition: 6.83 },
+  { lane: 6, name: '選手F', winRate: 4.3, localRate: 4.2, st: 0.19, motor: 27, boat: 29, exhibition: 6.86 },
+];
