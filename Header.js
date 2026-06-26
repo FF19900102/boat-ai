@@ -1,1 +1,35 @@
-*{box-sizing:border-box} body{margin:0;background:#f5f7fb;color:#111827;font-family:Arial,'Hiragino Kaku Gothic ProN','Yu Gothic',Meiryo,sans-serif}.page{max-width:1180px;margin:0 auto;padding:24px}.header{display:flex;justify-content:space-between;align-items:center;background:#0f172a;color:white;border-radius:18px;padding:24px;margin-bottom:18px}.header h1{margin:0;font-size:34px}.header p{margin:6px 0 0;color:#cbd5e1}.badge{background:#2563eb;padding:8px 14px;border-radius:999px;font-weight:bold}.panel{background:white;border:1px solid #e5e7eb;border-radius:18px;padding:20px;margin-bottom:18px;box-shadow:0 8px 24px rgba(15,23,42,.06)}.panelTitle{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:14px}.panelTitle h2,.selectedBox h2{margin:0;font-size:22px}.panelTitle p,.selectedBox p{margin:0;color:#64748b}.venueGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px}.venueCard,.raceCard{border:1px solid #dbe3ef;background:#fff;border-radius:14px;padding:16px;cursor:pointer;text-align:left;transition:.15s}.venueCard:hover,.raceCard:hover{transform:translateY(-1px);border-color:#2563eb}.venueCard.active,.raceCard.active{background:#eff6ff;border-color:#2563eb;box-shadow:0 0 0 2px rgba(37,99,235,.15)}.venueCard strong,.raceCard strong{display:block;font-size:20px}.venueCard span,.raceCard span{display:block;margin-top:6px;color:#64748b;font-size:13px}.raceGrid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}.mainButton{margin-top:14px;border:0;background:#2563eb;color:white;border-radius:12px;padding:14px 18px;font-weight:bold;cursor:pointer}@media(max-width:700px){.page{padding:14px}.header{align-items:flex-start;gap:14px;flex-direction:column}.raceGrid{grid-template-columns:repeat(3,1fr)}}
+'use client';
+import {useMemo,useState} from 'react';
+import Header from '../components/Header';
+import {venues, createBoats} from '../lib/sampleData';
+import {probabilities,trifectaRankings,aiComment} from '../lib/boatAi';
+
+export default function Page(){
+ const [venue,setVenue]=useState(venues[0]);
+ const [race,setRace]=useState(1);
+ const [boats,setBoats]=useState(createBoats(venues[0].id,1));
+ const [result,setResult]=useState({finish:'',ticket:'',stake:1000,payout:0});
+ const probs=useMemo(()=>probabilities(boats),[boats]);
+ const tickets=useMemo(()=>trifectaRankings(boats),[boats]);
+ const top=tickets[0];
+ const hit=result.finish && result.ticket && result.finish===result.ticket;
+ const profit=(hit?Number(result.payout):0)-Number(result.stake||0);
+ function changeVenue(v){ setVenue(v); setBoats(createBoats(v.id,race)); }
+ function changeRace(r){ setRace(r); setBoats(createBoats(venue.id,r)); }
+ function updateBoat(index,key,value){ setBoats(prev=>prev.map((b,i)=>i===index?{...b,[key]:value}:b)); }
+ function saveResult(){
+   const item={id:Date.now(),venue:venue.name,race,finish:result.finish,ticket:result.ticket,stake:Number(result.stake),payout:hit?Number(result.payout):0,profit,createdAt:new Date().toISOString()};
+   const old=JSON.parse(localStorage.getItem('boat-ai-results')||'[]');
+   localStorage.setItem('boat-ai-results',JSON.stringify([item,...old].slice(0,200)));
+   alert('結果を保存しました');
+ }
+ return <main><Header/>
+  <section className="hero"><div><h1>本日開催</h1><p>開催場 → レース → AI予想 → 期待値 → 結果保存</p></div><div className="badge">STEP 6</div></section>
+  <section className="card"><h2>開催場</h2><div className="grid venueGrid">{venues.map(v=><button key={v.id} onClick={()=>changeVenue(v)} className={venue.id===v.id?'active venue':'venue'}><b>{v.name}</b><span>{v.area} / {v.status}</span></button>)}</div></section>
+  <section className="card"><h2>{venue.name} レース選択</h2><div className="raceGrid">{Array.from({length:12},(_,i)=>i+1).map(r=><button className={race===r?'active small':'small'} key={r} onClick={()=>changeRace(r)}>{r}R</button>)}</div></section>
+  <section className="card"><h2>出走表入力</h2><div className="tableWrap"><table><thead><tr><th>枠</th><th>選手</th><th>級</th><th>全国</th><th>当地</th><th>ST</th><th>Motor</th><th>展示</th></tr></thead><tbody>{boats.map((b,i)=><tr key={b.frame}><td className={'frame f'+b.frame}>{b.frame}</td><td><input value={b.name} onChange={e=>updateBoat(i,'name',e.target.value)}/></td><td><input value={b.classRank} onChange={e=>updateBoat(i,'classRank',e.target.value)}/></td><td><input type="number" step="0.01" value={b.nationalWin} onChange={e=>updateBoat(i,'nationalWin',e.target.value)}/></td><td><input type="number" step="0.01" value={b.localWin} onChange={e=>updateBoat(i,'localWin',e.target.value)}/></td><td><input type="number" step="0.01" value={b.avgST} onChange={e=>updateBoat(i,'avgST',e.target.value)}/></td><td><input type="number" step="0.1" value={b.motorRate} onChange={e=>updateBoat(i,'motorRate',e.target.value)}/></td><td><input type="number" step="0.01" value={b.exhibition} onChange={e=>updateBoat(i,'exhibition',e.target.value)}/></td></tr>)}</tbody></table></div></section>
+  <section className="cols"><div className="card"><h2>艇別AI確率</h2>{probs.map(b=><div className="prob" key={b.frame}><span className={'frame f'+b.frame}>{b.frame}</span><b>{b.name}</b><em>1着 {(b.firstProb*100).toFixed(1)}%</em><em>3連対 {(b.top3Prob*100).toFixed(1)}%</em></div>)}</div><div className="card"><h2>AI判断</h2><div className="bigEv">EV {top?.ev.toFixed(0)}</div><p>{aiComment(top)}</p><p className="muted">推奨：{top?.key} / 確率 {(top?.hitProb*100).toFixed(2)}% / オッズ {top?.odds}</p></div></section>
+  <section className="card"><h2>3連単 期待値ランキング</h2><div className="tableWrap"><table><thead><tr><th>買い目</th><th>的中確率</th><th>オッズ</th><th>期待値</th><th>判定</th></tr></thead><tbody>{tickets.slice(0,15).map(t=><tr key={t.key}><td><b>{t.key}</b></td><td>{(t.hitProb*100).toFixed(2)}%</td><td>{t.odds}</td><td>{t.ev.toFixed(0)}</td><td><span className={t.ev>=120?'buy':t.ev>=100?'warn':'pass'}>{t.rank}</span></td></tr>)}</tbody></table></div></section>
+  <section className="card"><h2>結果入力・保存</h2><div className="formGrid"><label>確定3連単<input placeholder="例 1-2-3" value={result.finish} onChange={e=>setResult({...result,finish:e.target.value})}/></label><label>購入買い目<input placeholder="例 1-2-3" value={result.ticket} onChange={e=>setResult({...result,ticket:e.target.value})}/></label><label>投資額<input type="number" value={result.stake} onChange={e=>setResult({...result,stake:e.target.value})}/></label><label>払戻金<input type="number" value={result.payout} onChange={e=>setResult({...result,payout:e.target.value})}/></label></div><div className="resultBox"><b>{result.finish? hit?'的中':'不的中':'結果待ち'}</b><span>収支 {profit.toLocaleString()}円</span><button onClick={saveResult}>保存</button></div></section>
+ </main>
+}

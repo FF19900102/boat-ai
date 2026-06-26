@@ -1,21 +1,3 @@
-{
-  "name": "boat-ai",
-  "version": "0.3.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@types/node": "latest",
-    "@types/react": "latest",
-    "@types/react-dom": "latest",
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest",
-    "typescript": "latest"
-  },
-  "devDependencies": {}
+export default function Header(){
+  return <header className="header"><div><div className="logo">Boat AI</div><div className="sub">確率・期待値・結果検証</div></div><nav><a href="/">ホーム</a></nav></header>
 }
