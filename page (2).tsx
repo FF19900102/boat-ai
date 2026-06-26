@@ -1,1 +1,11 @@
-import Link from'next/link';import{raceService}from'@/services/raceService';import VenueCard from'@/components/VenueCard';export default function Home(){const venues=raceService.listTodayVenues();return <main className='container'><section className='card'><h1 className='title'>Boat AI v2.0</h1><p className='muted'>確率・期待値・結果検証・AIリーグで戦う競艇AI。</p><div className='row'><Link className='btn' href='/venues'>開催場</Link><Link className='btn btn-sub' href='/backtest'>検証</Link><Link className='btn btn-sub' href='/admin'>AIリーグ</Link></div></section><h2>本日開催</h2><div className='grid'>{venues.map(v=><VenueCard key={v.id} venue={v}/>)}</div></main>}
+import PollingStatusPanel from '@/components/client/PollingStatusPanel';
+
+export default function LivePage() {
+  return (
+    <main className="container">
+      <h1 className="title">ライブ監視</h1>
+      <p className="muted">15秒ごとにAPI状態を確認します。実データ接続後は速報監視画面になります。</p>
+      <PollingStatusPanel />
+    </main>
+  );
+}
