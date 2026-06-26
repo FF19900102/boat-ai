@@ -1,29 +1,4 @@
-"use client";
-import { TrifectaPick } from "@/lib/types";
-
-export function OddsEditor({ picks, odds, onChange }: { picks: TrifectaPick[]; odds: Record<string, number>; onChange: (odds: Record<string, number>) => void }) {
-  const top = picks.slice(0, 20);
-  return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4">
-      <div className="mb-3 flex items-center justify-between gap-3">
-        <div>
-          <h3 className="font-black">オッズ入力</h3>
-          <p className="text-xs text-slate-500">上位20点だけ表示。未入力は期待値0。</p>
-        </div>
-        <button className="btn btn-ghost text-xs" onClick={() => {
-          const next = { ...odds };
-          top.forEach((p, i) => { if (!next[p.key]) next[p.key] = Number((8 + i * 1.7).toFixed(1)); });
-          onChange(next);
-        }}>仮オッズ入力</button>
-      </div>
-      <div className="grid gap-2 md:grid-cols-4">
-        {top.map((p) => (
-          <label key={p.key} className="flex items-center gap-2 rounded-xl border border-slate-100 p-2">
-            <span className="w-16 font-black">{p.key}</span>
-            <input className="input" type="number" step="0.1" value={odds[p.key] ?? ""} onChange={(e)=>onChange({ ...odds, [p.key]: Number(e.target.value) })} />
-          </label>
-        ))}
-      </div>
-    </div>
-  );
-}
+'use client';
+import { Racer, Weather } from '@/lib/types';
+import { calcLaneProbabilities } from '@/lib/boatAi';
+export default function ProbabilityTable({racers,weather}:{racers:Racer[];weather:Weather}){const rows=calcLaneProbabilities(racers,weather);return <div className="scroll"><table className="table"><thead><tr><th>順位</th><th>艇</th><th>選手</th><th>スコア</th><th>1着率</th><th>2連対</th><th>3連対</th></tr></thead><tbody>{rows.map((r,i)=><tr key={r.racer.lane}><td className={i<3?`rank${i+1}`:''}>{i+1}</td><td>{r.racer.lane}</td><td>{r.racer.name}</td><td>{r.score.toFixed(1)}</td><td>{(r.first*100).toFixed(1)}%</td><td>{(r.in2*100).toFixed(1)}%</td><td>{(r.in3*100).toFixed(1)}%</td></tr>)}</tbody></table></div>}

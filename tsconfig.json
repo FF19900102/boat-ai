@@ -1,5 +1,61 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-};
-module.exports = nextConfig;
+import { Racer, Ticket, Weather } from './types';
+
+const laneBias: Record<number, number> = { 1: 18, 2: 7, 3: 4, 4: 1, 5: -3, 6: -7 };
+const classBias: Record<string, number> = { A1: 10, A2: 5, B1: 0, B2: -5 };
+
+export function scoreRacer(r: Racer, weather: Weather) {
+  const win = r.nationalWin * 9 + r.localWin * 5;
+  const st = Math.max(0, (0.22 - r.avgSt) * 180);
+  const motor = r.motor2 * 0.48 + r.boat2 * 0.25;
+  const exhibit = Math.max(0, (6.95 - r.exhibition) * 45);
+  const entry = (7 - r.entry) * 1.5;
+  const windPenalty = weather.windSpeed >= 5 && r.lane === 1 ? -6 : 0;
+  const wavePenalty = weather.wave >= 5 && r.lane >= 5 ? -3 : 0;
+  return Math.max(1, win + st + motor + exhibit + entry + (laneBias[r.lane] || 0) + (classBias[r.className] || 0) + windPenalty + wavePenalty);
+}
+
+export function calcLaneProbabilities(racers: Racer[], weather: Weather) {
+  const scores = racers.map((r) => ({ racer: r, score: scoreRacer(r, weather) }));
+  const total = scores.reduce((s, x) => s + x.score, 0);
+  return scores.map((x) => {
+    const first = x.score / total;
+    const in2 = Math.min(0.96, first * 1.72 + 0.05);
+    const in3 = Math.min(0.99, first * 2.32 + 0.12);
+    return { ...x, first, in2, in3 };
+  }).sort((a,b)=>b.first-a.first);
+}
+
+function permutations(lanes: number[]) {
+  const out: number[][] = [];
+  for (const a of lanes) for (const b of lanes) for (const c of lanes) {
+    if (a !== b && b !== c && a !== c) out.push([a,b,c]);
+  }
+  return out;
+}
+
+export function generateTickets(racers: Racer[], weather: Weather, oddsMap: Record<string, number>): Ticket[] {
+  const probs = calcLaneProbabilities(racers, weather);
+  const pmap = new Map(probs.map((p) => [p.racer.lane, p]));
+  return permutations(racers.map(r=>r.lane)).map(([a,b,c]) => {
+    const pa = pmap.get(a)!; const pb = pmap.get(b)!; const pc = pmap.get(c)!;
+    const probability = pa.first * Math.max(0.01, pb.in2 - pb.first * 0.55) * Math.max(0.01, pc.in3 - pc.in2 * 0.35) * 1.65;
+    const combo = `${a}-${b}-${c}`;
+    const odds = oddsMap[combo] || autoOdds(probability);
+    const ev = probability * odds * 100;
+    const judge = ev >= 120 ? '買い候補' : ev >= 100 ? '注意' : '買わない';
+    return { combo, probability, odds, ev, judge };
+  }).sort((a,b)=>b.ev-a.ev);
+}
+
+export function autoOdds(probability: number) {
+  const fair = probability > 0 ? 1 / probability : 999;
+  return Math.max(3.0, Math.min(250, Math.round((fair * 0.86 + 2) * 10) / 10));
+}
+
+export function aiComment(topTicket: Ticket | undefined) {
+  if (!topTicket) return 'データ不足';
+  if (topTicket.ev >= 140) return '期待値が高い買い目あり。購入候補。';
+  if (topTicket.ev >= 120) return '買い候補あり。ただし資金配分は抑えめ。';
+  if (topTicket.ev >= 100) return '妙味は薄い。無理買い注意。';
+  return '期待値不足。見送り推奨。';
+}

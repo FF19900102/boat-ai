@@ -1,15 +1,3 @@
-import Link from "next/link";
-
-export function Header() {
-  return (
-    <header className="sticky top-0 z-10 border-b bg-white/90 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-        <Link href="/" className="text-xl font-black tracking-tight">Boat AI</Link>
-        <nav className="flex gap-2 text-sm font-bold">
-          <Link className="btn btn-light py-2" href="/">本日開催</Link>
-          <Link className="btn btn-light py-2" href="/races">レース一覧</Link>
-        </nav>
-      </div>
-    </header>
-  );
-}
+'use client';
+import { clearRaces, loadRaces, summary } from '@/lib/storage';
+export default function Dashboard({refresh}:{refresh:number}){const races=loadRaces(); const s=summary(races); const byVenue=Object.entries(races.reduce((a:any,r)=>{a[r.venue]=a[r.venue]||{count:0,stake:0,payout:0}; a[r.venue].count++; if(r.result){a[r.venue].stake+=r.result.stake; a[r.venue].payout+=r.result.hit?r.result.payout:0} return a},{})); return <><div className="grid grid4"><div className="stat"><span className="muted">保存レース</span><b>{s.races}</b></div><div className="stat"><span className="muted">的中率</span><b>{(s.hitRate*100).toFixed(1)}%</b></div><div className="stat"><span className="muted">回収率</span><b>{(s.returnRate*100).toFixed(1)}%</b></div><div className="stat"><span className="muted">収支</span><b className={s.profit>=0?'good':'bad'}>{s.profit.toLocaleString()}円</b></div></div><div className="scroll" style={{marginTop:12}}><table className="table"><thead><tr><th>場</th><th>件数</th><th>投資</th><th>回収</th><th>回収率</th></tr></thead><tbody>{byVenue.map(([v,x]:any)=><tr key={v}><td>{v}</td><td>{x.count}</td><td>{x.stake}</td><td>{x.payout}</td><td>{x.stake?((x.payout/x.stake)*100).toFixed(1):'0.0'}%</td></tr>)}</tbody></table></div><button className="ghost" style={{marginTop:12}} onClick={()=>{clearRaces(); location.reload()}}>保存データ削除</button></>}

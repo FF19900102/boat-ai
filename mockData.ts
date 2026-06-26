@@ -1,47 +1,9 @@
-"use client";
-import { SavedRace } from "@/lib/types";
-
-export function Dashboard({ races }: { races: SavedRace[] }) {
-  const results = races.map(r => r.result).filter(Boolean);
-  const stake = results.reduce((s, r) => s + (r?.stake ?? 0), 0);
-  const returns = results.reduce((s, r) => s + (r?.returnAmount ?? 0), 0);
-  const hits = results.filter(r => r?.hit).length;
-  const roi = stake > 0 ? (returns / stake) * 100 : 0;
-  const profit = returns - stake;
-
-  const byVenue = races.reduce<Record<string, { stake: number; returns: number; count: number }>>((acc, r) => {
-    if (!r.result) return acc;
-    const row = acc[r.venueName] ?? { stake: 0, returns: 0, count: 0 };
-    row.stake += r.result.stake;
-    row.returns += r.result.returnAmount;
-    row.count += 1;
-    acc[r.venueName] = row;
-    return acc;
-  }, {});
-
-  return (
-    <div className="grid gap-4 lg:grid-cols-3">
-      <Stat title="保存レース" value={`${races.length}`} />
-      <Stat title="的中率" value={results.length ? `${((hits / results.length) * 100).toFixed(1)}%` : "-"} />
-      <Stat title="回収率" value={stake ? `${roi.toFixed(1)}%` : "-"} />
-      <Stat title="総投資" value={`${stake.toLocaleString()}円`} />
-      <Stat title="総回収" value={`${returns.toLocaleString()}円`} />
-      <Stat title="収支" value={`${profit.toLocaleString()}円`} />
-      <div className="card p-4 lg:col-span-3">
-        <h3 className="mb-3 font-black">競艇場別成績</h3>
-        <div className="grid gap-2 md:grid-cols-3">
-          {Object.entries(byVenue).map(([venue, v]) => (
-            <div key={venue} className="rounded-xl border border-slate-100 p-3">
-              <div className="font-bold">{venue}</div>
-              <div className="text-sm text-slate-500">{v.count}件 / 回収率 {v.stake ? ((v.returns / v.stake) * 100).toFixed(1) : 0}%</div>
-            </div>
-          ))}
-          {Object.keys(byVenue).length === 0 && <p className="text-sm text-slate-500">結果保存後に表示されます</p>}
-        </div>
-      </div>
-    </div>
-  );
-}
-function Stat({ title, value }: { title: string; value: string }) {
-  return <div className="card p-4"><div className="text-xs font-bold text-slate-500">{title}</div><div className="mt-1 text-2xl font-black">{value}</div></div>;
+'use client';
+import { useState } from 'react';
+import { RaceResult, SavedRace, Ticket } from '@/lib/types';
+import { saveRace } from '@/lib/storage';
+export default function ResultPanel({race,topTickets,onSaved}:{race:Omit<SavedRace,'result'>;topTickets:Ticket[];onSaved:()=>void}){
+ const [result,setResult]=useState('1-2-3'); const [payout,setPayout]=useState(0); const [stake,setStake]=useState(1000); const [bought,setBought]=useState(topTickets[0]?.combo || '');
+ const save=()=>{const hit=result===bought; const rr:RaceResult={result,payout,stake,bought,hit,profit:(hit?payout:0)-stake}; saveRace({...race,result:rr}); onSaved(); alert(hit?'的中で保存しました':'不的中で保存しました')};
+ return <div className="grid grid4"><label><span className="label">確定3連単</span><input className="input" value={result} onChange={e=>setResult(e.target.value)} /></label><label><span className="label">払戻金</span><input className="input" type="number" value={payout} onChange={e=>setPayout(Number(e.target.value))} /></label><label><span className="label">投資額</span><input className="input" type="number" value={stake} onChange={e=>setStake(Number(e.target.value))} /></label><label><span className="label">購入買い目</span><input className="input" value={bought} onChange={e=>setBought(e.target.value)} /></label><button className="primary" onClick={save}>結果を保存</button></div>
 }

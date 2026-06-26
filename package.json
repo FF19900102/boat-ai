@@ -1,12 +1,9 @@
-import Link from "next/link";
-import { Venue } from "@/lib/types";
-
-export function VenueCard({ venue }: { venue: Venue }) {
-  return (
-    <Link href={`/race/${venue.id}`} className="card block p-5 hover:border-blue-400">
-      <div className="text-xs font-bold text-blue-700">{venue.area}</div>
-      <div className="mt-1 text-2xl font-black">{venue.name}</div>
-      <div className="mt-3 text-sm text-gray-500">1R〜12Rを選択</div>
-    </Link>
-  );
-}
+export type Venue = { id: string; name: string; region: string; night?: boolean };
+export type Racer = {
+  lane: number; name: string; className: string; nationalWin: number; localWin: number;
+  avgSt: number; motor2: number; boat2: number; exhibition: number; tilt: number; weight: number; entry: number;
+};
+export type Weather = { condition: string; windDirection: string; windSpeed: number; wave: number };
+export type Ticket = { combo: string; probability: number; odds: number; ev: number; judge: '買い候補'|'注意'|'買わない' };
+export type RaceResult = { result: string; payout: number; stake: number; bought: string; hit: boolean; profit: number };
+export type SavedRace = { id: string; date: string; venue: string; raceNo: number; tickets: Ticket[]; result?: RaceResult; createdAt: string };

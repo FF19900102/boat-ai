@@ -1,115 +1,30 @@
-"use client";
+'use client';
+import { useMemo, useState } from 'react';
+import Header from '@/components/Header';
+import VenueSelector from '@/components/VenueSelector';
+import RaceSelector from '@/components/RaceSelector';
+import RacerTable from '@/components/RacerTable';
+import WeatherForm from '@/components/WeatherForm';
+import ProbabilityTable from '@/components/ProbabilityTable';
+import TicketTable from '@/components/TicketTable';
+import ResultPanel from '@/components/ResultPanel';
+import Dashboard from '@/components/Dashboard';
+import { aiComment } from '@/lib/boatAi';
+import { defaultRacers, venues } from '@/lib/mockData';
+import { Racer, Ticket, Weather } from '@/lib/types';
 
-import { useMemo, useState, useEffect } from "react";
-import { Header } from "@/components/Header";
-import { VenueSelector } from "@/components/VenueSelector";
-import { RaceSelector } from "@/components/RaceSelector";
-import { EntryTable } from "@/components/EntryTable";
-import { WeatherForm } from "@/components/WeatherForm";
-import { ProbabilityTable } from "@/components/ProbabilityTable";
-import { OddsEditor } from "@/components/OddsEditor";
-import { ExpectedValueTable } from "@/components/ExpectedValueTable";
-import { ResultForm } from "@/components/ResultForm";
-import { Dashboard } from "@/components/Dashboard";
-import { AiModelPanel } from "@/components/AiModelPanel";
-import { calculateBoatProbabilities, generateTrifectaPicks } from "@/lib/ai";
-import { getTodayText, sampleEntries, venues } from "@/lib/mockData";
-import { loadRaces, saveRace, saveResult, clearAllRaces } from "@/lib/storage";
-import { RaceInput, SavedRace, Weather } from "@/lib/types";
-
-export default function Home() {
-  const [venueId, setVenueId] = useState("hamanako");
-  const [raceNo, setRaceNo] = useState(1);
-  const [entries, setEntries] = useState(sampleEntries());
-  const [weather, setWeather] = useState<Weather>({ weather: "晴", windDirection: "北西", windSpeed: 2, waveHeight: 2 });
-  const [odds, setOdds] = useState<Record<string, number>>({});
-  const [saved, setSaved] = useState<SavedRace[]>([]);
-
-  useEffect(() => setSaved(loadRaces()), []);
-
-  const venue = venues.find((v) => v.id === venueId) ?? venues[0];
-  const race: RaceInput = useMemo(() => ({
-    id: `${new Date().toISOString().slice(0,10)}-${venueId}-${raceNo}`,
-    date: new Date().toISOString().slice(0,10),
-    venueId,
-    venueName: venue.name,
-    raceNo,
-    entries,
-    weather,
-    odds,
-  }), [venueId, venue.name, raceNo, entries, weather, odds]);
-
-  const probabilities = useMemo(() => calculateBoatProbabilities(entries, weather), [entries, weather]);
-  const picks = useMemo(() => generateTrifectaPicks(race), [race]);
-
-  const saveCurrent = () => {
-    const next = saveRace({ ...race, createdAt: new Date().toISOString() });
-    setSaved(next);
-  };
-
-  return (
-    <main>
-      <Header />
-      <div className="mx-auto max-w-7xl space-y-6 px-4 py-6">
-        <section className="card p-5">
-          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <h1 className="text-2xl font-black">本日開催</h1>
-              <p className="text-sm text-slate-500">{getTodayText()} / まずは手動＋仮データ。後で公式データ取得を接続。</p>
-            </div>
-            <div className="flex gap-2">
-              <button className="btn btn-ghost" onClick={() => { setEntries(sampleEntries()); setOdds({}); }}>リセット</button>
-              <button className="btn btn-primary" onClick={saveCurrent}>このレースを保存</button>
-            </div>
-          </div>
-          <VenueSelector venues={venues} selected={venueId} onSelect={setVenueId} />
-        </section>
-
-        <section className="card p-5">
-          <h2 className="mb-3 text-xl font-black">{venue.name} レース選択</h2>
-          <RaceSelector selected={raceNo} onSelect={setRaceNo} />
-        </section>
-
-        <section className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-black">{venue.name} {raceNo}R 予想入力</h2>
-            <div className="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-600">Race ID: {race.id}</div>
-          </div>
-          <EntryTable entries={entries} onChange={setEntries} />
-          <div className="card p-4"><WeatherForm weather={weather} onChange={setWeather} /></div>
-        </section>
-
-        <section className="grid gap-4 lg:grid-cols-2">
-          <div>
-            <h2 className="mb-3 text-xl font-black">各艇の確率</h2>
-            <ProbabilityTable rows={probabilities} />
-          </div>
-          <div>
-            <h2 className="mb-3 text-xl font-black">AI判断</h2>
-            <div className="card p-4">
-              <div className="text-sm text-slate-500">本命</div>
-              <div className="text-4xl font-black">{probabilities[0]?.lane}号艇</div>
-              <div className="mt-2 text-sm text-slate-600">1着率 {(probabilities[0]?.firstRate * 100 || 0).toFixed(1)}%</div>
-              <div className="mt-4 rounded-xl bg-slate-50 p-3 text-sm">
-                {weather.windSpeed >= 5 ? "風が強いためイン信頼度を少し下げています。" : "風が弱く、枠・実力・モーターを総合評価しています。"}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <AiModelPanel race={race} />
-        <OddsEditor picks={picks} odds={odds} onChange={setOdds} />
-        <ExpectedValueTable picks={picks} />
-        <ResultForm race={race} picks={picks} onSave={(result) => setSaved(saveResult(result))} />
-
-        <section>
-          <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-xl font-black">成績ダッシュボード</h2>
-            <button className="btn btn-ghost text-xs" onClick={() => { clearAllRaces(); setSaved([]); }}>保存削除</button>
-          </div>
-          <Dashboard races={saved} />
-        </section>
-      </div>
-    </main>
-  );
+export default function Page(){
+ const today=new Date().toISOString().slice(0,10);
+ const [venue,setVenue]=useState('hamanako'); const [raceNo,setRaceNo]=useState(1); const [tab,setTab]=useState('race');
+ const [racers,setRacers]=useState<Racer[]>(defaultRacers); const [weather,setWeather]=useState<Weather>({condition:'晴',windDirection:'向かい風',windSpeed:2,wave:2});
+ const [oddsMap,setOddsMap]=useState<Record<string,number>>({}); const [tickets,setTickets]=useState<Ticket[]>([]); const [refresh,setRefresh]=useState(0);
+ const venueName=useMemo(()=>venues.find(v=>v.id===venue)?.name || venue,[venue]);
+ const raceBase={id:`${today}-${venue}-${raceNo}`,date:today,venue:venueName,raceNo,tickets,createdAt:new Date().toISOString()};
+ const top=tickets[0];
+ return <main className="wrap"><Header/><div className="tabs"><button className={`tab ${tab==='race'?'active':''}`} onClick={()=>setTab('race')}>予想</button><button className={`tab ${tab==='data'?'active':''}`} onClick={()=>setTab('data')}>入力</button><button className={`tab ${tab==='result'?'active':''}`} onClick={()=>setTab('result')}>結果</button><button className={`tab ${tab==='dashboard'?'active':''}`} onClick={()=>setTab('dashboard')}>成績</button></div>
+ {tab==='race'&&<div className="grid"><section className="card"><h2 className="sectionTitle">本日開催場</h2><VenueSelector venues={venues} selected={venue} onSelect={setVenue}/></section><section className="card"><h2 className="sectionTitle">レース選択：{venueName}</h2><RaceSelector raceNo={raceNo} setRaceNo={setRaceNo}/></section><section className="card"><h2 className="sectionTitle">AI判定</h2><div className={top&&top.ev>=120?'notice':top&&top.ev<100?'notice dangerNotice':'notice'}>{aiComment(top)} {top&&<>最上位：<b>{top.combo}</b> / EV <b>{top.ev.toFixed(1)}</b></>}</div></section><section className="grid grid2"><div className="card"><h2 className="sectionTitle">各艇確率</h2><ProbabilityTable racers={racers} weather={weather}/></div><div className="card"><h2 className="sectionTitle">期待値ランキング TOP30</h2><TicketTable racers={racers} weather={weather} oddsMap={oddsMap} setOddsMap={setOddsMap} onTickets={setTickets}/></div></section></div>}
+ {tab==='data'&&<div className="grid"><section className="card"><h2 className="sectionTitle">気象・水面</h2><WeatherForm weather={weather} setWeather={setWeather}/></section><section className="card"><h2 className="sectionTitle">出走表入力</h2><RacerTable racers={racers} setRacers={setRacers}/></section></div>}
+ {tab==='result'&&<section className="card"><h2 className="sectionTitle">結果入力・保存</h2><ResultPanel race={raceBase} topTickets={tickets} onSaved={()=>setRefresh(refresh+1)}/></section>}
+ {tab==='dashboard'&&<section className="card"><h2 className="sectionTitle">成績ダッシュボード</h2><Dashboard refresh={refresh}/></section>}
+ <p className="small muted" style={{marginTop:18}}>現在は手入力＋localStorage保存版。次段階で公式データ取得API・DB・機械学習モデルに接続する設計です。</p></main>
 }
