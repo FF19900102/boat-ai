@@ -129,3 +129,51 @@ export function summarizeByModel(results: SavedResult[]) {
   }
   return [...map.values()].sort((a,b)=>b.profit-a.profit)
 }
+
+export function summarizeByEvBucket(results: SavedResult[]) {
+  const buckets = [
+    { key: 'ev120', label: 'EV120以上', test: (ev: number) => ev >= 120 },
+    { key: 'ev100', label: 'EV100〜119', test: (ev: number) => ev >= 100 && ev < 120 },
+    { key: 'evUnder', label: 'EV100未満', test: (ev: number) => ev < 100 }
+  ]
+  return buckets.map(bucket => {
+    const rows = results.filter(r => {
+      const maxEv = Math.max(0, ...r.purchases.map(p => p.ev || 0))
+      return bucket.test(maxEv)
+    })
+    const stake = rows.reduce((s, r) => s + r.stake, 0)
+    const payout = rows.reduce((s, r) => s + r.payout, 0)
+    const hits = rows.filter(r => r.hit).length
+    return {
+      key: bucket.key,
+      label: bucket.label,
+      races: rows.length,
+      stake,
+      payout,
+      profit: payout - stake,
+      hitRate: rows.length ? hits / rows.length : 0,
+      roi: stake ? payout / stake : 0
+    }
+  })
+}
+
+export function summarizeByRaceNo(results: SavedResult[]) {
+  return Array.from({ length: 12 }, (_, i) => i + 1).map(no => {
+    const rows = results.filter(r => r.raceNo === no)
+    const stake = rows.reduce((s, r) => s + r.stake, 0)
+    const payout = rows.reduce((s, r) => s + r.payout, 0)
+    const hits = rows.filter(r => r.hit).length
+    return { raceNo: no, races: rows.length, stake, payout, profit: payout - stake, hitRate: rows.length ? hits / rows.length : 0, roi: stake ? payout / stake : 0 }
+  }).filter(r => r.races > 0).sort((a, b) => b.profit - a.profit)
+}
+
+export function makeStakePlan(bets: Bet[], bankroll: number, maxPerRacePercent = 2) {
+  const candidates = bets.filter(b => b.judgment === '買い候補').slice(0, 8)
+  const raceBudget = Math.max(0, Math.floor(bankroll * (maxPerRacePercent / 100) / 100) * 100)
+  const totalEdge = candidates.reduce((s, b) => s + Math.max(0, b.ev - 100), 0) || 1
+  return candidates.map(b => {
+    const ratio = Math.max(0, b.ev - 100) / totalEdge
+    const stake = Math.max(100, Math.floor((raceBudget * ratio) / 100) * 100)
+    return { key: b.key, odds: b.odds, ev: b.ev, probability: b.probability, stake }
+  }).filter(p => raceBudget > 0)
+}

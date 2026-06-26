@@ -81,4 +81,6 @@ export type SavedResult = {
   profit: number
   hit: boolean
   note?: string
+  maxEv?: number
+  avgEv?: number
 }

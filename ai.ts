@@ -3,10 +3,10 @@
 import { useMemo, useState, useEffect } from 'react'
 import { venues, sampleBoats } from '@/lib/mockData'
 import { BetPurchase, Boat, RaceContext, SavedResult } from '@/lib/types'
-import { aiModels, chooseSupervisorModel, evaluateModels, generateBets, makePredictions, summarizeByModel, summarizeByVenue, summarizeResults } from '@/lib/ai'
+import { aiModels, chooseSupervisorModel, evaluateModels, generateBets, makePredictions, makeStakePlan, summarizeByEvBucket, summarizeByModel, summarizeByRaceNo, summarizeByVenue, summarizeResults } from '@/lib/ai'
 
-const STORAGE_KEY = 'boat-ai-results-v4'
-const RACE_KEY = 'boat-ai-current-race-v4'
+const STORAGE_KEY = 'boat-ai-results-v5'
+const RACE_KEY = 'boat-ai-current-race-v5'
 
 export default function BoatAiApp() {
   const [venue, setVenue] = useState(venues[5].name)
@@ -21,6 +21,7 @@ export default function BoatAiApp() {
   const [note, setNote] = useState('')
   const [saved, setSaved] = useState<SavedResult[]>([])
   const [activeModelId, setActiveModelId] = useState('supervisor')
+  const [bankroll, setBankroll] = useState(30000)
 
   useEffect(() => {
     const rawResults = localStorage.getItem(STORAGE_KEY)
@@ -43,8 +44,8 @@ export default function BoatAiApp() {
   }, [venue, raceNo])
 
   useEffect(() => {
-    localStorage.setItem(RACE_KEY, JSON.stringify({ venue, raceNo, boats, context, oddsMap, purchases, activeModelId }))
-  }, [venue, raceNo, boats, context, oddsMap, purchases, activeModelId])
+    localStorage.setItem(RACE_KEY, JSON.stringify({ venue, raceNo, boats, context, oddsMap, purchases, activeModelId, bankroll }))
+  }, [venue, raceNo, boats, context, oddsMap, purchases, activeModelId, bankroll])
 
   const modelSummaries = useMemo(() => evaluateModels(boats, context, oddsMap), [boats, context, oddsMap])
   const supervisor = useMemo(() => chooseSupervisorModel(boats, context, oddsMap), [boats, context, oddsMap])
@@ -54,6 +55,9 @@ export default function BoatAiApp() {
   const stats = useMemo(() => summarizeResults(saved), [saved])
   const venueStats = useMemo(() => summarizeByVenue(saved), [saved])
   const modelStats = useMemo(() => summarizeByModel(saved), [saved])
+  const evStats = useMemo(() => summarizeByEvBucket(saved), [saved])
+  const raceStats = useMemo(() => summarizeByRaceNo(saved), [saved])
+  const stakePlan = useMemo(() => makeStakePlan(bets, bankroll, 2), [bets, bankroll])
   const totalStake = purchases.reduce((s, p) => s + Number(p.stake || 0), 0)
   const recommended = bets.filter(b => b.judgment === '買い候補').slice(0, 8)
   const buySignal = recommended.length ? `買い候補 ${recommended.length}点` : '見送り推奨'
@@ -89,6 +93,11 @@ export default function BoatAiApp() {
     setPurchases(next)
   }
 
+  function addStakePlan() {
+    const next = stakePlan.map(p => ({ key: p.key, stake: p.stake, odds: p.odds, ev: p.ev }))
+    setPurchases(next)
+  }
+
   function saveResult() {
     const normalized = result.trim()
     const hitPurchase = purchases.find(p => p.key === normalized)
@@ -103,6 +112,8 @@ export default function BoatAiApp() {
       payout: Number(payout),
       profit: Number(payout) - totalStake,
       hit: !!hitPurchase,
+      maxEv: Math.max(0, ...purchases.map(p => p.ev || 0)),
+      avgEv: purchases.length ? purchases.reduce((sum, p) => sum + (p.ev || 0), 0) / purchases.length : 0,
       modelId: activeModel.id,
       modelName: activeModel.name,
       note
@@ -116,7 +127,7 @@ export default function BoatAiApp() {
   }
 
   function exportData() {
-    const data = { version: 4, saved, current: { venue, raceNo, boats, context, oddsMap, purchases, activeModelId } }
+    const data = { version: 5, saved, current: { venue, raceNo, boats, context, oddsMap, purchases, activeModelId, bankroll } }
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -143,6 +154,7 @@ export default function BoatAiApp() {
         setOddsMap(data.current.oddsMap || oddsMap)
         setPurchases(data.current.purchases || [])
         setActiveModelId(data.current.activeModelId || 'supervisor')
+        setBankroll(data.current.bankroll || 30000)
       }
     }
     reader.readAsText(file)
@@ -239,6 +251,7 @@ export default function BoatAiApp() {
             <div><label>波高 cm</label><input type="number" value={context.wave} onChange={e => setContext({ ...context, wave: Number(e.target.value) })} /></div>
             <div><label>場</label><input value={venue} onChange={e => setVenue(e.target.value)} /></div>
             <div><label>R</label><input type="number" value={raceNo} onChange={e => setRaceNo(Number(e.target.value))} /></div>
+            <div><label>資金管理元金</label><input type="number" value={bankroll} onChange={e => setBankroll(Number(e.target.value))} /></div>
             <div><label>操作</label><button className="secondary" onClick={() => setBoats(sampleBoats)}>サンプル復元</button></div>
           </div>
 
@@ -282,6 +295,13 @@ export default function BoatAiApp() {
             </table>
           </div>
 
+          <div className="sectionTitle">資金配分案</div>
+          <div className="card">
+            <div className="small">元金の2%以内を上限に、期待値の高さで配分します。</div>
+            <div className="tabs" style={{ marginTop: 10 }}><button className="green" onClick={addStakePlan}>資金配分案を購入予定へ反映</button></div>
+            <div className="tableWrap"><table><thead><tr><th>買い目</th><th>推奨金額</th><th>確率</th><th>オッズ</th><th>期待値</th></tr></thead><tbody>{stakePlan.map(p => <tr key={p.key}><td className="mono rank">{p.key}</td><td>{p.stake.toLocaleString()}円</td><td>{(p.probability*100).toFixed(2)}%</td><td>{p.odds}</td><td>{p.ev.toFixed(0)}</td></tr>)}</tbody></table></div>
+          </div>
+
           <div className="sectionTitle">購入予定</div>
           <div className="tableWrap card">
             <table><thead><tr><th>買い目</th><th>金額</th><th>オッズ</th><th>期待値</th><th>削除</th></tr></thead>
@@ -318,8 +338,14 @@ export default function BoatAiApp() {
           <div className="sectionTitle">AI別成績</div>
           <div className="tableWrap card"><table><thead><tr><th>AI</th><th>R数</th><th>的中率</th><th>回収率</th><th>収支</th></tr></thead><tbody>{modelStats.map(v => <tr key={v.modelName}><td>{v.modelName}</td><td>{v.races}</td><td>{(v.hitRate*100).toFixed(1)}%</td><td>{(v.roi*100).toFixed(1)}%</td><td>{v.profit.toLocaleString()}円</td></tr>)}</tbody></table></div>
 
+          <div className="sectionTitle">期待値帯別成績</div>
+          <div className="tableWrap card"><table><thead><tr><th>期待値帯</th><th>R数</th><th>的中率</th><th>回収率</th><th>収支</th></tr></thead><tbody>{evStats.map(v => <tr key={v.key}><td>{v.label}</td><td>{v.races}</td><td>{(v.hitRate*100).toFixed(1)}%</td><td>{(v.roi*100).toFixed(1)}%</td><td>{v.profit.toLocaleString()}円</td></tr>)}</tbody></table></div>
+
+          <div className="sectionTitle">レース番号別成績</div>
+          <div className="tableWrap card"><table><thead><tr><th>R</th><th>R数</th><th>的中率</th><th>回収率</th><th>収支</th></tr></thead><tbody>{raceStats.map(v => <tr key={v.raceNo}><td>{v.raceNo}R</td><td>{v.races}</td><td>{(v.hitRate*100).toFixed(1)}%</td><td>{(v.roi*100).toFixed(1)}%</td><td>{v.profit.toLocaleString()}円</td></tr>)}</tbody></table></div>
+
           <div className="sectionTitle">履歴</div>
-          <div className="tableWrap card"><table><thead><tr><th>日時</th><th>場</th><th>R</th><th>結果</th><th>AI</th><th>買い目</th><th>投資</th><th>払戻</th><th>収支</th><th>メモ</th></tr></thead><tbody>{saved.map(r => <tr key={r.id}><td>{new Date(r.date).toLocaleString()}</td><td>{r.venue}</td><td>{r.raceNo}R</td><td className="mono">{r.result}</td><td>{r.modelName || '-'}</td><td className="mono">{r.purchases.map(p=>p.key).join(', ')}</td><td>{r.stake.toLocaleString()}</td><td>{r.payout.toLocaleString()}</td><td>{r.profit.toLocaleString()}</td><td>{r.note}</td></tr>)}</tbody></table></div>
+          <div className="tableWrap card"><table><thead><tr><th>日時</th><th>場</th><th>R</th><th>結果</th><th>AI</th><th>買い目</th><th>最大EV</th><th>投資</th><th>払戻</th><th>収支</th><th>メモ</th></tr></thead><tbody>{saved.map(r => <tr key={r.id}><td>{new Date(r.date).toLocaleString()}</td><td>{r.venue}</td><td>{r.raceNo}R</td><td className="mono">{r.result}</td><td>{r.modelName || '-'}</td><td className="mono">{r.purchases.map(p=>p.key).join(', ')}</td><td>{(r.maxEv || 0).toFixed(0)}</td><td>{r.stake.toLocaleString()}</td><td>{r.payout.toLocaleString()}</td><td>{r.profit.toLocaleString()}</td><td>{r.note}</td></tr>)}</tbody></table></div>
         </section>
       )}
     </main>
