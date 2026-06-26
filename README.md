@@ -1,3 +1,5 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = { reactStrictMode: true };
-module.exports = nextConfig;
+node_modules
+.next
+out
+.env*.local
+.DS_Store

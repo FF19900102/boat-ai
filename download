@@ -1,0 +1,32 @@
+export type Venue = { id: string; name: string; region: string; night?: boolean };
+export type Weather = { condition: string; windDirection: string; windSpeed: number; wave: number };
+export type Boat = {
+  frame: number;
+  name: string;
+  class: string;
+  nationalRate: number;
+  localRate: number;
+  avgST: number;
+  motorRate: number;
+  boatRate: number;
+  exhibition: number;
+  tilt: number;
+  weight: number;
+  course: number;
+};
+export type Race = { venueId: string; raceNo: number; date: string; weather: Weather; boats: Boat[] };
+export type Probability = { frame: number; name: string; score: number; first: number; top2: number; top3: number };
+export type Bet = { combo: string; probability: number; odds: number; ev: number; judge: string };
+export type SavedResult = {
+  id: string;
+  venueId: string;
+  venueName: string;
+  raceNo: number;
+  date: string;
+  result: string;
+  hit: boolean;
+  investment: number;
+  payout: number;
+  profit: number;
+  memo: string;
+};

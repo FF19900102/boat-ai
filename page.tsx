@@ -1,1 +1,15 @@
-*{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#111827;font-family:Arial,'Hiragino Sans','Yu Gothic',sans-serif}.wrap{max-width:1220px;margin:0 auto;padding:24px}.header{background:#08111f;color:#fff;padding:22px 24px;border-radius:18px;margin-bottom:18px}.header h1{margin:0;font-size:30px}.header p{margin:8px 0 0;color:#b9c5d8}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.grid.small{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}.card{background:#fff;border:1px solid #dbe3ef;border-radius:16px;padding:16px;box-shadow:0 4px 14px #0000000d}.btn{cursor:pointer;border:0;border-radius:12px;padding:12px 14px;background:#0f62fe;color:white;font-weight:700}.btn.gray{background:#e5e7eb;color:#111827}.btn.green{background:#059669}.btn.red{background:#dc2626}.mini{cursor:pointer;border:0;border-radius:8px;padding:6px 8px;background:#fee2e2;color:#991b1b;font-weight:700}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.between{justify-content:space-between}.mt{margin-top:12px}.section{margin-top:16px}.title{font-size:20px;font-weight:800;margin:0 0 12px}input,select{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:10px;background:white}.table{width:100%;border-collapse:collapse;background:white;border-radius:14px;overflow:hidden}.table th,.table td{padding:10px;border-bottom:1px solid #e5e7eb;text-align:left;font-size:14px;vertical-align:middle}.table th{background:#f8fafc}.pill{display:inline-block;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:700;background:#e0f2fe;color:#075985}.warn{background:#fef3c7;color:#92400e}.good{background:#dcfce7;color:#166534}.bad{background:#fee2e2;color:#991b1b}.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}.kpi{background:#f8fafc;border:1px solid #e5e7eb;border-radius:14px;padding:14px}.kpi div{color:#64748b;font-size:13px}.kpi strong{display:block;margin-top:8px;font-size:24px}@media(max-width:800px){.cols{grid-template-columns:1fr}.wrap{padding:14px}.table{font-size:12px;display:block;overflow:auto}.table th,.table td{font-size:12px}.header h1{font-size:24px}}
+import './globals.css';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Boat AI',
+  description: '競艇AI 予想・期待値・結果検証アプリ'
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="ja">
+      <body>{children}</body>
+    </html>
+  );
+}
