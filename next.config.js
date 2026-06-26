@@ -1,12 +1,12 @@
 'use client';
 import { useEffect, useMemo, useState } from 'react';
-import { defaultRacers, grade, makeTickets, predict, Racer, venues } from '@/lib/boatAi';
+import { defaultRacers, grade, makeAiLeague, makeTickets, predict, Racer, venues } from '@/lib/boatAi';
 
 type HistoryItem = {
   id:string; date:string; venue:string; race:number; result:string; bestCombo:string; hit:boolean;
   stake:number; payout:number; profit:number; bestEv:number; savedAt:string;
 };
-const STORAGE_KEY='boat-ai-history-v18';
+const STORAGE_KEY='boat-ai-history-v19';
 
 export default function BoatAiApp(){
   const today = new Date().toISOString().slice(0,10);
@@ -24,6 +24,8 @@ export default function BoatAiApp(){
 
   const predictions = useMemo(()=>predict(racers,weather),[racers,weather]);
   const tickets = useMemo(()=>makeTickets(predictions),[predictions]);
+  const aiLeague = useMemo(()=>makeAiLeague(racers,weather),[racers,weather]);
+  const bestAi = aiLeague[0];
   const best = tickets[0];
   const hit = !!result && best?.combo === result;
   const payout = hit ? Math.round(best.odds*stake) : 0;
@@ -78,6 +80,9 @@ export default function BoatAiApp(){
       <section className="card"><h2 className="section-title">期待値ランキング</h2><table><thead><tr><th>買い目</th><th>確率</th><th>想定Odds</th><th>EV</th><th>判定</th></tr></thead><tbody>{tickets.slice(0,10).map(t=><tr key={t.combo}><td className="rank1">{t.combo}</td><td>{(t.prob*100).toFixed(2)}%</td><td>{t.odds}</td><td>{t.ev}</td><td><span className={`pill ${t.ev>=120?'good':t.ev>=100?'warn':'bad'}`}>{t.label}</span></td></tr>)}</tbody></table></section>
     </div>
 
+
+    <section className="card" style={{marginTop:14,overflowX:'auto'}}><h2 className="section-title">AIリーグ戦</h2><div className="sub">5種類のAIが同じレースを分析。EVが高いAIを上位表示します。</div><table><thead><tr><th>順位</th><th>AI</th><th>推奨</th><th>EV</th><th>信頼度</th><th>理由</th></tr></thead><tbody>{aiLeague.map((a,i)=><tr key={a.mode}><td className={i===0?'rank1':''}>{i+1}</td><td>{a.name}</td><td className="rank1">{a.topCombo}</td><td>{a.ev}</td><td>{a.confidence}%</td><td>{a.comment}</td></tr>)}</tbody></table><div className="stat"><span>AI監督の採用</span><b>{bestAi?.name} / {bestAi?.topCombo}</b></div></section>
+
     <section className="card" style={{marginTop:14}}><h2 className="section-title">結果入力・保存</h2><div className="grid cols3"><label>3連単結果<input placeholder="例 1-3-2" value={result} onChange={e=>setResult(e.target.value)}/></label><label>投資額<input type="number" value={stake} onChange={e=>setStake(Number(e.target.value))}/></label><div><div className="sub">判定</div><div className="big">{result? hit?'的中':'不的中':'結果待ち'}</div></div></div>{result&&<div className="stat"><span>払戻 / 収支</span><b>{payout.toLocaleString()}円 / {profit.toLocaleString()}円</b></div>}<button className="btn primary" onClick={saveResult}>この結果を保存</button></section>
 
     <div className="grid cols3" style={{marginTop:14}}>
@@ -88,6 +93,6 @@ export default function BoatAiApp(){
 
     <section className="card" style={{marginTop:14,overflowX:'auto'}}><h2 className="section-title">保存履歴</h2><table><thead><tr><th>日時</th><th>場</th><th>R</th><th>推奨</th><th>結果</th><th>判定</th><th>収支</th></tr></thead><tbody>{history.slice(0,20).map(h=><tr key={h.id}><td>{h.savedAt}</td><td>{h.venue}</td><td>{h.race}R</td><td>{h.bestCombo}</td><td>{h.result}</td><td>{h.hit?'的中':'不的中'}</td><td>{h.profit.toLocaleString()}円</td></tr>)}</tbody></table>{history.length>0&&<button className="btn warn" onClick={clearHistory}>履歴削除</button>}</section>
 
-    <div className="footer">v0.18 local demo / 次はAI別リーグ戦・CSV出力</div>
+    <div className="footer">v0.19 local demo / 次はAI別リーグ戦・CSV出力</div>
   </div>
 }
