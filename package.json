@@ -1,0 +1,20 @@
+export const venues = [
+  '桐生','戸田','江戸川','平和島','多摩川','浜名湖','蒲郡','常滑','津','三国','びわこ','住之江','尼崎','鳴門','丸亀','児島','宮島','徳山','下関','若松','芦屋','福岡','唐津','大村'
+];
+export const venueStatus = { '浜名湖':'開催中','蒲郡':'ナイター','常滑':'開催中','住之江':'ナイター','戸田':'開催中','大村':'ナイター' };
+const names = ['山田太郎','鈴木一郎','佐藤健','田中誠','伊藤翼','加藤亮','中村航','小林陸','渡辺翔','吉田蓮'];
+export function makeBoats(venue, raceNo){
+  return Array.from({length:6},(_,i)=>({
+    lane:i+1,
+    name:names[(i+raceNo)%names.length],
+    className:['A1','A2','B1','B1','A2','B2'][i],
+    national:(4.2 + Math.random()*2.8 + (i===0?.8:0)).toFixed(2),
+    local:(4.0 + Math.random()*3.0 + (venue==='浜名湖'&&i===2?.5:0)).toFixed(2),
+    st:(0.11 + Math.random()*0.09).toFixed(2),
+    motor:(25+Math.random()*25).toFixed(1),
+    boat:(25+Math.random()*22).toFixed(1),
+    display:(6.65+Math.random()*0.18).toFixed(2),
+    tilt:['-0.5','0','0','0.5','0','-0.5'][i],
+    weight:(50+Math.random()*7).toFixed(1),
+  }));
+}

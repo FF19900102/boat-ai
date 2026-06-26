@@ -1,14 +1,1 @@
-import './globals.css';
-
-export const metadata = {
-  title: 'Boat AI',
-  description: '競艇AI分析アプリ'
-};
-
-export default function RootLayout({ children }) {
-  return (
-    <html lang="ja">
-      <body>{children}</body>
-    </html>
-  );
-}
+*{box-sizing:border-box}body{margin:0;background:#f5f7fb;color:#111;font-family:Arial,'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif}.wrap{max-width:1180px;margin:0 auto;padding:24px}.header{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:18px}.brand{font-size:30px;font-weight:800}.sub{color:#667085;font-size:14px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:16px;box-shadow:0 6px 20px rgba(16,24,40,.06)}button,.btn{border:0;background:#111827;color:#fff;border-radius:12px;padding:12px 16px;font-weight:700;cursor:pointer}button.secondary{background:#eef2f7;color:#111}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.tab{background:#fff;color:#111;border:1px solid #ddd}.tab.active{background:#111827;color:#fff}.venue{cursor:pointer}.venue.active{outline:3px solid #111827}.races{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.race{padding:14px;border-radius:12px;border:1px solid #ddd;background:#fff;font-weight:800;cursor:pointer}.race.active{background:#111827;color:#fff}table{width:100%;border-collapse:collapse;font-size:14px}th,td{border-bottom:1px solid #e5e7eb;padding:8px;text-align:left}th{background:#f9fafb}input,select{width:100%;padding:8px;border:1px solid #d0d5dd;border-radius:8px}.rank{font-size:22px;font-weight:800}.good{color:#067647}.warn{color:#b54708}.bad{color:#b42318}.cols{display:grid;grid-template-columns:1.3fr .7fr;gap:12px}.pill{display:inline-block;border-radius:999px;padding:4px 8px;background:#eef2ff;font-size:12px;font-weight:700}.small{font-size:12px;color:#667085}.section{margin-top:12px}@media(max-width:800px){.cols{grid-template-columns:1fr}.races{grid-template-columns:repeat(3,1fr)}.wrap{padding:12px}table{font-size:12px}}
