@@ -1,16 +1,28 @@
-'use client';
-import type { RaceWeather } from '@/lib/types';
+import { NextRequest, NextResponse } from 'next/server';
 
-export function WeatherPanel({ weather, onChange }: { weather: RaceWeather; onChange: (weather: RaceWeather) => void }) {
-  return (
-    <section className="card">
-      <h2>水面・気象</h2>
-      <div className="grid grid-2">
-        <label>天候<select value={weather.weather} onChange={(e) => onChange({ ...weather, weather: e.target.value })}><option>晴れ</option><option>曇り</option><option>雨</option><option>雪</option></select></label>
-        <label>風向<select value={weather.windDirection} onChange={(e) => onChange({ ...weather, windDirection: e.target.value })}><option>向かい風</option><option>追い風</option><option>左横風</option><option>右横風</option><option>無風</option></select></label>
-        <label>風速 m<input type="number" value={weather.windSpeed} onChange={(e) => onChange({ ...weather, windSpeed: Number(e.target.value) })} /></label>
-        <label>波高 cm<input type="number" value={weather.waveHeight} onChange={(e) => onChange({ ...weather, waveHeight: Number(e.target.value) })} /></label>
-      </div>
-    </section>
-  );
+function seeded(seed: number) {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
+
+export async function GET(req: NextRequest) {
+  const venueId = req.nextUrl.searchParams.get('venueId') || 'hamanako';
+  const raceNo = Number(req.nextUrl.searchParams.get('raceNo') || 1);
+  const seed = venueId.split('').reduce((s, c) => s + c.charCodeAt(0), 0) + raceNo * 31;
+  const nowHour = new Date().getHours();
+  const isConfirmed = raceNo < Math.max(1, nowHour - 9);
+
+  const lanes = [1, 2, 3, 4, 5, 6].sort((a, b) => seeded(seed + a) - seeded(seed + b));
+  const [first, second, third] = lanes;
+
+  return NextResponse.json({
+    status: isConfirmed ? 'confirmed' : 'pending',
+    first: isConfirmed ? first : undefined,
+    second: isConfirmed ? second : undefined,
+    third: isConfirmed ? third : undefined,
+    combination: isConfirmed ? `${first}-${second}-${third}` : undefined,
+    payout: isConfirmed ? Math.round((seeded(seed + 99) * 18000 + 900) / 100) * 100 : undefined,
+    source: 'mock-api-v1 / 結果速報（後で実データへ差し替え）',
+    updatedAt: new Date().toISOString()
+  });
 }

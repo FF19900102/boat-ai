@@ -33,6 +33,7 @@ export type Ticket = {
   odds: number;
   ev: number;
   rank: 'BUY' | 'WATCH' | 'SKIP';
+  oddsSource?: 'manual' | 'estimated';
 };
 
 export type SavedRace = {

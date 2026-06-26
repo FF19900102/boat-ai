@@ -1,145 +1,26 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { Racer, ResultRecord, Weather, createDefaultRacers, formatPct, predict, trifectaTickets, venues } from '@/lib/boat';
+type Props = {
+  source: string;
+  updatedAt: string;
+  loading: boolean;
+  onReload: () => void;
+  onFetchResult: () => void;
+};
 
-export default function Page() {
-  const today = new Date().toISOString().slice(0,10);
-  const [date, setDate] = useState(today);
-  const [venue, setVenue] = useState('浜名湖');
-  const [raceNo, setRaceNo] = useState(1);
-  const [racers, setRacers] = useState<Racer[]>(createDefaultRacers());
-  const [weather, setWeather] = useState<Weather>({ weather: '晴', windDir: '北西', windSpeed: 2, wave: 2 });
-  const [odds, setOdds] = useState<Record<string, number>>({'1-2-3':12.4,'1-3-2':15.8,'2-1-3':28.5,'3-1-2':41.2});
-  const [result, setResult] = useState('');
-  const [investment, setInvestment] = useState(1000);
-  const [payout, setPayout] = useState(0);
-  const [records, setRecords] = useState<ResultRecord[]>([]);
-
-  useEffect(() => {
-    const saved = localStorage.getItem('boat-ai-records');
-    if (saved) setRecords(JSON.parse(saved));
-  }, []);
-  useEffect(() => localStorage.setItem('boat-ai-records', JSON.stringify(records)), [records]);
-
-  const predictions = useMemo(() => predict(racers, weather), [racers, weather]);
-  const tickets = useMemo(() => trifectaTickets(predictions, odds), [predictions, odds]);
-  const topTickets = tickets.slice(0, 18);
-  const buyTickets = tickets.filter(t => t.ev >= 120).slice(0, 8);
-  const totalInvestment = records.reduce((a,b)=>a+b.investment,0);
-  const totalPayout = records.reduce((a,b)=>a+b.payout,0);
-  const profit = totalPayout - totalInvestment;
-  const hitRate = records.length ? records.filter(r=>r.hit).length / records.length * 100 : 0;
-  const roi = totalInvestment ? totalPayout / totalInvestment * 100 : 0;
-
-  function updateRacer(index: number, key: keyof Racer, value: string) {
-    setRacers(prev => prev.map((r, i) => i === index ? { ...r, [key]: key === 'name' || key === 'className' ? value : Number(value) } : r));
-  }
-
-  function saveResult() {
-    const hit = buyTickets.some(t => t.combo === result);
-    const record: ResultRecord = { id: crypto.randomUUID(), date, venue, raceNo, result, investment, payout, profit: payout - investment, hit };
-    setRecords(prev => [record, ...prev]);
-  }
-
-  function setSampleOdds() {
-    const next: Record<string, number> = {};
-    tickets.forEach((t, i) => { if (i < 30) next[t.combo] = Number((6 + i * 2.7 + (t.combo.startsWith('1') ? 0 : 12)).toFixed(1)); });
-    setOdds(next);
-  }
-
+export function AutoSyncPanel({ source, updatedAt, loading, onReload, onFetchResult }: Props) {
   return (
-    <main className="wrap">
-      <div className="header">
-        <div>
-          <div className="brand">Boat AI</div>
-          <div className="sub">確率・期待値・結果検証で見る競艇分析</div>
-        </div>
-        <button className="btn" onClick={setSampleOdds}>オッズ仮入力</button>
+    <section className="card sync-card">
+      <div>
+        <h2>データ取得</h2>
+        <p className="small">今はモックAPI。ここを公式サイト取得・有料API・DBへ差し替えます。</p>
+        <p className="small">source: {source || '未取得'}</p>
+        <p className="small">updated: {updatedAt ? new Date(updatedAt).toLocaleString('ja-JP') : '--'}</p>
       </div>
-
-      <section className="card notice">
-        <b>現在の版：</b> 手入力データでAI確率・3連単120通り・期待値・結果保存まで動きます。公式データ自動取得は次段階で接続します。
-      </section>
-
-      <section className="grid grid3" style={{marginTop:14}}>
-        <div className="card"><div className="small">的中率</div><div className="stat">{hitRate.toFixed(1)}%</div></div>
-        <div className="card"><div className="small">回収率</div><div className={`stat ${roi>=100?'good':'danger'}`}>{roi.toFixed(1)}%</div></div>
-        <div className="card"><div className="small">総収支</div><div className={`stat ${profit>=0?'good':'danger'}`}>{profit.toLocaleString()}円</div></div>
-      </section>
-
-      <section className="card" style={{marginTop:14}}>
-        <h2 className="title">レース選択</h2>
-        <div className="grid grid3">
-          <div><label>日付</label><input className="input" type="date" value={date} onChange={e=>setDate(e.target.value)} /></div>
-          <div><label>競艇場</label><select value={venue} onChange={e=>setVenue(e.target.value)}>{venues.map(v=><option key={v}>{v}</option>)}</select></div>
-          <div><label>レース</label><select value={raceNo} onChange={e=>setRaceNo(Number(e.target.value))}>{Array.from({length:12},(_,i)=><option key={i+1} value={i+1}>{i+1}R</option>)}</select></div>
-        </div>
-      </section>
-
-      <section className="card" style={{marginTop:14}}>
-        <h2 className="title">出走表入力</h2>
-        <table className="table">
-          <thead><tr><th>枠</th><th>選手</th><th>級</th><th>全国</th><th>当地</th><th>ST</th><th>モーター</th><th>ボート</th><th>展示</th><th>体重</th></tr></thead>
-          <tbody>{racers.map((r,i)=><tr key={r.lane}>
-            <td>{r.lane}</td>
-            <td><input className="input" value={r.name} onChange={e=>updateRacer(i,'name',e.target.value)} /></td>
-            <td><input className="input" value={r.className} onChange={e=>updateRacer(i,'className',e.target.value)} /></td>
-            <td><input className="input" type="number" step="0.01" value={r.nationalWin} onChange={e=>updateRacer(i,'nationalWin',e.target.value)} /></td>
-            <td><input className="input" type="number" step="0.01" value={r.localWin} onChange={e=>updateRacer(i,'localWin',e.target.value)} /></td>
-            <td><input className="input" type="number" step="0.01" value={r.avgSt} onChange={e=>updateRacer(i,'avgSt',e.target.value)} /></td>
-            <td><input className="input" type="number" step="0.1" value={r.motorRate} onChange={e=>updateRacer(i,'motorRate',e.target.value)} /></td>
-            <td><input className="input" type="number" step="0.1" value={r.boatRate} onChange={e=>updateRacer(i,'boatRate',e.target.value)} /></td>
-            <td><input className="input" type="number" step="0.01" value={r.exhibition} onChange={e=>updateRacer(i,'exhibition',e.target.value)} /></td>
-            <td><input className="input" type="number" step="0.1" value={r.weight} onChange={e=>updateRacer(i,'weight',e.target.value)} /></td>
-          </tr>)}</tbody>
-        </table>
-      </section>
-
-      <section className="grid grid2" style={{marginTop:14}}>
-        <div className="card">
-          <h2 className="title">気象</h2>
-          <div className="grid grid2">
-            <div><label>天候</label><input className="input" value={weather.weather} onChange={e=>setWeather({...weather, weather:e.target.value})}/></div>
-            <div><label>風向</label><input className="input" value={weather.windDir} onChange={e=>setWeather({...weather, windDir:e.target.value})}/></div>
-            <div><label>風速 m</label><input className="input" type="number" value={weather.windSpeed} onChange={e=>setWeather({...weather, windSpeed:Number(e.target.value)})}/></div>
-            <div><label>波高 cm</label><input className="input" type="number" value={weather.wave} onChange={e=>setWeather({...weather, wave:Number(e.target.value)})}/></div>
-          </div>
-        </div>
-        <div className="card">
-          <h2 className="title">AI判定</h2>
-          {buyTickets.length ? <><div className="pill buy">買い候補あり</div><p>期待値120以上：{buyTickets.length}点</p><b>本線：</b> {buyTickets.slice(0,3).map(t=>t.combo).join(' / ')}</> : <><div className="pill skip">見送り</div><p>期待値120以上の買い目がありません。</p></>}
-        </div>
-      </section>
-
-      <section className="grid grid2" style={{marginTop:14}}>
-        <div className="card">
-          <h2 className="title">各艇確率</h2>
-          <table className="table"><thead><tr><th>枠</th><th>選手</th><th>1着率</th><th>2連対</th><th>3連対</th><th>スコア</th></tr></thead>
-          <tbody>{predictions.map(p=><tr key={p.lane}><td>{p.lane}</td><td>{p.name}</td><td className="mono">{formatPct(p.p1)}</td><td>{formatPct(p.p2)}</td><td>{formatPct(p.p3)}</td><td>{p.score.toFixed(1)}</td></tr>)}</tbody></table>
-        </div>
-        <div className="card">
-          <h2 className="title">期待値ランキング</h2>
-          <table className="table"><thead><tr><th>買い目</th><th>確率</th><th>オッズ</th><th>EV</th><th>判定</th></tr></thead>
-          <tbody>{topTickets.map(t=><tr key={t.combo}><td><b>{t.combo}</b></td><td>{formatPct(t.probability)}</td><td><input className="input" type="number" step="0.1" value={odds[t.combo] || ''} onChange={e=>setOdds({...odds,[t.combo]:Number(e.target.value)})}/></td><td className="mono">{t.ev.toFixed(0)}</td><td><span className={`pill ${t.rank==='買い候補'?'buy':t.rank==='注意'?'watch':'skip'}`}>{t.rank}</span></td></tr>)}</tbody></table>
-        </div>
-      </section>
-
-      <section className="card" style={{marginTop:14}}>
-        <h2 className="title">結果入力</h2>
-        <div className="grid grid3">
-          <div><label>確定3連単</label><input className="input" placeholder="例 1-3-2" value={result} onChange={e=>setResult(e.target.value)} /></div>
-          <div><label>投資額</label><input className="input" type="number" value={investment} onChange={e=>setInvestment(Number(e.target.value))} /></div>
-          <div><label>払戻金</label><input className="input" type="number" value={payout} onChange={e=>setPayout(Number(e.target.value))} /></div>
-        </div>
-        <button className="btn" style={{marginTop:12}} onClick={saveResult}>結果を保存</button>
-      </section>
-
-      <section className="card" style={{marginTop:14}}>
-        <h2 className="title">保存済み結果</h2>
-        <table className="table"><thead><tr><th>日付</th><th>場</th><th>R</th><th>結果</th><th>的中</th><th>投資</th><th>払戻</th><th>収支</th></tr></thead>
-        <tbody>{records.map(r=><tr key={r.id}><td>{r.date}</td><td>{r.venue}</td><td>{r.raceNo}R</td><td>{r.result}</td><td>{r.hit?'○':'×'}</td><td>{r.investment.toLocaleString()}</td><td>{r.payout.toLocaleString()}</td><td className={r.profit>=0?'good':'danger'}>{r.profit.toLocaleString()}</td></tr>)}</tbody></table>
-      </section>
-    </main>
+      <div className="sync-actions">
+        <button className="btn" onClick={onReload} disabled={loading}>{loading ? '取得中...' : '出走表を取得'}</button>
+        <button className="btn secondary" onClick={onFetchResult} disabled={loading}>結果速報を確認</button>
+      </div>
+    </section>
   );
 }

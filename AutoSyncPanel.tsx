@@ -1,18 +1,12 @@
-'use client';
-import type { Venue } from '@/lib/types';
-
-export function VenueSelector({ venues, selected, onSelect }: { venues: Venue[]; selected: string; onSelect: (id: string) => void }) {
+export function Header() {
+  const today = new Date().toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' });
   return (
-    <section className="card">
-      <h2>本日開催場</h2>
-      <div className="grid grid-3">
-        {venues.map((venue) => (
-          <button key={venue.id} className={`card venue ${selected === venue.id ? 'active' : ''}`} onClick={() => onSelect(venue.id)}>
-            <strong>{venue.name}</strong>
-            <div className="small">{venue.region}{venue.night ? ' / ナイター' : ''}</div>
-          </button>
-        ))}
+    <header className="header">
+      <div>
+        <div className="logo">Boat AI</div>
+        <div className="sub">確率・期待値・結果検証で競艇を分析</div>
       </div>
-    </section>
+      <div className="badge">本日 {today}</div>
+    </header>
   );
 }

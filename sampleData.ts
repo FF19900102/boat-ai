@@ -1,43 +1,55 @@
 'use client';
-import type { Racer } from '@/lib/types';
+import type { Racer, RaceWeather, Ticket } from '@/lib/types';
+import { generateTrifectaTickets, verdict, winProbabilities } from '@/lib/ai';
 
-export function RacerTable({ racers, onChange }: { racers: Racer[]; onChange: (racers: Racer[]) => void }) {
-  function update(index: number, key: keyof Racer, value: string) {
-    const next = [...racers];
-    const old = next[index];
-    next[index] = { ...old, [key]: key === 'name' || key === 'className' ? value : Number(value) } as Racer;
-    onChange(next);
-  }
+export function PredictionPanel({ racers, weather, oddsMap = {} }: { racers: Racer[]; weather: RaceWeather; oddsMap?: Record<string, number> }) {
+  const probs = winProbabilities(racers, weather).sort((a, b) => b.probability - a.probability);
+  const tickets = generateTrifectaTickets(racers, weather, oddsMap).slice(0, 20);
+  const decision = verdict(tickets as Ticket[]);
 
   return (
-    <section className="card">
-      <h2>出走表・展示データ</h2>
-      <div className="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>枠</th><th>選手</th><th>級</th><th>全国</th><th>当地</th><th>平均ST</th><th>モーター</th><th>ボート</th><th>展示</th><th>チルト</th><th>体重</th><th>単勝目安</th>
-            </tr>
-          </thead>
-          <tbody>
-            {racers.map((r, i) => (
-              <tr key={r.lane}>
-                <td>{r.lane}</td>
-                <td><input value={r.name} onChange={(e) => update(i, 'name', e.target.value)} /></td>
-                <td><select value={r.className} onChange={(e) => update(i, 'className', e.target.value)}><option>A1</option><option>A2</option><option>B1</option><option>B2</option></select></td>
-                <td><input type="number" step="0.1" value={r.nationalWinRate} onChange={(e) => update(i, 'nationalWinRate', e.target.value)} /></td>
-                <td><input type="number" step="0.1" value={r.localWinRate} onChange={(e) => update(i, 'localWinRate', e.target.value)} /></td>
-                <td><input type="number" step="0.01" value={r.avgStart} onChange={(e) => update(i, 'avgStart', e.target.value)} /></td>
-                <td><input type="number" step="0.1" value={r.motorRate} onChange={(e) => update(i, 'motorRate', e.target.value)} /></td>
-                <td><input type="number" step="0.1" value={r.boatRate} onChange={(e) => update(i, 'boatRate', e.target.value)} /></td>
-                <td><input type="number" step="0.01" value={r.exhibitionTime} onChange={(e) => update(i, 'exhibitionTime', e.target.value)} /></td>
-                <td><input type="number" step="0.5" value={r.tilt} onChange={(e) => update(i, 'tilt', e.target.value)} /></td>
-                <td><input type="number" step="0.1" value={r.weight} onChange={(e) => update(i, 'weight', e.target.value)} /></td>
-                <td><input type="number" step="0.1" value={r.oddsWin} onChange={(e) => update(i, 'oddsWin', e.target.value)} /></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <section className="grid grid-2">
+      <div className="card">
+        <h2>AI判定</h2>
+        <div className="kpi">
+          <span className={decision.label === '購入候補' ? 'good' : decision.label === '見送り' ? 'bad' : 'warn'}>{decision.label}</span>
+          <strong>{decision.detail}</strong>
+          <div className="small">現在は数式AI。後でLightGBMに差し替え可能。</div>
+        </div>
+      </div>
+      <div className="card">
+        <h2>1着確率</h2>
+        <div className="table-wrap">
+          <table>
+            <thead><tr><th>艇</th><th>選手</th><th>確率</th><th>スコア</th></tr></thead>
+            <tbody>
+              {probs.map((p) => {
+                const r = racers.find((x) => x.lane === p.lane)!;
+                return <tr key={p.lane}><td>{p.lane}</td><td>{r.name}</td><td>{(p.probability * 100).toFixed(1)}%</td><td>{p.score.toFixed(1)}</td></tr>;
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div className="card" style={{ gridColumn: '1 / -1' }}>
+        <h2>3連単 期待値ランキング TOP20</h2>
+        <div className="table-wrap">
+          <table>
+            <thead><tr><th>買い目</th><th>的中確率</th><th>オッズ</th><th>期待値</th><th>種別</th><th>判定</th></tr></thead>
+            <tbody>
+              {tickets.map((t) => (
+                <tr key={t.combination}>
+                  <td><strong>{t.combination}</strong></td>
+                  <td>{(t.probability * 100).toFixed(2)}%</td>
+                  <td>{t.odds.toFixed(1)}</td>
+                  <td className={t.ev >= 120 ? 'good' : t.ev >= 100 ? 'warn' : 'bad'}>{t.ev.toFixed(0)}</td>
+                  <td>{t.oddsSource === 'manual' ? '実オッズ' : '推定'}</td>
+                  <td>{t.rank === 'BUY' ? '買い候補' : t.rank === 'WATCH' ? '注意' : '見送り'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   );

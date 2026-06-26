@@ -1,30 +1,37 @@
 'use client';
-import { useEffect, useState } from 'react';
-import type { SavedRace } from '@/lib/types';
+import type { Racer, RaceWeather } from '@/lib/types';
+import { runStrategyLeague } from '@/lib/strategies';
 
-export function Dashboard() {
-  const [races, setRaces] = useState<SavedRace[]>([]);
-  useEffect(() => {
-    setRaces(JSON.parse(localStorage.getItem('boat-ai-races') || '[]'));
-  }, []);
-  const totalBet = races.reduce((s, r) => s + (r.result?.betAmount || 0), 0);
-  const totalPayout = races.reduce((s, r) => s + (r.result?.hit ? r.result.payout : 0), 0);
-  const hits = races.filter((r) => r.result?.hit).length;
-  const roi = totalBet ? (totalPayout / totalBet) * 100 : 0;
+export function AiLeaguePanel({ racers, weather }: { racers: Racer[]; weather: RaceWeather }) {
+  const league = runStrategyLeague(racers, weather);
+  const leader = league[0];
 
   return (
     <section className="card">
-      <h2>成績ダッシュボード</h2>
-      <div className="grid grid-3">
-        <div className="kpi"><span className="small">保存レース</span><strong>{races.length}</strong></div>
-        <div className="kpi"><span className="small">的中率</span><strong>{races.length ? ((hits / races.length) * 100).toFixed(1) : '0.0'}%</strong></div>
-        <div className="kpi"><span className="small">回収率</span><strong className={roi >= 100 ? 'good' : 'bad'}>{roi.toFixed(1)}%</strong></div>
+      <div className="section-title">
+        <div>
+          <h2>AIリーグ戦</h2>
+          <p className="small">5種類のAIで同じレースを判定。現時点で強い作戦を上に表示します。</p>
+        </div>
+        <div className="badge">採用候補：{leader?.name || '--'}</div>
       </div>
-      <div className="table-wrap" style={{ marginTop: 14 }}>
+      <div className="table-wrap">
         <table>
-          <thead><tr><th>日付</th><th>場</th><th>R</th><th>結果</th><th>収支</th></tr></thead>
+          <thead>
+            <tr><th>順位</th><th>AI</th><th>狙い</th><th>本線</th><th>EV</th><th>信頼度</th><th>判定</th></tr>
+          </thead>
           <tbody>
-            {races.slice(0, 10).map((r) => <tr key={r.id}><td>{new Date(r.date).toLocaleString('ja-JP')}</td><td>{r.venue}</td><td>{r.raceNo}R</td><td>{r.result?.first}-{r.result?.second}-{r.result?.third}</td><td className={(r.result?.profit || 0) >= 0 ? 'good' : 'bad'}>{r.result?.profit.toLocaleString()}円</td></tr>)}
+            {league.map((item, index) => (
+              <tr key={item.key}>
+                <td>{index + 1}</td>
+                <td><strong>{item.name}</strong></td>
+                <td>{item.summary}</td>
+                <td>{item.topTicket.combination}</td>
+                <td className={item.topTicket.ev >= 120 ? 'good' : item.topTicket.ev >= 100 ? 'warn' : 'bad'}>{item.topTicket.ev.toFixed(0)}</td>
+                <td>{item.confidence.toFixed(0)}%</td>
+                <td>{item.topTicket.rank === 'BUY' ? '買い候補' : item.topTicket.rank === 'WATCH' ? '注意' : '見送り'}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
