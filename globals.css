@@ -1,14 +1,65 @@
-import './globals.css';
+'use client';
 
-export const metadata = {
-  title: 'Boat AI',
-  description: '競艇AI分析アプリ'
-};
+import { useMemo, useState } from 'react';
+import Header from '../components/Header';
+import { venues, races } from '../lib/data';
 
-export default function RootLayout({ children }) {
+export default function Home() {
+  const [selectedVenue, setSelectedVenue] = useState(null);
+  const [selectedRace, setSelectedRace] = useState(null);
+  const today = useMemo(() => new Date().toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short' }), []);
+
   return (
-    <html lang="ja">
-      <body>{children}</body>
-    </html>
+    <main className="page">
+      <Header />
+
+      <section className="panel">
+        <div className="panelTitle">
+          <h2>本日開催</h2>
+          <p>{today}</p>
+        </div>
+        <div className="venueGrid">
+          {venues.map((v) => (
+            <button
+              key={v.id}
+              className={`venueCard ${selectedVenue?.id === v.id ? 'active' : ''}`}
+              onClick={() => { setSelectedVenue(v); setSelectedRace(null); }}
+            >
+              <strong>{v.name}</strong>
+              <span>{v.night ? 'ナイター' : 'デイ'}</span>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {selectedVenue && (
+        <section className="panel">
+          <div className="panelTitle">
+            <h2>{selectedVenue.name} レース選択</h2>
+            <p>1R〜12R</p>
+          </div>
+          <div className="raceGrid">
+            {races.map((r) => (
+              <button
+                key={r.number}
+                className={`raceCard ${selectedRace?.number === r.number ? 'active' : ''}`}
+                onClick={() => setSelectedRace(r)}
+              >
+                <strong>{r.name}</strong>
+                <span>{r.status}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {selectedVenue && selectedRace && (
+        <section className="panel selectedBox">
+          <h2>次に作る画面</h2>
+          <p>{selectedVenue.name} {selectedRace.name} の出走表・AI予想ページへ進みます。</p>
+          <button className="mainButton">出走表を開く（STEP3で実装）</button>
+        </section>
+      )}
+    </main>
   );
 }
