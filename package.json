@@ -1,9 +1,9 @@
 export const venues = ['桐生','戸田','江戸川','平和島','多摩川','浜名湖','蒲郡','常滑','津','三国','びわこ','住之江','尼崎','鳴門','丸亀','児島','宮島','徳山','下関','若松','芦屋','福岡','唐津','大村'];
-export const races = Array.from({length:12},(_,i)=>`${i+1}R`);
-const names=['山田太郎','鈴木一郎','佐藤健二','田中誠','伊藤翔','加藤亮'];
-export function makeBoats(venue='浜名湖', race='1R'){
-  const seed=(venue.length*7+parseInt(race)*13)%17;
-  return Array.from({length:6},(_,i)=>({
-    lane:i+1,name:names[i],className:i<2?'A1':i<4?'A2':'B1',national:(6.8-i*.35+(seed%3)*.08).toFixed(2),local:(6.4-i*.28+(seed%5)*.05).toFixed(2),st:(0.13+i*.01+(seed%2)*.005).toFixed(3),motor:(42-i*2+(seed%6)).toFixed(1),boat:(38-i*1.6+(seed%4)).toFixed(1),exhibition:(6.72+i*.03-(seed%3)*.01).toFixed(2),tilt:'0.0',weight:(52+i*.8).toFixed(1),odds:''
-  }));
-}
+export const sampleBoats = [
+ {frame:1,name:'山田 太郎',class:'A1',nat:6.82,local:6.44,st:0.13,motor:42.1,boat:35.2,ex:6.72,tilt:0,weight:52.0,course:1},
+ {frame:2,name:'鈴木 一郎',class:'A2',nat:5.88,local:5.62,st:0.15,motor:33.8,boat:31.1,ex:6.78,tilt:0,weight:53.1,course:2},
+ {frame:3,name:'佐藤 健',class:'A1',nat:6.31,local:6.02,st:0.14,motor:38.5,boat:29.4,ex:6.75,tilt:0,weight:52.6,course:3},
+ {frame:4,name:'高橋 誠',class:'B1',nat:4.92,local:5.10,st:0.17,motor:45.9,boat:37.8,ex:6.81,tilt:0,weight:54.2,course:4},
+ {frame:5,name:'田中 翔',class:'A2',nat:5.44,local:5.34,st:0.16,motor:31.2,boat:33.9,ex:6.83,tilt:0.5,weight:52.8,course:5},
+ {frame:6,name:'伊藤 大輔',class:'B1',nat:4.58,local:4.80,st:0.19,motor:27.5,boat:28.0,ex:6.88,tilt:0.5,weight:55.0,course:6}
+];
