@@ -1,10 +1,10 @@
-import LiveDataTester from '@/components/client/LiveDataTester';
+import OfficialDataTester from '@/components/client/OfficialDataTester';
 
-export default function AdminLiveDataPage() {
+export default function OfficialDataPage() {
   return (
     <main className="container">
-      <h1 className="title">実データ取得テスト</h1>
-      <LiveDataTester />
+      <h1 className="title">公式データ取得</h1>
+      <OfficialDataTester />
     </main>
   );
 }
