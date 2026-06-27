@@ -1,13 +1,10 @@
-import DbBetManager from '@/components/client/DbBetManager';
+import LiveDataTester from '@/components/client/LiveDataTester';
 
-export default function AdminBetsPage() {
+export default function AdminLiveDataPage() {
   return (
     <main className="container">
-      <h1 className="title">DB購入履歴 管理</h1>
-      <p className="muted">
-        v2.2ではAPI経由で購入履歴を管理します。次のv2.3でPrisma保存へ切り替えます。
-      </p>
-      <DbBetManager />
+      <h1 className="title">実データ取得テスト</h1>
+      <LiveDataTester />
     </main>
   );
 }

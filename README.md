@@ -1,15 +1,22 @@
-# Boat AI v2.8
+# Boat AI Real Data Layer v1
 
-v2.8では、販売版に近づけるための運用・分析機能を追加します。
+実データ取得層の追加パッチです。
 
 ## 追加内容
-- オッズ変動分析API
-- オッズ変動管理画面
-- 通知設定API
-- 通知設定画面
-- エラーログAPI
-- エラーログ管理画面
-- 運用監視サービス
-- v2.8ドキュメント
+- 実データ取得プロバイダー構造
+- 公式/外部データへ差し替え可能なProvider
+- HTML/JSON取得クライアント
+- レースID解析
+- live API群
+- 管理画面 `/admin/live-data`
+- Mock fallback
 
-GitHubに上書きアップロードしてください。
+## 重要
+現時点では、実取得先URLを `BOAT_DATA_BASE_URL` に設定できる構造です。
+未設定時は既存Mockへフォールバックします。
+
+`.env`
+```env
+BOAT_DATA_PROVIDER=external
+BOAT_DATA_BASE_URL=https://example.com
+```
