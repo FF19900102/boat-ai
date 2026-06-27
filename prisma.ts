@@ -1,28 +1,24 @@
 import { NextResponse } from 'next/server';
-import { createBetRecord, listBetRecords, clearBetRecords } from '@/repositories/betRepository';
+import { listDbRaces, upsertRaceToDb } from '@/repositories/core/raceRepository';
+import { raceService } from '@/services/raceService';
+import { replaceRaceEntries } from '@/repositories/core/entryRepository';
 
 export async function GET() {
-  const rows = await listBetRecords();
+  const rows = await listDbRaces();
   return NextResponse.json({ ok: true, data: rows });
 }
 
 export async function POST(req: Request) {
-  const body = await req.json();
+  const body = await req.json().catch(() => ({}));
+  const raceId = String(body.raceId ?? 'hamanako-1');
+  const race = raceService.getRace(raceId);
 
-  const record = await createBetRecord({
-    raceId: String(body.raceId ?? ''),
-    venueName: String(body.venueName ?? ''),
-    raceTitle: String(body.raceTitle ?? ''),
-    combination: String(body.combination ?? ''),
-    stake: Number(body.stake ?? 0),
-    payout: Number(body.payout ?? 0),
-    hit: Boolean(body.hit ?? Number(body.payout ?? 0) > 0)
-  });
+  if (!race) {
+    return NextResponse.json({ ok: false, error: 'race not found' }, { status: 404 });
+  }
 
-  return NextResponse.json({ ok: true, data: record });
-}
+  await upsertRaceToDb(race);
+  await replaceRaceEntries(race.id, race.entries);
 
-export async function DELETE() {
-  const count = await clearBetRecords();
-  return NextResponse.json({ ok: true, data: { deleted: count } });
+  return NextResponse.json({ ok: true, data: { raceId: race.id, entries: race.entries.length } });
 }
