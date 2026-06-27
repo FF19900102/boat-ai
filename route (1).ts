@@ -1,120 +1,42 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { Header } from '@/components/Header';
-import { VenueSelector } from '@/components/VenueSelector';
-import { RaceSelector } from '@/components/RaceSelector';
-import { RacerTable } from '@/components/RacerTable';
-import { WeatherPanel } from '@/components/WeatherPanel';
-import { PredictionPanel } from '@/components/PredictionPanel';
-import { OddsInputPanel } from '@/components/OddsInputPanel';
-import { ResultPanel } from '@/components/ResultPanel';
-import { Dashboard } from '@/components/Dashboard';
-import { AutoSyncPanel } from '@/components/AutoSyncPanel';
-import { AiLeaguePanel } from '@/components/AiLeaguePanel';
-import { DataManager } from '@/components/DataManager';
-import { defaultRacers, defaultWeather, venues as fallbackVenues } from '@/lib/sampleData';
-import type { Racer, RaceWeather, Venue } from '@/lib/types';
-import { fetchRaceData, fetchRaceResult, fetchRaces, fetchVenues, type RaceMeta, type ResultPayload } from '@/services/boatDataClient';
+import { BoatFeature } from '@/ai/features/featureEngine';
+import { Prediction, TrifectaPrediction } from '@/lib/types';
+import { AiModelProfile } from '@/ai/models/modelProfiles';
 
-export default function HomePage() {
-  const [venues, setVenues] = useState<Venue[]>(fallbackVenues);
-  const [venueId, setVenueId] = useState('hamanako');
-  const [raceNo, setRaceNo] = useState(1);
-  const [races, setRaces] = useState<RaceMeta[]>([]);
-  const [racers, setRacers] = useState<Racer[]>(defaultRacers);
-  const [weather, setWeather] = useState<RaceWeather>(defaultWeather);
-  const [source, setSource] = useState('local sample');
-  const [updatedAt, setUpdatedAt] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [fetchedResult, setFetchedResult] = useState<ResultPayload | null>(null);
-  const [oddsMap, setOddsMap] = useState<Record<string, number>>({});
-  const selectedVenue = venues.find((v) => v.id === venueId) || venues[0];
+export function explainPrediction(input: {
+  model: AiModelProfile;
+  features: BoatFeature[];
+  predictions: Prediction[];
+  trifecta: TrifectaPrediction[];
+}) {
+  const top = input.predictions[0];
+  const topFeature = input.features.find((f) => f.lane === top?.lane);
+  const bestBet = input.trifecta[0];
 
-  useEffect(() => {
-    fetchVenues()
-      .then((data) => {
-        setVenues(data.venues);
-        setSource(data.source);
-        setUpdatedAt(data.updatedAt);
-      })
-      .catch(() => null);
-  }, []);
+  const reasons: string[] = [];
 
-  useEffect(() => {
-    fetchRaces(venueId)
-      .then((data) => {
-        setRaces(data.races);
-        setSource(data.source);
-        setUpdatedAt(data.updatedAt);
-      })
-      .catch(() => setRaces([]));
-  }, [venueId]);
+  if (topFeature) {
+    const factors = [
+      ['選手力', topFeature.racerPower],
+      ['当地相性', topFeature.localPower],
+      ['モーター', topFeature.motorPower],
+      ['展示', topFeature.exhibitionPower],
+      ['枠番', topFeature.lanePower],
+      ['気象', topFeature.weatherPower]
+    ].sort((a, b) => Number(b[1]) - Number(a[1]));
 
-  useEffect(() => {
-    loadRaceData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [venueId, raceNo]);
-
-  useEffect(() => {
-    const key = `boat-ai-odds-${venueId}-${raceNo}`;
-    try {
-      setOddsMap(JSON.parse(localStorage.getItem(key) || '{}'));
-    } catch {
-      setOddsMap({});
-    }
-  }, [venueId, raceNo]);
-
-  useEffect(() => {
-    const key = `boat-ai-odds-${venueId}-${raceNo}`;
-    localStorage.setItem(key, JSON.stringify(oddsMap));
-  }, [venueId, raceNo, oddsMap]);
-
-  async function loadRaceData() {
-    try {
-      setLoading(true);
-      setFetchedResult(null);
-      const data = await fetchRaceData(venueId, raceNo);
-      setRacers(data.racers);
-      setWeather(data.weather);
-      setSource(data.source);
-      setUpdatedAt(data.updatedAt);
-    } finally {
-      setLoading(false);
-    }
+    reasons.push(`${top.lane}号艇は「${factors[0][0]}」と「${factors[1][0]}」の評価が高いです。`);
   }
 
-  async function loadResult() {
-    try {
-      setLoading(true);
-      const data = await fetchRaceResult(venueId, raceNo);
-      setFetchedResult(data);
-      setSource(data.source);
-      setUpdatedAt(data.updatedAt);
-    } finally {
-      setLoading(false);
-    }
+  if (bestBet) {
+    reasons.push(`最上位買い目は ${bestBet.combination}、期待値は ${bestBet.expectedValue.toFixed(1)} です。`);
   }
 
-  return (
-    <>
-      <Header />
-      <main className="container grid">
-        <VenueSelector venues={venues} selected={venueId} onSelect={setVenueId} />
-        <RaceSelector races={races} raceNo={raceNo} onSelect={setRaceNo} />
-        <AutoSyncPanel source={source} updatedAt={updatedAt} loading={loading} onReload={loadRaceData} onFetchResult={loadResult} />
-        <section className="card">
-          <h2>{selectedVenue.name} {raceNo}R</h2>
-          <div className="small">出走表・展示・結果速報をAPI経由で取得する形に変更済み。現在はモックAPIです。</div>
-        </section>
-        <RacerTable racers={racers} onChange={setRacers} />
-        <WeatherPanel weather={weather} onChange={setWeather} />
-        <PredictionPanel racers={racers} weather={weather} oddsMap={oddsMap} />
-        <OddsInputPanel racers={racers} weather={weather} oddsMap={oddsMap} onChange={setOddsMap} />
-        <AiLeaguePanel racers={racers} weather={weather} />
-        <ResultPanel venue={selectedVenue.name} raceNo={raceNo} racers={racers} weather={weather} fetchedResult={fetchedResult} oddsMap={oddsMap} />
-        <Dashboard />
-        <DataManager />
-      </main>
-    </>
-  );
+  reasons.push(`使用モデルは「${input.model.name}」です。${input.model.description}`);
+
+  return {
+    summary: reasons.join(' '),
+    topLane: top?.lane ?? null,
+    topBet: bestBet ?? null,
+    reasons
+  };
 }

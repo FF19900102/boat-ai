@@ -1,1 +1,80 @@
-:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#07111f;color:#e8f1ff;font-family:Arial,Helvetica,sans-serif}a{color:inherit;text-decoration:none}.container{max-width:1220px;margin:0 auto;padding:24px}.header{background:#0b1b30;border-bottom:1px solid #183455;position:sticky;top:0;z-index:10}.header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:1220px;margin:auto;padding:16px 24px}.logo{font-weight:900;font-size:22px}.nav{display:flex;gap:14px;font-size:14px;color:#b7c7dc;flex-wrap:wrap}.card{background:#0e2038;border:1px solid #1f3b5f;border-radius:16px;padding:18px;box-shadow:0 10px 24px rgba(0,0,0,.22)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}.btn{display:inline-flex;align-items:center;justify-content:center;border-radius:10px;padding:10px 14px;background:#2f7df6;color:white;font-weight:700;border:0;cursor:pointer}.btn-sub{background:#173252;color:#d9e8ff}.muted{color:#9fb2c9}.title{font-size:30px;margin:0 0 8px}.table{width:100%;border-collapse:collapse;font-size:14px}.table th,.table td{border-bottom:1px solid #203a5c;padding:10px;text-align:left}.table th{color:#9fb2c9;font-weight:700}.badge{border-radius:999px;padding:4px 8px;font-size:12px;background:#183455;color:#c7dcf5}.good{color:#8ff0a4}.warn{color:#ffd166}.bad{color:#ff8a8a}.kpi{font-size:28px;font-weight:800}.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.input{background:#07182b;color:#e8f1ff;border:1px solid #244669;border-radius:10px;padding:9px 10px;width:100%}.section{margin-top:16px}.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}.bar{height:10px;border-radius:999px;background:#173252;overflow:hidden}.bar>span{display:block;height:100%;background:#2f7df6}@media(max-width:800px){.two{grid-template-columns:1fr}.container{padding:16px}.header-inner{padding:14px 16px}.table{font-size:12px}}
+import { AiWeights } from '@/lib/types';
+
+export type AiModelProfile = {
+  id: string;
+  name: string;
+  description: string;
+  weights: AiWeights;
+  riskMode: 'safe' | 'balanced' | 'aggressive';
+};
+
+export const aiModelProfiles: AiModelProfile[] = [
+  {
+    id: 'balanced',
+    name: '総合AI',
+    description: '勝率・モーター・展示・枠番をバランス良く評価',
+    riskMode: 'balanced',
+    weights: {
+      nationalWinRate: 8,
+      localWinRate: 5,
+      motorRate: 0.55,
+      boatRate: 0.25,
+      avgStart: 130,
+      exhibitionTime: 55,
+      laneBias: 1,
+      weatherBias: 1
+    }
+  },
+  {
+    id: 'motor',
+    name: 'モーターAI',
+    description: 'モーター2連率とボートを強く評価',
+    riskMode: 'balanced',
+    weights: {
+      nationalWinRate: 6,
+      localWinRate: 4,
+      motorRate: 1.1,
+      boatRate: 0.6,
+      avgStart: 100,
+      exhibitionTime: 45,
+      laneBias: 0.9,
+      weatherBias: 1
+    }
+  },
+  {
+    id: 'exhibition',
+    name: '展示AI',
+    description: '展示タイムとSTを重視',
+    riskMode: 'safe',
+    weights: {
+      nationalWinRate: 6,
+      localWinRate: 4,
+      motorRate: 0.5,
+      boatRate: 0.25,
+      avgStart: 180,
+      exhibitionTime: 120,
+      laneBias: 1,
+      weatherBias: 1
+    }
+  },
+  {
+    id: 'value',
+    name: '期待値AI',
+    description: '荒れ・オッズ妙味・気象変化を重視',
+    riskMode: 'aggressive',
+    weights: {
+      nationalWinRate: 5,
+      localWinRate: 3,
+      motorRate: 0.75,
+      boatRate: 0.35,
+      avgStart: 120,
+      exhibitionTime: 70,
+      laneBias: 0.7,
+      weatherBias: 1.5
+    }
+  }
+];
+
+export function getAiModelProfile(id?: string) {
+  return aiModelProfiles.find((m) => m.id === id) ?? aiModelProfiles[0];
+}
