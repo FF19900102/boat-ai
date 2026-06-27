@@ -1,35 +1,17 @@
-import { TrainedModel } from '@/ai/training/simpleTrainer';
-import { TrainingSample } from '@/ai/training/datasetBuilder';
+import { FeatureMap } from '@/ai/features/pro/types';
 
-export type EvaluationResult = {
-  modelId: string;
-  samples: number;
-  accuracy: number;
-  roi: number;
-  score: number;
-};
-
-function predict(sample: TrainingSample, model: TrainedModel) {
-  const score = sample.features.reduce((sum, value, i) => sum + value * (model.weights[i] ?? 0), 0);
-  return score >= 1 ? 1 : 0;
-}
-
-export function evaluateModel(model: TrainedModel, samples: TrainingSample[]): EvaluationResult {
-  let correct = 0;
-
-  for (const sample of samples) {
-    if (predict(sample, model) === sample.label) correct++;
-  }
-
-  const accuracy = samples.length ? correct / samples.length : 0;
-  const roi = 95 + accuracy * 35;
-  const score = accuracy * 100 + roi;
-
+export function buildLaneFeatures(lane: number): FeatureMap {
   return {
-    modelId: model.id,
-    samples: samples.length,
-    accuracy,
-    roi,
-    score
+    lane,
+    lane_1: lane === 1,
+    lane_2: lane === 2,
+    lane_3: lane === 3,
+    lane_4: lane === 4,
+    lane_5: lane === 5,
+    lane_6: lane === 6,
+    lane_inner: lane <= 2,
+    lane_center: lane === 3 || lane === 4,
+    lane_outer: lane >= 5,
+    lane_bias_score: ({ 1: 100, 2: 74, 3: 68, 4: 60, 5: 48, 6: 40 } as Record<number, number>)[lane] ?? 40
   };
 }
