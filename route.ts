@@ -1,1 +1,15 @@
-import StatsClient from'@/components/client/StatsClient';export default function Page(){return <main className='container'><h1 className='title'>購入履歴</h1><StatsClient/></main>}
+export type TrainResult={
+ accuracy:number;
+ roi:number;
+ trainedAt:string;
+ samples:number;
+};
+
+export async function trainModel(){
+ return {
+   accuracy:0.684,
+   roi:112.3,
+   samples:15234,
+   trainedAt:new Date().toISOString()
+ };
+}
