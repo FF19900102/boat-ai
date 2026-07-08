@@ -1,0 +1,460 @@
+[
+  {
+    "key": "kiryu-1-2-6-4",
+    "timestamp": "2026-07-07T11:35:11.546Z",
+    "venueId": "kiryu",
+    "raceNo": "1",
+    "prediction": {
+      "score": [
+        {
+          "lane": 1,
+          "racerName": "中野 和裕",
+          "className": "B1",
+          "nationalWinRate": 3.44,
+          "localWinRate": 0,
+          "avgST": 0.17,
+          "motorRate": 22.92,
+          "boatRate": 30.5,
+          "score": 48.2,
+          "rank": 4,
+          "mark": "△",
+          "reason": [
+            "枠番 25.0 / 25",
+            "展示タイム 10.0 / 20",
+            "ST 7.5 / 15",
+            "全国勝率 4.4 / 15",
+            "当地勝率 0.0 / 10",
+            "モーター2連率 1.8 / 8",
+            "ボート2連率 1.6 / 5",
+            "天候補正 1.0 / 2",
+            "過去統計補正 -2.0 / 8",
+            "天候統計補正 -1.0 / 3"
+          ],
+          "breakdown": {
+            "lanePoint": 25,
+            "exhibitionPoint": 10,
+            "stPoint": 7.5,
+            "nationalPoint": 4.4,
+            "localPoint": 0,
+            "motorPoint": 1.8,
+            "boatPoint": 1.6,
+            "weatherPoint": 1,
+            "laneHistoryPoint": -2,
+            "weatherHistoryPoint": -1,
+            "outsidePenaltyPoint": 0,
+            "motorHistoryPoint": 0,
+            "racerHistoryPoint": 0
+          }
+        },
+        {
+          "lane": 2,
+          "racerName": "三村 岳人",
+          "className": "A2",
+          "nationalWinRate": 5.79,
+          "localWinRate": 5.73,
+          "avgST": 0.15,
+          "motorRate": 43.81,
+          "boatRate": 37.04,
+          "score": 69.4,
+          "rank": 1,
+          "mark": "◎",
+          "reason": [
+            "枠番 20.0 / 25",
+            "展示タイム 10.0 / 20",
+            "ST 7.5 / 15",
+            "全国勝率 11.5 / 15",
+            "当地勝率 10.0 / 10",
+            "モーター2連率 8.0 / 8",
+            "ボート2連率 4.4 / 5",
+            "天候補正 1.0 / 2",
+            "過去統計補正 -2.0 / 8",
+            "天候統計補正 -1.0 / 3"
+          ],
+          "breakdown": {
+            "lanePoint": 20,
+            "exhibitionPoint": 10,
+            "stPoint": 7.5,
+            "nationalPoint": 11.5,
+            "localPoint": 10,
+            "motorPoint": 8,
+            "boatPoint": 4.4,
+            "weatherPoint": 1,
+            "laneHistoryPoint": -2,
+            "weatherHistoryPoint": -1,
+            "outsidePenaltyPoint": 0,
+            "motorHistoryPoint": 0,
+            "racerHistoryPoint": 0
+          }
+        },
+        {
+          "lane": 3,
+          "racerName": "藤原 仙二",
+          "className": "A1",
+          "nationalWinRate": 6.77,
+          "localWinRate": 3.88,
+          "avgST": 0.18,
+          "motorRate": 27.59,
+          "boatRate": 38.3,
+          "score": 61.7,
+          "rank": 2,
+          "mark": "○",
+          "reason": [
+            "枠番 16.0 / 25",
+            "展示タイム 10.0 / 20",
+            "ST 7.5 / 15",
+            "全国勝率 15.0 / 15",
+            "当地勝率 7.0 / 10",
+            "モーター2連率 3.2 / 8",
+            "ボート2連率 5.0 / 5",
+            "天候補正 1.0 / 2",
+            "過去統計補正 -2.0 / 8",
+            "天候統計補正 -1.0 / 3"
+          ],
+          "breakdown": {
+            "lanePoint": 16,
+            "exhibitionPoint": 10,
+            "stPoint": 7.5,
+            "nationalPoint": 15,
+            "localPoint": 7,
+            "motorPoint": 3.2,
+            "boatPoint": 5,
+            "weatherPoint": 1,
+            "laneHistoryPoint": -2,
+            "weatherHistoryPoint": -1,
+            "outsidePenaltyPoint": 0,
+            "motorHistoryPoint": 0,
+            "racerHistoryPoint": 0
+          }
+        },
+        {
+          "lane": 4,
+          "racerName": "大谷 直弘",
+          "className": "B1",
+          "nationalWinRate": 5.43,
+          "localWinRate": 4.93,
+          "avgST": 0.19,
+          "motorRate": 31.11,
+          "boatRate": 26.87,
+          "score": 49.8,
+          "rank": 3,
+          "mark": "▲",
+          "reason": [
+            "枠番 12.0 / 25",
+            "展示タイム 10.0 / 20",
+            "ST 7.5 / 15",
+            "全国勝率 9.8 / 15",
+            "当地勝率 8.3 / 10",
+            "モーター2連率 4.2 / 8",
+            "ボート2連率 0.0 / 5",
+            "天候補正 1.0 / 2",
+            "過去統計補正 -2.0 / 8",
+            "天候統計補正 -1.0 / 3"
+          ],
+          "breakdown": {
+            "lanePoint": 12,
+            "exhibitionPoint": 10,
+            "stPoint": 7.5,
+            "nationalPoint": 9.8,
+            "localPoint": 8.3,
+            "motorPoint": 4.2,
+            "boatPoint": 0,
+            "weatherPoint": 1,
+            "laneHistoryPoint": -2,
+            "weatherHistoryPoint": -1,
+            "outsidePenaltyPoint": 0,
+            "motorHistoryPoint": 0,
+            "racerHistoryPoint": 0
+          }
+        },
+        {
+          "lane": 5,
+          "racerName": "米本 圭佑",
+          "className": "B2",
+          "nationalWinRate": 1.91,
+          "localWinRate": 1.93,
+          "avgST": 0.24,
+          "motorRate": 33.1,
+          "boatRate": 35.04,
+          "score": 36,
+          "rank": 6,
+          "mark": "",
+          "reason": [
+            "枠番 9.0 / 25",
+            "展示タイム 10.0 / 20",
+            "ST 7.5 / 15",
+            "全国勝率 0.0 / 15",
+            "当地勝率 3.1 / 10",
+            "モーター2連率 4.8 / 8",
+            "ボート2連率 3.6 / 5",
+            "天候補正 1.0 / 2",
+            "過去統計補正 -2.0 / 8",
+            "天候統計補正 -1.0 / 3"
+          ],
+          "breakdown": {
+            "lanePoint": 9,
+            "exhibitionPoint": 10,
+            "stPoint": 7.5,
+            "nationalPoint": 0,
+            "localPoint": 3.1,
+            "motorPoint": 4.8,
+            "boatPoint": 3.6,
+            "weatherPoint": 1,
+            "laneHistoryPoint": -2,
+            "weatherHistoryPoint": -1,
+            "outsidePenaltyPoint": 0,
+            "motorHistoryPoint": 0,
+            "racerHistoryPoint": 0
+          }
+        },
+        {
+          "lane": 6,
+          "racerName": "広次 修",
+          "className": "A2",
+          "nationalWinRate": 5.39,
+          "localWinRate": 3.56,
+          "avgST": 0.15,
+          "motorRate": 17.02,
+          "boatRate": 31.16,
+          "score": 39.9,
+          "rank": 5,
+          "mark": "×",
+          "reason": [
+            "枠番 6.0 / 25",
+            "展示タイム 10.0 / 20",
+            "ST 7.5 / 15",
+            "全国勝率 10.3 / 15",
+            "当地勝率 6.2 / 10",
+            "モーター2連率 0.0 / 8",
+            "ボート2連率 1.9 / 5",
+            "天候補正 1.0 / 2",
+            "過去統計補正 -2.0 / 8",
+            "天候統計補正 -1.0 / 3"
+          ],
+          "breakdown": {
+            "lanePoint": 6,
+            "exhibitionPoint": 10,
+            "stPoint": 7.5,
+            "nationalPoint": 10.3,
+            "localPoint": 6.2,
+            "motorPoint": 0,
+            "boatPoint": 1.9,
+            "weatherPoint": 1,
+            "laneHistoryPoint": -2,
+            "weatherHistoryPoint": -1,
+            "outsidePenaltyPoint": 0,
+            "motorHistoryPoint": 0,
+            "racerHistoryPoint": 0
+          }
+        }
+      ],
+      "buyDetails": [
+        {
+          "rank": 1,
+          "type": "main",
+          "combo": "2-3-4",
+          "odds": 42.2,
+          "probability": 0.0171,
+          "expectedValue": 72,
+          "rating": "★☆☆☆☆"
+        },
+        {
+          "rank": 2,
+          "type": "main",
+          "combo": "2-3-1",
+          "odds": 43.6,
+          "probability": 0.0165,
+          "expectedValue": 72,
+          "rating": "★☆☆☆☆"
+        },
+        {
+          "rank": 3,
+          "type": "main",
+          "combo": "3-2-4",
+          "odds": 43.6,
+          "probability": 0.0165,
+          "expectedValue": 72,
+          "rating": "★☆☆☆☆"
+        },
+        {
+          "rank": 4,
+          "type": "reserve",
+          "combo": "2-4-3",
+          "odds": 45.1,
+          "probability": 0.016,
+          "expectedValue": 72,
+          "rating": "★☆☆☆☆"
+        },
+        {
+          "rank": 5,
+          "type": "reserve",
+          "combo": "3-2-1",
+          "odds": 45,
+          "probability": 0.016,
+          "expectedValue": 72,
+          "rating": "★☆☆☆☆"
+        },
+        {
+          "rank": 6,
+          "type": "reserve",
+          "combo": "2-1-3",
+          "odds": 47,
+          "probability": 0.0153,
+          "expectedValue": 72,
+          "rating": "★☆☆☆☆"
+        },
+        {
+          "rank": 7,
+          "type": "reserve",
+          "combo": "3-4-2",
+          "odds": 48.5,
+          "probability": 0.0149,
+          "expectedValue": 72,
+          "rating": "★☆☆☆☆"
+        },
+        {
+          "rank": 8,
+          "type": "reserve",
+          "combo": "4-2-3",
+          "odds": 48.8,
+          "probability": 0.0147,
+          "expectedValue": 72,
+          "rating": "★☆☆☆☆"
+        },
+        {
+          "rank": 9,
+          "type": "hole",
+          "combo": "6-1-4",
+          "odds": 131.8,
+          "probability": 0.0055,
+          "expectedValue": 72,
+          "rating": "★☆☆☆☆"
+        },
+        {
+          "rank": 10,
+          "type": "hole",
+          "combo": "6-4-1",
+          "odds": 130.9,
+          "probability": 0.0055,
+          "expectedValue": 72,
+          "rating": "★☆☆☆☆"
+        },
+        {
+          "rank": 11,
+          "type": "hole",
+          "combo": "1-6-4",
+          "odds": 127.7,
+          "probability": 0.0056,
+          "expectedValue": 72,
+          "rating": "★☆☆☆☆"
+        }
+      ],
+      "decision": {
+        "decision": "見送り",
+        "reason": "期待値が低く、無理に買うレースではありません。",
+        "stakeLevel": 0,
+        "stakeStars": "☆☆☆☆☆",
+        "recommendedBudgetRate": "見送り"
+      }
+    },
+    "buy": [
+      "2-3-4",
+      "2-3-1",
+      "3-2-4",
+      "2-4-3",
+      "3-2-1",
+      "2-1-3",
+      "3-4-2",
+      "4-2-3",
+      "6-1-4",
+      "6-4-1",
+      "1-6-4"
+    ],
+    "result": {
+      "order": "",
+      "kimarite": "まくり",
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "2---6---4",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "2---6",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "150-5",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "260-6",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "390-6",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "2",
+          "popularity": ""
+        }
+      ]
+    },
+    "payout": 3,
+    "roi": 0,
+    "profit": -1000,
+    "hit": false,
+    "roughRace": {
+      "roughScore": 25,
+      "roughLevel": "本命",
+      "stars": "★☆☆☆☆",
+      "reasons": [
+        "上位のスコア差があり本命寄り"
+      ],
+      "comment": "本命寄りのレース。1号艇中心。"
+    },
+    "evaluation": {
+      "hit": false,
+      "hitType": "3連単",
+      "predictedRank": 1,
+      "actualOrder": "2-6-4",
+      "roi": 0,
+      "profit": -1000,
+      "learning": {
+        "laneWeight": -0.2,
+        "exhibitionWeight": 0.2,
+        "stWeight": 0.1,
+        "motorWeight": -0.1,
+        "weatherWeight": 0.1
+      },
+      "learningComment": "展示タイムの重みを+0.2しました。 モーター評価を少し下げました。 天候補正を+0.1しました。",
+      "payout": 3,
+      "stake": 1000,
+      "oddsSnapshot": {
+        "venueId": "kiryu",
+        "raceNo": "1",
+        "trifecta": [],
+        "exacta": [],
+        "quinella": [],
+        "quinellaPlace": []
+      }
+    }
+  }
+]

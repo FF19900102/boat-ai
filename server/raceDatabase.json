@@ -1,0 +1,6938 @@
+[
+  {
+    "date": "20260706",
+    "venueId": "kiryu",
+    "raceNo": "1",
+    "entries": [
+      {
+        "venueId": "kiryu",
+        "raceNo": "1",
+        "lane": "1",
+        "registrationNo": "4332",
+        "racerName": "村上 彰一",
+        "branch": "福岡/福岡",
+        "className": "B1",
+        "age": "42",
+        "weight": "55.9kg",
+        "nationalWinRate": "4.61",
+        "localWinRate": "4.67",
+        "motorNo": "13",
+        "motorRate": "27.78",
+        "boatNo": "19",
+        "boatRate": "39.69",
+        "avgST": "0.19",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "1",
+        "lane": "2",
+        "registrationNo": "3712",
+        "racerName": "淺香 文武",
+        "branch": "三重/三重",
+        "className": "B1",
+        "age": "51",
+        "weight": "54.7kg",
+        "nationalWinRate": "5.11",
+        "localWinRate": "4.65",
+        "motorNo": "21",
+        "motorRate": "32.65",
+        "boatNo": "23",
+        "boatRate": "43.80",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "1",
+        "lane": "3",
+        "registrationNo": "4010",
+        "racerName": "越智 照浩",
+        "branch": "香川/愛媛",
+        "className": "B1",
+        "age": "46",
+        "weight": "56.8kg",
+        "nationalWinRate": "4.28",
+        "localWinRate": "3.31",
+        "motorNo": "28",
+        "motorRate": "38.58",
+        "boatNo": "17",
+        "boatRate": "35.92",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "1",
+        "lane": "4",
+        "registrationNo": "3538",
+        "racerName": "菊池 峰晴",
+        "branch": "群馬/栃木",
+        "className": "B2",
+        "age": "58",
+        "weight": "52.3kg",
+        "nationalWinRate": "4.11",
+        "localWinRate": "5.65",
+        "motorNo": "55",
+        "motorRate": "22.86",
+        "boatNo": "51",
+        "boatRate": "35.71",
+        "avgST": "0.21",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "1",
+        "lane": "5",
+        "registrationNo": "5255",
+        "racerName": "藤原 仙二",
+        "branch": "滋賀/滋賀",
+        "className": "A1",
+        "age": "22",
+        "weight": "52.9kg",
+        "nationalWinRate": "6.77",
+        "localWinRate": "3.88",
+        "motorNo": "29",
+        "motorRate": "27.59",
+        "boatNo": "54",
+        "boatRate": "38.30",
+        "avgST": "0.18",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "1",
+        "lane": "6",
+        "registrationNo": "4067",
+        "racerName": "永井 源",
+        "branch": "愛知/福岡",
+        "className": "A2",
+        "age": "46",
+        "weight": "52.0kg",
+        "nationalWinRate": "6.30",
+        "localWinRate": "6.55",
+        "motorNo": "54",
+        "motorRate": "20.22",
+        "boatNo": "40",
+        "boatRate": "34.06",
+        "avgST": "0.17",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "kiryu",
+      "raceNo": "1",
+      "weather": "晴",
+      "windDirection": "",
+      "windSpeed": "1",
+      "waveHeight": "1",
+      "airTemperature": "19.0",
+      "waterTemperature": "18.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "kiryu",
+      "raceNo": "1",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "kiryu",
+      "raceNo": "1",
+      "order": "",
+      "kimarite": "逃げ",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "1---3---4",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "1---3",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "640-15",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "950-4",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "300-3",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-06T21:40:34.448Z"
+  },
+  {
+    "date": "20260706",
+    "venueId": "kiryu",
+    "raceNo": "2",
+    "entries": [
+      {
+        "venueId": "kiryu",
+        "raceNo": "2",
+        "lane": "1",
+        "registrationNo": "4093",
+        "racerName": "吉田 宗弘",
+        "branch": "東京/東京",
+        "className": "B1",
+        "age": "45",
+        "weight": "51.0kg",
+        "nationalWinRate": "4.42",
+        "localWinRate": "3.61",
+        "motorNo": "39",
+        "motorRate": "21.84",
+        "boatNo": "75",
+        "boatRate": "30.30",
+        "avgST": "0.19",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "2",
+        "lane": "2",
+        "registrationNo": "4910",
+        "racerName": "中村 泰平",
+        "branch": "愛知/愛知",
+        "className": "A1",
+        "age": "30",
+        "weight": "52.0kg",
+        "nationalWinRate": "6.78",
+        "localWinRate": "5.59",
+        "motorNo": "31",
+        "motorRate": "36.84",
+        "boatNo": "73",
+        "boatRate": "37.32",
+        "avgST": "0.15",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "2",
+        "lane": "3",
+        "registrationNo": "4607",
+        "racerName": "鶴田 勇雄",
+        "branch": "福岡/福岡",
+        "className": "A2",
+        "age": "37",
+        "weight": "52.2kg",
+        "nationalWinRate": "5.91",
+        "localWinRate": "6.11",
+        "motorNo": "44",
+        "motorRate": "27.42",
+        "boatNo": "21",
+        "boatRate": "31.43",
+        "avgST": "0.18",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "2",
+        "lane": "4",
+        "registrationNo": "4465",
+        "racerName": "大西 賢",
+        "branch": "東京/茨城",
+        "className": "B1",
+        "age": "39",
+        "weight": "52.0kg",
+        "nationalWinRate": "4.92",
+        "localWinRate": "4.58",
+        "motorNo": "23",
+        "motorRate": "25.00",
+        "boatNo": "18",
+        "boatRate": "30.22",
+        "avgST": "0.20",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "2",
+        "lane": "5",
+        "registrationNo": "4214",
+        "racerName": "林 祐介",
+        "branch": "岡山/岡山",
+        "className": "B1",
+        "age": "41",
+        "weight": "55.4kg",
+        "nationalWinRate": "5.72",
+        "localWinRate": "5.90",
+        "motorNo": "24",
+        "motorRate": "36.30",
+        "boatNo": "68",
+        "boatRate": "28.57",
+        "avgST": "0.16",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "2",
+        "lane": "6",
+        "registrationNo": "3747",
+        "racerName": "國崎 良春",
+        "branch": "福岡/福岡",
+        "className": "A2",
+        "age": "51",
+        "weight": "52.0kg",
+        "nationalWinRate": "5.53",
+        "localWinRate": "5.41",
+        "motorNo": "22",
+        "motorRate": "27.08",
+        "boatNo": "64",
+        "boatRate": "30.28",
+        "avgST": "0.16",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "kiryu",
+      "raceNo": "2",
+      "weather": "雨",
+      "windDirection": "西",
+      "windSpeed": "1",
+      "waveHeight": "1",
+      "airTemperature": "19.0",
+      "waterTemperature": "18.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "kiryu",
+      "raceNo": "2",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "kiryu",
+      "raceNo": "2",
+      "order": "",
+      "kimarite": "まくり差し",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "6---3---5",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "6---3",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "640-15",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "300-8",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "250-14",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "6",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "6",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-06T21:40:34.823Z"
+  },
+  {
+    "date": "20260706",
+    "venueId": "kiryu",
+    "raceNo": "3",
+    "entries": [
+      {
+        "venueId": "kiryu",
+        "raceNo": "3",
+        "lane": "1",
+        "registrationNo": "3748",
+        "racerName": "小黒 竜吾",
+        "branch": "埼玉/埼玉",
+        "className": "B1",
+        "age": "50",
+        "weight": "55.7kg",
+        "nationalWinRate": "4.10",
+        "localWinRate": "4.60",
+        "motorNo": "47",
+        "motorRate": "30.14",
+        "boatNo": "45",
+        "boatRate": "41.79",
+        "avgST": "0.16",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "3",
+        "lane": "2",
+        "registrationNo": "3827",
+        "racerName": "今泉 徹",
+        "branch": "群馬/群馬",
+        "className": "B1",
+        "age": "52",
+        "weight": "52.0kg",
+        "nationalWinRate": "3.71",
+        "localWinRate": "4.32",
+        "motorNo": "51",
+        "motorRate": "28.81",
+        "boatNo": "53",
+        "boatRate": "25.56",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "3",
+        "lane": "3",
+        "registrationNo": "3741",
+        "racerName": "松尾 基成",
+        "branch": "福岡/福岡",
+        "className": "B1",
+        "age": "52",
+        "weight": "55.9kg",
+        "nationalWinRate": "3.65",
+        "localWinRate": "3.85",
+        "motorNo": "52",
+        "motorRate": "26.97",
+        "boatNo": "48",
+        "boatRate": "40.44",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "3",
+        "lane": "4",
+        "registrationNo": "5010",
+        "racerName": "宇留田 翔平",
+        "branch": "三重/三重",
+        "className": "A2",
+        "age": "29",
+        "weight": "53.8kg",
+        "nationalWinRate": "5.65",
+        "localWinRate": "5.12",
+        "motorNo": "61",
+        "motorRate": "13.16",
+        "boatNo": "52",
+        "boatRate": "42.14",
+        "avgST": "0.14",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "3",
+        "lane": "5",
+        "registrationNo": "3412",
+        "racerName": "鈴木 博",
+        "branch": "埼玉/埼玉",
+        "className": "A1",
+        "age": "56",
+        "weight": "53.2kg",
+        "nationalWinRate": "6.77",
+        "localWinRate": "6.15",
+        "motorNo": "34",
+        "motorRate": "37.18",
+        "boatNo": "25",
+        "boatRate": "28.89",
+        "avgST": "0.16",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "3",
+        "lane": "6",
+        "registrationNo": "4645",
+        "racerName": "上村 純一",
+        "branch": "群馬/千葉",
+        "className": "A1",
+        "age": "46",
+        "weight": "52.2kg",
+        "nationalWinRate": "6.39",
+        "localWinRate": "6.06",
+        "motorNo": "16",
+        "motorRate": "21.10",
+        "boatNo": "24",
+        "boatRate": "35.29",
+        "avgST": "0.14",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "kiryu",
+      "raceNo": "3",
+      "weather": "曇",
+      "windDirection": "",
+      "windSpeed": "3",
+      "waveHeight": "2",
+      "airTemperature": "20.0",
+      "waterTemperature": "18.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "kiryu",
+      "raceNo": "3",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "kiryu",
+      "raceNo": "3",
+      "order": "",
+      "kimarite": "まくり",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "4---5---6",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "4---5",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "430-1",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "780-3",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "180-1",
+          "payout": "4",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "4",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "4",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-06T21:40:35.215Z"
+  },
+  {
+    "date": "20260706",
+    "venueId": "kiryu",
+    "raceNo": "4",
+    "entries": [
+      {
+        "venueId": "kiryu",
+        "raceNo": "4",
+        "lane": "1",
+        "registrationNo": "4161",
+        "racerName": "黒柳 浩孝",
+        "branch": "愛知/愛知",
+        "className": "B1",
+        "age": "44",
+        "weight": "53.8kg",
+        "nationalWinRate": "5.22",
+        "localWinRate": "5.65",
+        "motorNo": "46",
+        "motorRate": "37.59",
+        "boatNo": "35",
+        "boatRate": "35.71",
+        "avgST": "0.16",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "4",
+        "lane": "2",
+        "registrationNo": "4928",
+        "racerName": "栗城 匠",
+        "branch": "東京/東京",
+        "className": "A1",
+        "age": "31",
+        "weight": "52.1kg",
+        "nationalWinRate": "6.33",
+        "localWinRate": "6.40",
+        "motorNo": "75",
+        "motorRate": "28.81",
+        "boatNo": "14",
+        "boatRate": "38.85",
+        "avgST": "0.14",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "4",
+        "lane": "3",
+        "registrationNo": "4367",
+        "racerName": "山口 修路",
+        "branch": "福岡/福岡",
+        "className": "B1",
+        "age": "40",
+        "weight": "52.0kg",
+        "nationalWinRate": "4.25",
+        "localWinRate": "4.89",
+        "motorNo": "50",
+        "motorRate": "30.66",
+        "boatNo": "66",
+        "boatRate": "35.29",
+        "avgST": "0.23",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "4",
+        "lane": "4",
+        "registrationNo": "4202",
+        "racerName": "浮田 圭浩",
+        "branch": "岡山/岡山",
+        "className": "B1",
+        "age": "43",
+        "weight": "54.2kg",
+        "nationalWinRate": "4.57",
+        "localWinRate": "4.33",
+        "motorNo": "66",
+        "motorRate": "14.61",
+        "boatNo": "26",
+        "boatRate": "28.57",
+        "avgST": "0.19",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "4",
+        "lane": "5",
+        "registrationNo": "4009",
+        "racerName": "小林 一樹",
+        "branch": "山口/山口",
+        "className": "A2",
+        "age": "47",
+        "weight": "56.2kg",
+        "nationalWinRate": "5.79",
+        "localWinRate": "5.44",
+        "motorNo": "68",
+        "motorRate": "20.88",
+        "boatNo": "37",
+        "boatRate": "36.17",
+        "avgST": "0.13",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "4",
+        "lane": "6",
+        "registrationNo": "4903",
+        "racerName": "吉田 凌太朗",
+        "branch": "愛知/愛知",
+        "className": "A1",
+        "age": "32",
+        "weight": "51.5kg",
+        "nationalWinRate": "6.45",
+        "localWinRate": "7.14",
+        "motorNo": "37",
+        "motorRate": "33.09",
+        "boatNo": "41",
+        "boatRate": "34.04",
+        "avgST": "0.15",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "kiryu",
+      "raceNo": "4",
+      "weather": "曇",
+      "windDirection": "",
+      "windSpeed": "3",
+      "waveHeight": "2",
+      "airTemperature": "20.0",
+      "waterTemperature": "18.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "kiryu",
+      "raceNo": "4",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "kiryu",
+      "raceNo": "4",
+      "order": "",
+      "kimarite": "逃げ",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "1---2---3",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "1---2",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "360-1",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "210-1",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "130-1",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-06T21:40:35.619Z"
+  },
+  {
+    "date": "20260706",
+    "venueId": "kiryu",
+    "raceNo": "5",
+    "entries": [
+      {
+        "venueId": "kiryu",
+        "raceNo": "5",
+        "lane": "1",
+        "registrationNo": "3432",
+        "racerName": "宮迫 暢彦",
+        "branch": "大阪/大阪",
+        "className": "B1",
+        "age": "58",
+        "weight": "51.5kg",
+        "nationalWinRate": "4.25",
+        "localWinRate": "4.33",
+        "motorNo": "40",
+        "motorRate": "34.48",
+        "boatNo": "22",
+        "boatRate": "31.65",
+        "avgST": "0.18",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "5",
+        "lane": "2",
+        "registrationNo": "3934",
+        "racerName": "鋤柄 貴俊",
+        "branch": "愛知/愛知",
+        "className": "B1",
+        "age": "49",
+        "weight": "51.5kg",
+        "nationalWinRate": "4.94",
+        "localWinRate": "4.78",
+        "motorNo": "74",
+        "motorRate": "39.73",
+        "boatNo": "38",
+        "boatRate": "37.41",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "5",
+        "lane": "3",
+        "registrationNo": "4332",
+        "racerName": "村上 彰一",
+        "branch": "福岡/福岡",
+        "className": "B1",
+        "age": "42",
+        "weight": "55.9kg",
+        "nationalWinRate": "4.61",
+        "localWinRate": "4.67",
+        "motorNo": "13",
+        "motorRate": "27.78",
+        "boatNo": "19",
+        "boatRate": "39.69",
+        "avgST": "0.19",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "5",
+        "lane": "4",
+        "registrationNo": "3872",
+        "racerName": "岡田 憲行",
+        "branch": "大阪/大阪",
+        "className": "A2",
+        "age": "50",
+        "weight": "53.1kg",
+        "nationalWinRate": "6.12",
+        "localWinRate": "7.22",
+        "motorNo": "33",
+        "motorRate": "38.17",
+        "boatNo": "60",
+        "boatRate": "40.44",
+        "avgST": "0.18",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "5",
+        "lane": "5",
+        "registrationNo": "4292",
+        "racerName": "麻生 慎介",
+        "branch": "広島/広島",
+        "className": "A1",
+        "age": "41",
+        "weight": "53.1kg",
+        "nationalWinRate": "6.30",
+        "localWinRate": "4.60",
+        "motorNo": "65",
+        "motorRate": "36.62",
+        "boatNo": "46",
+        "boatRate": "30.28",
+        "avgST": "0.14",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "5",
+        "lane": "6",
+        "registrationNo": "4852",
+        "racerName": "川原 祐明",
+        "branch": "香川/愛媛",
+        "className": "A1",
+        "age": "31",
+        "weight": "51.5kg",
+        "nationalWinRate": "7.31",
+        "localWinRate": "7.32",
+        "motorNo": "67",
+        "motorRate": "27.19",
+        "boatNo": "27",
+        "boatRate": "38.97",
+        "avgST": "0.15",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "kiryu",
+      "raceNo": "5",
+      "weather": "曇",
+      "windDirection": "",
+      "windSpeed": "3",
+      "waveHeight": "2",
+      "airTemperature": "20.0",
+      "waterTemperature": "18.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "1",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "13",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "kiryu",
+      "raceNo": "5",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "kiryu",
+      "raceNo": "5",
+      "order": "",
+      "kimarite": "まくり",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "5---6---3",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "5---6",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "080-11",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "410-1",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "220-2",
+          "payout": "5",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "5",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "5",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-06T21:40:35.972Z"
+  },
+  {
+    "date": "20260706",
+    "venueId": "kiryu",
+    "raceNo": "6",
+    "entries": [
+      {
+        "venueId": "kiryu",
+        "raceNo": "6",
+        "lane": "1",
+        "registrationNo": "4812",
+        "racerName": "西野 雄貴",
+        "branch": "徳島/徳島",
+        "className": "A1",
+        "age": "36",
+        "weight": "50.5kg",
+        "nationalWinRate": "7.24",
+        "localWinRate": "0.00",
+        "motorNo": "72",
+        "motorRate": "31.39",
+        "boatNo": "58",
+        "boatRate": "31.85",
+        "avgST": "0.14",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "6",
+        "lane": "2",
+        "registrationNo": "4465",
+        "racerName": "大西 賢",
+        "branch": "東京/茨城",
+        "className": "B1",
+        "age": "39",
+        "weight": "51.5kg",
+        "nationalWinRate": "4.92",
+        "localWinRate": "4.58",
+        "motorNo": "23",
+        "motorRate": "25.00",
+        "boatNo": "18",
+        "boatRate": "30.22",
+        "avgST": "0.20",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "6",
+        "lane": "3",
+        "registrationNo": "3538",
+        "racerName": "菊池 峰晴",
+        "branch": "群馬/栃木",
+        "className": "B2",
+        "age": "58",
+        "weight": "52.6kg",
+        "nationalWinRate": "4.11",
+        "localWinRate": "5.65",
+        "motorNo": "55",
+        "motorRate": "22.86",
+        "boatNo": "51",
+        "boatRate": "35.71",
+        "avgST": "0.21",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "6",
+        "lane": "4",
+        "registrationNo": "3459",
+        "racerName": "中野 和裕",
+        "branch": "佐賀/佐賀",
+        "className": "B1",
+        "age": "59",
+        "weight": "53.0kg",
+        "nationalWinRate": "3.44",
+        "localWinRate": "0.00",
+        "motorNo": "58",
+        "motorRate": "22.92",
+        "boatNo": "70",
+        "boatRate": "30.50",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "6",
+        "lane": "5",
+        "registrationNo": "3957",
+        "racerName": "大谷 直弘",
+        "branch": "愛知/愛知",
+        "className": "B1",
+        "age": "48",
+        "weight": "53.4kg",
+        "nationalWinRate": "5.43",
+        "localWinRate": "4.93",
+        "motorNo": "26",
+        "motorRate": "31.11",
+        "boatNo": "43",
+        "boatRate": "26.87",
+        "avgST": "0.19",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "6",
+        "lane": "6",
+        "registrationNo": "4343",
+        "racerName": "村岡 賢",
+        "branch": "広島/広島",
+        "className": "B1",
+        "age": "41",
+        "weight": "53.9kg",
+        "nationalWinRate": "5.07",
+        "localWinRate": "3.28",
+        "motorNo": "49",
+        "motorRate": "38.30",
+        "boatNo": "20",
+        "boatRate": "32.61",
+        "avgST": "0.17",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "kiryu",
+      "raceNo": "6",
+      "weather": "晴",
+      "windDirection": "西",
+      "windSpeed": "3",
+      "waveHeight": "2",
+      "airTemperature": "20.0",
+      "waterTemperature": "18.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "4",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "18",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "4",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "22",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "kiryu",
+      "raceNo": "6",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "kiryu",
+      "raceNo": "6",
+      "order": "",
+      "kimarite": "逃げ",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "1---5---6",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "1---5",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "860-4",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "280-2",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "170-2",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-06T21:40:36.433Z"
+  },
+  {
+    "date": "20260706",
+    "venueId": "kiryu",
+    "raceNo": "7",
+    "entries": [
+      {
+        "venueId": "kiryu",
+        "raceNo": "7",
+        "lane": "1",
+        "registrationNo": "3508",
+        "racerName": "久富 政弘",
+        "branch": "佐賀/佐賀",
+        "className": "A2",
+        "age": "54",
+        "weight": "53.7kg",
+        "nationalWinRate": "5.68",
+        "localWinRate": "5.67",
+        "motorNo": "17",
+        "motorRate": "32.45",
+        "boatNo": "63",
+        "boatRate": "20.00",
+        "avgST": "0.20",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "7",
+        "lane": "2",
+        "registrationNo": "4010",
+        "racerName": "越智 照浩",
+        "branch": "香川/愛媛",
+        "className": "B1",
+        "age": "46",
+        "weight": "56.8kg",
+        "nationalWinRate": "4.28",
+        "localWinRate": "3.31",
+        "motorNo": "28",
+        "motorRate": "38.58",
+        "boatNo": "17",
+        "boatRate": "35.92",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "7",
+        "lane": "3",
+        "registrationNo": "5278",
+        "racerName": "田中 駿兵",
+        "branch": "徳島/徳島",
+        "className": "A1",
+        "age": "23",
+        "weight": "52.1kg",
+        "nationalWinRate": "7.48",
+        "localWinRate": "6.82",
+        "motorNo": "38",
+        "motorRate": "40.74",
+        "boatNo": "34",
+        "boatRate": "36.62",
+        "avgST": "0.14",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "7",
+        "lane": "4",
+        "registrationNo": "3741",
+        "racerName": "松尾 基成",
+        "branch": "福岡/福岡",
+        "className": "B1",
+        "age": "52",
+        "weight": "55.9kg",
+        "nationalWinRate": "3.65",
+        "localWinRate": "3.85",
+        "motorNo": "52",
+        "motorRate": "26.97",
+        "boatNo": "48",
+        "boatRate": "40.44",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "7",
+        "lane": "5",
+        "registrationNo": "5090",
+        "racerName": "生方 靖亜",
+        "branch": "群馬/群馬",
+        "className": "B1",
+        "age": "25",
+        "weight": "53.3kg",
+        "nationalWinRate": "5.22",
+        "localWinRate": "5.10",
+        "motorNo": "64",
+        "motorRate": "34.78",
+        "boatNo": "15",
+        "boatRate": "45.00",
+        "avgST": "0.15",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "7",
+        "lane": "6",
+        "registrationNo": "4865",
+        "racerName": "立具 敬司",
+        "branch": "大阪/和歌山",
+        "className": "B2",
+        "age": "36",
+        "weight": "52.0kg",
+        "nationalWinRate": "4.89",
+        "localWinRate": "3.64",
+        "motorNo": "41",
+        "motorRate": "37.21",
+        "boatNo": "36",
+        "boatRate": "34.81",
+        "avgST": "0.17",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "kiryu",
+      "raceNo": "7",
+      "weather": "雨",
+      "windDirection": "",
+      "windSpeed": "2",
+      "waveHeight": "1",
+      "airTemperature": "20.0",
+      "waterTemperature": "18.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "3",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "15",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "3",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "21",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "kiryu",
+      "raceNo": "7",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "kiryu",
+      "raceNo": "7",
+      "order": "",
+      "kimarite": "逃げ",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "1---2---3",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "1---2",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "450-2",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "120-5",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "270-4",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-06T21:40:36.838Z"
+  },
+  {
+    "date": "20260706",
+    "venueId": "kiryu",
+    "raceNo": "8",
+    "entries": [
+      {
+        "venueId": "kiryu",
+        "raceNo": "8",
+        "lane": "1",
+        "registrationNo": "4009",
+        "racerName": "小林 一樹",
+        "branch": "山口/山口",
+        "className": "A2",
+        "age": "47",
+        "weight": "56.2kg",
+        "nationalWinRate": "5.79",
+        "localWinRate": "5.44",
+        "motorNo": "68",
+        "motorRate": "20.88",
+        "boatNo": "37",
+        "boatRate": "36.17",
+        "avgST": "0.13",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "8",
+        "lane": "2",
+        "registrationNo": "4406",
+        "racerName": "幸野 史明",
+        "branch": "福岡/福岡",
+        "className": "B1",
+        "age": "41",
+        "weight": "52.3kg",
+        "nationalWinRate": "4.15",
+        "localWinRate": "3.76",
+        "motorNo": "36",
+        "motorRate": "33.63",
+        "boatNo": "16",
+        "boatRate": "25.18",
+        "avgST": "0.16",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "8",
+        "lane": "3",
+        "registrationNo": "5417",
+        "racerName": "小柳 勝希",
+        "branch": "佐賀/佐賀",
+        "className": "B1",
+        "age": "20",
+        "weight": "51.0kg",
+        "nationalWinRate": "3.71",
+        "localWinRate": "0.00",
+        "motorNo": "53",
+        "motorRate": "37.30",
+        "boatNo": "42",
+        "boatRate": "30.60",
+        "avgST": "0.20",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "8",
+        "lane": "4",
+        "registrationNo": "3827",
+        "racerName": "今泉 徹",
+        "branch": "群馬/群馬",
+        "className": "B1",
+        "age": "52",
+        "weight": "52.0kg",
+        "nationalWinRate": "3.71",
+        "localWinRate": "4.32",
+        "motorNo": "51",
+        "motorRate": "28.81",
+        "boatNo": "53",
+        "boatRate": "25.56",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "8",
+        "lane": "5",
+        "registrationNo": "4776",
+        "racerName": "竹田 和哉",
+        "branch": "香川/愛媛",
+        "className": "A1",
+        "age": "32",
+        "weight": "52.7kg",
+        "nationalWinRate": "6.67",
+        "localWinRate": "6.76",
+        "motorNo": "70",
+        "motorRate": "33.58",
+        "boatNo": "62",
+        "boatRate": "30.43",
+        "avgST": "0.16",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "8",
+        "lane": "6",
+        "registrationNo": "5433",
+        "racerName": "米本 圭佑",
+        "branch": "東京/東京",
+        "className": "B2",
+        "age": "21",
+        "weight": "51.0kg",
+        "nationalWinRate": "1.91",
+        "localWinRate": "1.93",
+        "motorNo": "48",
+        "motorRate": "33.10",
+        "boatNo": "33",
+        "boatRate": "35.04",
+        "avgST": "0.24",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "kiryu",
+      "raceNo": "8",
+      "weather": "曇",
+      "windDirection": "",
+      "windSpeed": "2",
+      "waveHeight": "1",
+      "airTemperature": "20.0",
+      "waterTemperature": "18.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "5",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "12",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "2",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "25",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "kiryu",
+      "raceNo": "8",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "kiryu",
+      "raceNo": "8",
+      "order": "",
+      "kimarite": "まくり差し",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "5---1---2",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "5---1",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "170-1",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "120-1",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "100-1",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "5",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "5",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-06T21:40:37.144Z"
+  },
+  {
+    "date": "20260706",
+    "venueId": "kiryu",
+    "raceNo": "9",
+    "entries": [
+      {
+        "venueId": "kiryu",
+        "raceNo": "9",
+        "lane": "1",
+        "registrationNo": "4214",
+        "racerName": "林 祐介",
+        "branch": "岡山/岡山",
+        "className": "B1",
+        "age": "41",
+        "weight": "55.4kg",
+        "nationalWinRate": "5.72",
+        "localWinRate": "5.90",
+        "motorNo": "24",
+        "motorRate": "36.30",
+        "boatNo": "68",
+        "boatRate": "28.57",
+        "avgST": "0.16",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "9",
+        "lane": "2",
+        "registrationNo": "4067",
+        "racerName": "永井 源",
+        "branch": "愛知/福岡",
+        "className": "A2",
+        "age": "46",
+        "weight": "52.0kg",
+        "nationalWinRate": "6.30",
+        "localWinRate": "6.55",
+        "motorNo": "54",
+        "motorRate": "20.22",
+        "boatNo": "40",
+        "boatRate": "34.06",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "9",
+        "lane": "3",
+        "registrationNo": "3412",
+        "racerName": "鈴木 博",
+        "branch": "埼玉/埼玉",
+        "className": "A1",
+        "age": "56",
+        "weight": "53.2kg",
+        "nationalWinRate": "6.77",
+        "localWinRate": "6.15",
+        "motorNo": "34",
+        "motorRate": "37.18",
+        "boatNo": "25",
+        "boatRate": "28.89",
+        "avgST": "0.16",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "9",
+        "lane": "4",
+        "registrationNo": "4928",
+        "racerName": "栗城 匠",
+        "branch": "東京/東京",
+        "className": "A1",
+        "age": "31",
+        "weight": "52.1kg",
+        "nationalWinRate": "6.33",
+        "localWinRate": "6.40",
+        "motorNo": "75",
+        "motorRate": "28.81",
+        "boatNo": "14",
+        "boatRate": "38.85",
+        "avgST": "0.14",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "9",
+        "lane": "5",
+        "registrationNo": "3432",
+        "racerName": "宮迫 暢彦",
+        "branch": "大阪/大阪",
+        "className": "B1",
+        "age": "58",
+        "weight": "51.5kg",
+        "nationalWinRate": "4.25",
+        "localWinRate": "4.33",
+        "motorNo": "40",
+        "motorRate": "34.48",
+        "boatNo": "22",
+        "boatRate": "31.65",
+        "avgST": "0.18",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "9",
+        "lane": "6",
+        "registrationNo": "5268",
+        "racerName": "山本 幸也",
+        "branch": "福岡/福岡",
+        "className": "B1",
+        "age": "25",
+        "weight": "54.5kg",
+        "nationalWinRate": "4.25",
+        "localWinRate": "4.13",
+        "motorNo": "25",
+        "motorRate": "25.26",
+        "boatNo": "12",
+        "boatRate": "31.11",
+        "avgST": "0.20",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "kiryu",
+      "raceNo": "9",
+      "weather": "曇",
+      "windDirection": "",
+      "windSpeed": "2",
+      "waveHeight": "1",
+      "airTemperature": "19.0",
+      "waterTemperature": "18.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "5",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "10",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "6",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "24",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "5",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "14",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "2",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "18",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "2",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "14",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "kiryu",
+      "raceNo": "9",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "kiryu",
+      "raceNo": "9",
+      "order": "",
+      "kimarite": "逃げ",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "1---4---2",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "1---4",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "470-3",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "420-2",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "150-2",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-06T21:40:37.540Z"
+  },
+  {
+    "date": "20260706",
+    "venueId": "kiryu",
+    "raceNo": "10",
+    "entries": [
+      {
+        "venueId": "kiryu",
+        "raceNo": "10",
+        "lane": "1",
+        "registrationNo": "4179",
+        "racerName": "広次 修",
+        "branch": "山口/山口",
+        "className": "A2",
+        "age": "43",
+        "weight": "52.1kg",
+        "nationalWinRate": "5.39",
+        "localWinRate": "3.56",
+        "motorNo": "63",
+        "motorRate": "17.02",
+        "boatNo": "50",
+        "boatRate": "31.16",
+        "avgST": "0.15",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "10",
+        "lane": "2",
+        "registrationNo": "4645",
+        "racerName": "上村 純一",
+        "branch": "群馬/千葉",
+        "className": "A1",
+        "age": "46",
+        "weight": "52.2kg",
+        "nationalWinRate": "6.39",
+        "localWinRate": "6.06",
+        "motorNo": "16",
+        "motorRate": "21.10",
+        "boatNo": "24",
+        "boatRate": "35.29",
+        "avgST": "0.14",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "10",
+        "lane": "3",
+        "registrationNo": "4852",
+        "racerName": "川原 祐明",
+        "branch": "香川/愛媛",
+        "className": "A1",
+        "age": "31",
+        "weight": "51.5kg",
+        "nationalWinRate": "7.31",
+        "localWinRate": "7.32",
+        "motorNo": "67",
+        "motorRate": "27.19",
+        "boatNo": "27",
+        "boatRate": "38.97",
+        "avgST": "0.15",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "10",
+        "lane": "4",
+        "registrationNo": "3712",
+        "racerName": "淺香 文武",
+        "branch": "三重/三重",
+        "className": "B1",
+        "age": "51",
+        "weight": "54.7kg",
+        "nationalWinRate": "5.11",
+        "localWinRate": "4.65",
+        "motorNo": "21",
+        "motorRate": "32.65",
+        "boatNo": "23",
+        "boatRate": "43.80",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "10",
+        "lane": "5",
+        "registrationNo": "4607",
+        "racerName": "鶴田 勇雄",
+        "branch": "福岡/福岡",
+        "className": "A2",
+        "age": "37",
+        "weight": "52.2kg",
+        "nationalWinRate": "5.91",
+        "localWinRate": "6.11",
+        "motorNo": "44",
+        "motorRate": "27.42",
+        "boatNo": "21",
+        "boatRate": "31.43",
+        "avgST": "0.18",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "10",
+        "lane": "6",
+        "registrationNo": "4367",
+        "racerName": "山口 修路",
+        "branch": "福岡/福岡",
+        "className": "B1",
+        "age": "40",
+        "weight": "52.0kg",
+        "nationalWinRate": "4.25",
+        "localWinRate": "4.89",
+        "motorNo": "50",
+        "motorRate": "30.66",
+        "boatNo": "66",
+        "boatRate": "35.29",
+        "avgST": "0.23",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "kiryu",
+      "raceNo": "10",
+      "weather": "曇",
+      "windDirection": "",
+      "windSpeed": "2",
+      "waveHeight": "1",
+      "airTemperature": "19.0",
+      "waterTemperature": "18.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "6",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "13",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "6",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "07",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "2",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "16",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "3",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "16",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "3",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "17",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "kiryu",
+      "raceNo": "10",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "kiryu",
+      "raceNo": "10",
+      "order": "",
+      "kimarite": "逃げ",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "1---3---5",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "1---3",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "730-3",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "350-2",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "210-2",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-06T21:40:37.955Z"
+  },
+  {
+    "date": "20260706",
+    "venueId": "kiryu",
+    "raceNo": "11",
+    "entries": [
+      {
+        "venueId": "kiryu",
+        "raceNo": "11",
+        "lane": "1",
+        "registrationNo": "5255",
+        "racerName": "藤原 仙二",
+        "branch": "滋賀/滋賀",
+        "className": "A1",
+        "age": "22",
+        "weight": "52.9kg",
+        "nationalWinRate": "6.77",
+        "localWinRate": "3.88",
+        "motorNo": "29",
+        "motorRate": "27.59",
+        "boatNo": "54",
+        "boatRate": "38.30",
+        "avgST": "0.18",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "11",
+        "lane": "2",
+        "registrationNo": "3872",
+        "racerName": "岡田 憲行",
+        "branch": "大阪/大阪",
+        "className": "A2",
+        "age": "50",
+        "weight": "53.1kg",
+        "nationalWinRate": "6.12",
+        "localWinRate": "7.22",
+        "motorNo": "33",
+        "motorRate": "38.17",
+        "boatNo": "60",
+        "boatRate": "40.44",
+        "avgST": "0.18",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "11",
+        "lane": "3",
+        "registrationNo": "4093",
+        "racerName": "吉田 宗弘",
+        "branch": "東京/東京",
+        "className": "B1",
+        "age": "45",
+        "weight": "51.0kg",
+        "nationalWinRate": "4.42",
+        "localWinRate": "3.61",
+        "motorNo": "39",
+        "motorRate": "21.84",
+        "boatNo": "75",
+        "boatRate": "30.30",
+        "avgST": "0.19",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "11",
+        "lane": "4",
+        "registrationNo": "3623",
+        "racerName": "深川 真二",
+        "branch": "佐賀/佐賀",
+        "className": "A1",
+        "age": "52",
+        "weight": "51.5kg",
+        "nationalWinRate": "7.51",
+        "localWinRate": "5.60",
+        "motorNo": "57",
+        "motorRate": "30.16",
+        "boatNo": "61",
+        "boatRate": "38.24",
+        "avgST": "0.14",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "11",
+        "lane": "5",
+        "registrationNo": "3748",
+        "racerName": "小黒 竜吾",
+        "branch": "埼玉/埼玉",
+        "className": "B1",
+        "age": "50",
+        "weight": "55.7kg",
+        "nationalWinRate": "4.10",
+        "localWinRate": "4.60",
+        "motorNo": "47",
+        "motorRate": "30.14",
+        "boatNo": "45",
+        "boatRate": "41.79",
+        "avgST": "0.16",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "11",
+        "lane": "6",
+        "registrationNo": "5111",
+        "racerName": "三村 岳人",
+        "branch": "岡山/岡山",
+        "className": "A2",
+        "age": "26",
+        "weight": "52.0kg",
+        "nationalWinRate": "5.79",
+        "localWinRate": "5.73",
+        "motorNo": "14",
+        "motorRate": "43.81",
+        "boatNo": "57",
+        "boatRate": "37.04",
+        "avgST": "0.15",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "kiryu",
+      "raceNo": "11",
+      "weather": "曇",
+      "windDirection": "",
+      "windSpeed": "1",
+      "waveHeight": "1",
+      "airTemperature": "19.0",
+      "waterTemperature": "18.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "5",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "17",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "1",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "08",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "1",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "22",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "1",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "27",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "kiryu",
+      "raceNo": "11",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "kiryu",
+      "raceNo": "11",
+      "order": "",
+      "kimarite": "差し",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "6---2---1",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "6---2",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "330-5",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "830-6",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "720-8",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "6",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "6",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-06T21:40:38.352Z"
+  },
+  {
+    "date": "20260706",
+    "venueId": "kiryu",
+    "raceNo": "12",
+    "entries": [
+      {
+        "venueId": "kiryu",
+        "raceNo": "12",
+        "lane": "1",
+        "registrationNo": "4910",
+        "racerName": "中村 泰平",
+        "branch": "愛知/愛知",
+        "className": "A1",
+        "age": "30",
+        "weight": "52.0kg",
+        "nationalWinRate": "6.78",
+        "localWinRate": "5.59",
+        "motorNo": "31",
+        "motorRate": "36.84",
+        "boatNo": "73",
+        "boatRate": "37.32",
+        "avgST": "0.15",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "12",
+        "lane": "2",
+        "registrationNo": "5010",
+        "racerName": "宇留田 翔平",
+        "branch": "三重/三重",
+        "className": "A2",
+        "age": "29",
+        "weight": "53.8kg",
+        "nationalWinRate": "5.65",
+        "localWinRate": "5.12",
+        "motorNo": "61",
+        "motorRate": "13.16",
+        "boatNo": "52",
+        "boatRate": "42.14",
+        "avgST": "0.14",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "12",
+        "lane": "3",
+        "registrationNo": "4292",
+        "racerName": "麻生 慎介",
+        "branch": "広島/広島",
+        "className": "A1",
+        "age": "41",
+        "weight": "53.1kg",
+        "nationalWinRate": "6.30",
+        "localWinRate": "4.60",
+        "motorNo": "65",
+        "motorRate": "36.62",
+        "boatNo": "46",
+        "boatRate": "30.28",
+        "avgST": "0.14",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "12",
+        "lane": "4",
+        "registrationNo": "4161",
+        "racerName": "黒柳 浩孝",
+        "branch": "愛知/愛知",
+        "className": "B1",
+        "age": "44",
+        "weight": "53.8kg",
+        "nationalWinRate": "5.22",
+        "localWinRate": "5.65",
+        "motorNo": "46",
+        "motorRate": "37.59",
+        "boatNo": "35",
+        "boatRate": "35.71",
+        "avgST": "0.16",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "12",
+        "lane": "5",
+        "registrationNo": "4812",
+        "racerName": "西野 雄貴",
+        "branch": "徳島/徳島",
+        "className": "A1",
+        "age": "36",
+        "weight": "50.5kg",
+        "nationalWinRate": "7.24",
+        "localWinRate": "0.00",
+        "motorNo": "72",
+        "motorRate": "31.39",
+        "boatNo": "58",
+        "boatRate": "31.85",
+        "avgST": "0.14",
+        "recentResults": ""
+      },
+      {
+        "venueId": "kiryu",
+        "raceNo": "12",
+        "lane": "6",
+        "registrationNo": "4406",
+        "racerName": "幸野 史明",
+        "branch": "福岡/福岡",
+        "className": "B1",
+        "age": "41",
+        "weight": "52.3kg",
+        "nationalWinRate": "4.15",
+        "localWinRate": "3.76",
+        "motorNo": "36",
+        "motorRate": "33.63",
+        "boatNo": "16",
+        "boatRate": "25.18",
+        "avgST": "0.16",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "kiryu",
+      "raceNo": "12",
+      "weather": "曇",
+      "windDirection": "西",
+      "windSpeed": "1",
+      "waveHeight": "1",
+      "airTemperature": "19.0",
+      "waterTemperature": "18.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "2",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "14",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "4",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "13",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "5",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "04",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "1",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "22",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "1",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "17",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "2",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "15",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "kiryu",
+      "raceNo": "12",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "kiryu",
+      "raceNo": "12",
+      "order": "",
+      "kimarite": "逃げ",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "1---4---3",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "1---4",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "520-3",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "840-4",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "190-2",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-06T21:40:38.756Z"
+  },
+  {
+    "date": "20260701",
+    "venueId": "toda",
+    "raceNo": "1",
+    "entries": [
+      {
+        "venueId": "toda",
+        "raceNo": "1",
+        "lane": "1",
+        "registrationNo": "3922",
+        "racerName": "菅沼 佳昭",
+        "branch": "愛知/愛知",
+        "className": "B1",
+        "age": "51",
+        "weight": "51.5kg",
+        "nationalWinRate": "3.74",
+        "localWinRate": "4.07",
+        "motorNo": "47",
+        "motorRate": "28.24",
+        "boatNo": "68",
+        "boatRate": "36.70",
+        "avgST": "0.19",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "1",
+        "lane": "2",
+        "registrationNo": "3797",
+        "racerName": "岩井 繁",
+        "branch": "広島/広島",
+        "className": "B1",
+        "age": "53",
+        "weight": "59.7kg",
+        "nationalWinRate": "3.91",
+        "localWinRate": "4.89",
+        "motorNo": "6",
+        "motorRate": "38.31",
+        "boatNo": "77",
+        "boatRate": "34.04",
+        "avgST": "0.19",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "1",
+        "lane": "3",
+        "registrationNo": "4081",
+        "racerName": "樋口 範政",
+        "branch": "愛知/愛知",
+        "className": "B1",
+        "age": "47",
+        "weight": "54.0kg",
+        "nationalWinRate": "4.74",
+        "localWinRate": "3.33",
+        "motorNo": "13",
+        "motorRate": "33.82",
+        "boatNo": "71",
+        "boatRate": "34.27",
+        "avgST": "0.19",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "1",
+        "lane": "4",
+        "registrationNo": "3620",
+        "racerName": "信濃 由行",
+        "branch": "福井/石川",
+        "className": "B1",
+        "age": "52",
+        "weight": "54.2kg",
+        "nationalWinRate": "4.13",
+        "localWinRate": "3.79",
+        "motorNo": "32",
+        "motorRate": "28.19",
+        "boatNo": "58",
+        "boatRate": "34.27",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "1",
+        "lane": "5",
+        "registrationNo": "5242",
+        "racerName": "高山 弘斗",
+        "branch": "埼玉/埼玉",
+        "className": "B1",
+        "age": "25",
+        "weight": "52.0kg",
+        "nationalWinRate": "3.38",
+        "localWinRate": "3.42",
+        "motorNo": "53",
+        "motorRate": "35.53",
+        "boatNo": "37",
+        "boatRate": "35.98",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "1",
+        "lane": "6",
+        "registrationNo": "4404",
+        "racerName": "岸蔭 亮",
+        "branch": "兵庫/兵庫",
+        "className": "B1",
+        "age": "41",
+        "weight": "53.5kg",
+        "nationalWinRate": "3.70",
+        "localWinRate": "2.73",
+        "motorNo": "38",
+        "motorRate": "37.32",
+        "boatNo": "48",
+        "boatRate": "32.97",
+        "avgST": "0.18",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "toda",
+      "raceNo": "1",
+      "weather": "曇",
+      "windDirection": "",
+      "windSpeed": "1",
+      "waveHeight": "1",
+      "airTemperature": "26.0",
+      "waterTemperature": "25.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "toda",
+      "raceNo": "1",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "toda",
+      "raceNo": "1",
+      "order": "",
+      "kimarite": "まくり",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "6---3---1",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "6---3",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "890-4",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "390-8",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "390-11",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "6",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "6",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-07T09:45:38.249Z"
+  },
+  {
+    "date": "20260701",
+    "venueId": "toda",
+    "raceNo": "2",
+    "entries": [
+      {
+        "venueId": "toda",
+        "raceNo": "2",
+        "lane": "1",
+        "registrationNo": "5351",
+        "racerName": "齊藤 廉",
+        "branch": "福岡/福岡",
+        "className": "B1",
+        "age": "21",
+        "weight": "52.0kg",
+        "nationalWinRate": "4.51",
+        "localWinRate": "0.00",
+        "motorNo": "21",
+        "motorRate": "31.18",
+        "boatNo": "63",
+        "boatRate": "34.25",
+        "avgST": "0.15",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "2",
+        "lane": "2",
+        "registrationNo": "5226",
+        "racerName": "藤田 俊祐",
+        "branch": "東京/東京",
+        "className": "A2",
+        "age": "24",
+        "weight": "52.2kg",
+        "nationalWinRate": "5.93",
+        "localWinRate": "5.43",
+        "motorNo": "17",
+        "motorRate": "32.28",
+        "boatNo": "32",
+        "boatRate": "31.38",
+        "avgST": "0.15",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "2",
+        "lane": "3",
+        "registrationNo": "3484",
+        "racerName": "芝田 浩治",
+        "branch": "兵庫/兵庫",
+        "className": "A2",
+        "age": "54",
+        "weight": "53.0kg",
+        "nationalWinRate": "5.86",
+        "localWinRate": "6.06",
+        "motorNo": "58",
+        "motorRate": "35.00",
+        "boatNo": "22",
+        "boatRate": "36.17",
+        "avgST": "0.16",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "2",
+        "lane": "4",
+        "registrationNo": "3687",
+        "racerName": "花田 和明",
+        "branch": "愛知/愛知",
+        "className": "B1",
+        "age": "56",
+        "weight": "52.2kg",
+        "nationalWinRate": "5.30",
+        "localWinRate": "4.40",
+        "motorNo": "11",
+        "motorRate": "42.64",
+        "boatNo": "46",
+        "boatRate": "31.72",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "2",
+        "lane": "5",
+        "registrationNo": "3463",
+        "racerName": "乙津 康志",
+        "branch": "東京/東京",
+        "className": "B1",
+        "age": "58",
+        "weight": "52.0kg",
+        "nationalWinRate": "4.85",
+        "localWinRate": "4.00",
+        "motorNo": "24",
+        "motorRate": "40.39",
+        "boatNo": "44",
+        "boatRate": "33.86",
+        "avgST": "0.20",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "2",
+        "lane": "6",
+        "registrationNo": "3430",
+        "racerName": "角浜 修",
+        "branch": "広島/広島",
+        "className": "B1",
+        "age": "58",
+        "weight": "52.9kg",
+        "nationalWinRate": "4.27",
+        "localWinRate": "3.88",
+        "motorNo": "22",
+        "motorRate": "27.78",
+        "boatNo": "70",
+        "boatRate": "39.78",
+        "avgST": "0.17",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "toda",
+      "raceNo": "2",
+      "weather": "曇",
+      "windDirection": "",
+      "windSpeed": "2",
+      "waveHeight": "1",
+      "airTemperature": "26.0",
+      "waterTemperature": "25.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "toda",
+      "raceNo": "2",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "toda",
+      "raceNo": "2",
+      "order": "",
+      "kimarite": "逃げ",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "1---2---5",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "1---2",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "780-6",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "390-2",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "220-3",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-07T09:45:38.622Z"
+  },
+  {
+    "date": "20260701",
+    "venueId": "toda",
+    "raceNo": "3",
+    "entries": [
+      {
+        "venueId": "toda",
+        "raceNo": "3",
+        "lane": "1",
+        "registrationNo": "3659",
+        "racerName": "藤生 雄人",
+        "branch": "群馬/群馬",
+        "className": "B1",
+        "age": "51",
+        "weight": "54.0kg",
+        "nationalWinRate": "5.69",
+        "localWinRate": "5.24",
+        "motorNo": "41",
+        "motorRate": "33.73",
+        "boatNo": "27",
+        "boatRate": "37.97",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "3",
+        "lane": "2",
+        "registrationNo": "3268",
+        "racerName": "森 竜也",
+        "branch": "三重/三重",
+        "className": "B1",
+        "age": "61",
+        "weight": "52.5kg",
+        "nationalWinRate": "4.44",
+        "localWinRate": "4.00",
+        "motorNo": "61",
+        "motorRate": "37.50",
+        "boatNo": "76",
+        "boatRate": "32.62",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "3",
+        "lane": "3",
+        "registrationNo": "4174",
+        "racerName": "赤坂 俊輔",
+        "branch": "長崎/長崎",
+        "className": "A1",
+        "age": "43",
+        "weight": "52.0kg",
+        "nationalWinRate": "6.29",
+        "localWinRate": "5.50",
+        "motorNo": "59",
+        "motorRate": "23.53",
+        "boatNo": "17",
+        "boatRate": "37.93",
+        "avgST": "0.16",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "3",
+        "lane": "4",
+        "registrationNo": "3681",
+        "racerName": "山谷 央",
+        "branch": "東京/東京",
+        "className": "B1",
+        "age": "52",
+        "weight": "52.1kg",
+        "nationalWinRate": "4.47",
+        "localWinRate": "5.46",
+        "motorNo": "62",
+        "motorRate": "33.90",
+        "boatNo": "21",
+        "boatRate": "35.87",
+        "avgST": "0.15",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "3",
+        "lane": "5",
+        "registrationNo": "4883",
+        "racerName": "岡部 大輝",
+        "branch": "東京/東京",
+        "className": "B1",
+        "age": "30",
+        "weight": "52.5kg",
+        "nationalWinRate": "5.97",
+        "localWinRate": "5.50",
+        "motorNo": "50",
+        "motorRate": "37.25",
+        "boatNo": "54",
+        "boatRate": "30.85",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "3",
+        "lane": "6",
+        "registrationNo": "3482",
+        "racerName": "金子 猛志",
+        "branch": "群馬/群馬",
+        "className": "A2",
+        "age": "55",
+        "weight": "57.3kg",
+        "nationalWinRate": "5.09",
+        "localWinRate": "6.71",
+        "motorNo": "8",
+        "motorRate": "32.07",
+        "boatNo": "23",
+        "boatRate": "31.09",
+        "avgST": "0.16",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "toda",
+      "raceNo": "3",
+      "weather": "曇",
+      "windDirection": "",
+      "windSpeed": "1",
+      "waveHeight": "1",
+      "airTemperature": "26.0",
+      "waterTemperature": "25.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "toda",
+      "raceNo": "3",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "toda",
+      "raceNo": "3",
+      "order": "",
+      "kimarite": "まくり差し",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "5---2---3",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "5---2",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "310-14",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "410-11",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "330-6",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "5",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "5",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-07T09:45:39.024Z"
+  },
+  {
+    "date": "20260701",
+    "venueId": "toda",
+    "raceNo": "4",
+    "entries": [
+      {
+        "venueId": "toda",
+        "raceNo": "4",
+        "lane": "1",
+        "registrationNo": "4553",
+        "racerName": "坪口 竜也",
+        "branch": "長崎/長崎",
+        "className": "A2",
+        "age": "37",
+        "weight": "53.3kg",
+        "nationalWinRate": "5.75",
+        "localWinRate": "0.00",
+        "motorNo": "63",
+        "motorRate": "39.70",
+        "boatNo": "73",
+        "boatRate": "30.99",
+        "avgST": "0.14",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "4",
+        "lane": "2",
+        "registrationNo": "4049",
+        "racerName": "荒川 健太",
+        "branch": "三重/三重",
+        "className": "A2",
+        "age": "45",
+        "weight": "55.5kg",
+        "nationalWinRate": "6.11",
+        "localWinRate": "6.12",
+        "motorNo": "43",
+        "motorRate": "35.29",
+        "boatNo": "65",
+        "boatRate": "43.32",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "4",
+        "lane": "3",
+        "registrationNo": "4944",
+        "racerName": "田代 達也",
+        "branch": "東京/東京",
+        "className": "B1",
+        "age": "35",
+        "weight": "52.8kg",
+        "nationalWinRate": "4.11",
+        "localWinRate": "4.11",
+        "motorNo": "23",
+        "motorRate": "32.81",
+        "boatNo": "34",
+        "boatRate": "37.30",
+        "avgST": "0.15",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "4",
+        "lane": "4",
+        "registrationNo": "3656",
+        "racerName": "伯母 芳恒",
+        "branch": "東京/山梨",
+        "className": "B1",
+        "age": "52",
+        "weight": "54.1kg",
+        "nationalWinRate": "5.15",
+        "localWinRate": "0.00",
+        "motorNo": "42",
+        "motorRate": "33.01",
+        "boatNo": "16",
+        "boatRate": "37.44",
+        "avgST": "0.16",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "4",
+        "lane": "5",
+        "registrationNo": "4966",
+        "racerName": "田川 大貴",
+        "branch": "長崎/長崎",
+        "className": "A2",
+        "age": "28",
+        "weight": "53.8kg",
+        "nationalWinRate": "5.35",
+        "localWinRate": "5.43",
+        "motorNo": "25",
+        "motorRate": "33.65",
+        "boatNo": "12",
+        "boatRate": "32.61",
+        "avgST": "0.14",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "4",
+        "lane": "6",
+        "registrationNo": "3589",
+        "racerName": "西村 勝",
+        "branch": "埼玉/埼玉",
+        "className": "B1",
+        "age": "52",
+        "weight": "55.4kg",
+        "nationalWinRate": "4.34",
+        "localWinRate": "4.62",
+        "motorNo": "33",
+        "motorRate": "27.81",
+        "boatNo": "30",
+        "boatRate": "36.13",
+        "avgST": "0.16",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "toda",
+      "raceNo": "4",
+      "weather": "曇",
+      "windDirection": "西",
+      "windSpeed": "1",
+      "waveHeight": "1",
+      "airTemperature": "27.0",
+      "waterTemperature": "25.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "toda",
+      "raceNo": "4",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "toda",
+      "raceNo": "4",
+      "order": "",
+      "kimarite": "逃げ",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "1---5---2",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "1---5",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "350-1",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "950-3",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "170-3",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-07T09:45:39.417Z"
+  },
+  {
+    "date": "20260701",
+    "venueId": "toda",
+    "raceNo": "5",
+    "entries": [
+      {
+        "venueId": "toda",
+        "raceNo": "5",
+        "lane": "1",
+        "registrationNo": "4471",
+        "racerName": "新田 泰章",
+        "branch": "広島/広島",
+        "className": "A1",
+        "age": "39",
+        "weight": "52.7kg",
+        "nationalWinRate": "6.57",
+        "localWinRate": "7.22",
+        "motorNo": "36",
+        "motorRate": "33.16",
+        "boatNo": "57",
+        "boatRate": "34.39",
+        "avgST": "0.15",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "5",
+        "lane": "2",
+        "registrationNo": "4112",
+        "racerName": "大久保信一郎",
+        "branch": "佐賀/佐賀",
+        "className": "B1",
+        "age": "45",
+        "weight": "52.0kg",
+        "nationalWinRate": "5.91",
+        "localWinRate": "0.00",
+        "motorNo": "19",
+        "motorRate": "28.88",
+        "boatNo": "69",
+        "boatRate": "34.55",
+        "avgST": "0.18",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "5",
+        "lane": "3",
+        "registrationNo": "3878",
+        "racerName": "胡本 悟志",
+        "branch": "山口/山口",
+        "className": "B1",
+        "age": "49",
+        "weight": "52.0kg",
+        "nationalWinRate": "4.28",
+        "localWinRate": "3.00",
+        "motorNo": "40",
+        "motorRate": "35.23",
+        "boatNo": "29",
+        "boatRate": "41.27",
+        "avgST": "0.18",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "5",
+        "lane": "4",
+        "registrationNo": "3719",
+        "racerName": "辻 栄蔵",
+        "branch": "広島/広島",
+        "className": "A1",
+        "age": "51",
+        "weight": "52.2kg",
+        "nationalWinRate": "6.91",
+        "localWinRate": "7.10",
+        "motorNo": "15",
+        "motorRate": "43.72",
+        "boatNo": "36",
+        "boatRate": "36.56",
+        "avgST": "0.15",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "5",
+        "lane": "5",
+        "registrationNo": "5424",
+        "racerName": "熊倉 幹太",
+        "branch": "東京/東京",
+        "className": "B2",
+        "age": "24",
+        "weight": "54.2kg",
+        "nationalWinRate": "1.39",
+        "localWinRate": "1.33",
+        "motorNo": "52",
+        "motorRate": "28.07",
+        "boatNo": "41",
+        "boatRate": "35.42",
+        "avgST": "",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "5",
+        "lane": "6",
+        "registrationNo": "5341",
+        "racerName": "山道 諄也",
+        "branch": "群馬/群馬",
+        "className": "B2",
+        "age": "24",
+        "weight": "53.1kg",
+        "nationalWinRate": "2.91",
+        "localWinRate": "2.33",
+        "motorNo": "10",
+        "motorRate": "36.00",
+        "boatNo": "38",
+        "boatRate": "36.56",
+        "avgST": "0.20",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "toda",
+      "raceNo": "5",
+      "weather": "曇",
+      "windDirection": "",
+      "windSpeed": "2",
+      "waveHeight": "1",
+      "airTemperature": "27.0",
+      "waterTemperature": "25.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "toda",
+      "raceNo": "5",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "toda",
+      "raceNo": "5",
+      "order": "",
+      "kimarite": "逃げ",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "1---4---3",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "1---4",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "350-2",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "150-1",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "120-1",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-07T09:45:39.811Z"
+  },
+  {
+    "date": "20260701",
+    "venueId": "toda",
+    "raceNo": "6",
+    "entries": [
+      {
+        "venueId": "toda",
+        "raceNo": "6",
+        "lane": "1",
+        "registrationNo": "4081",
+        "racerName": "樋口 範政",
+        "branch": "愛知/愛知",
+        "className": "B1",
+        "age": "47",
+        "weight": "54.0kg",
+        "nationalWinRate": "4.74",
+        "localWinRate": "3.33",
+        "motorNo": "13",
+        "motorRate": "33.82",
+        "boatNo": "71",
+        "boatRate": "34.27",
+        "avgST": "0.19",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "6",
+        "lane": "2",
+        "registrationNo": "5242",
+        "racerName": "高山 弘斗",
+        "branch": "埼玉/埼玉",
+        "className": "B1",
+        "age": "25",
+        "weight": "52.0kg",
+        "nationalWinRate": "3.38",
+        "localWinRate": "3.42",
+        "motorNo": "53",
+        "motorRate": "35.53",
+        "boatNo": "64",
+        "boatRate": "30.81",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "6",
+        "lane": "3",
+        "registrationNo": "5187",
+        "racerName": "小坂 風太",
+        "branch": "福井/石川",
+        "className": "B1",
+        "age": "26",
+        "weight": "57.0kg",
+        "nationalWinRate": "3.24",
+        "localWinRate": "3.92",
+        "motorNo": "51",
+        "motorRate": "31.84",
+        "boatNo": "15",
+        "boatRate": "36.13",
+        "avgST": "0.18",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "6",
+        "lane": "4",
+        "registrationNo": "3912",
+        "racerName": "川原 正明",
+        "branch": "福井/石川",
+        "className": "A2",
+        "age": "52",
+        "weight": "52.1kg",
+        "nationalWinRate": "5.66",
+        "localWinRate": "6.11",
+        "motorNo": "16",
+        "motorRate": "39.81",
+        "boatNo": "53",
+        "boatRate": "32.77",
+        "avgST": "0.14",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "6",
+        "lane": "5",
+        "registrationNo": "3327",
+        "racerName": "野長瀬 正孝",
+        "branch": "静岡/静岡",
+        "className": "A2",
+        "age": "58",
+        "weight": "52.0kg",
+        "nationalWinRate": "6.01",
+        "localWinRate": "6.31",
+        "motorNo": "31",
+        "motorRate": "33.01",
+        "boatNo": "47",
+        "boatRate": "35.08",
+        "avgST": "0.16",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "6",
+        "lane": "6",
+        "registrationNo": "3463",
+        "racerName": "乙津 康志",
+        "branch": "東京/東京",
+        "className": "B1",
+        "age": "58",
+        "weight": "52.0kg",
+        "nationalWinRate": "4.85",
+        "localWinRate": "4.00",
+        "motorNo": "24",
+        "motorRate": "40.39",
+        "boatNo": "44",
+        "boatRate": "33.86",
+        "avgST": "0.20",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "toda",
+      "raceNo": "6",
+      "weather": "曇",
+      "windDirection": "",
+      "windSpeed": "2",
+      "waveHeight": "1",
+      "airTemperature": "27.0",
+      "waterTemperature": "25.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "3",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "11",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "5",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "13",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "5",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "17",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "toda",
+      "raceNo": "6",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "toda",
+      "raceNo": "6",
+      "order": "",
+      "kimarite": "まくり",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "2---5---3",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "2---5",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "710-16",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "650-7",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "430-6",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "2",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-07T09:45:40.187Z"
+  },
+  {
+    "date": "20260701",
+    "venueId": "toda",
+    "raceNo": "7",
+    "entries": [
+      {
+        "venueId": "toda",
+        "raceNo": "7",
+        "lane": "1",
+        "registrationNo": "4174",
+        "racerName": "赤坂 俊輔",
+        "branch": "長崎/長崎",
+        "className": "A1",
+        "age": "43",
+        "weight": "52.0kg",
+        "nationalWinRate": "6.29",
+        "localWinRate": "5.50",
+        "motorNo": "59",
+        "motorRate": "23.53",
+        "boatNo": "17",
+        "boatRate": "37.93",
+        "avgST": "0.16",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "7",
+        "lane": "2",
+        "registrationNo": "4883",
+        "racerName": "岡部 大輝",
+        "branch": "東京/東京",
+        "className": "B1",
+        "age": "30",
+        "weight": "52.5kg",
+        "nationalWinRate": "5.97",
+        "localWinRate": "5.50",
+        "motorNo": "50",
+        "motorRate": "37.25",
+        "boatNo": "54",
+        "boatRate": "30.85",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "7",
+        "lane": "3",
+        "registrationNo": "3430",
+        "racerName": "角浜 修",
+        "branch": "広島/広島",
+        "className": "B1",
+        "age": "58",
+        "weight": "52.9kg",
+        "nationalWinRate": "4.27",
+        "localWinRate": "3.88",
+        "motorNo": "22",
+        "motorRate": "27.78",
+        "boatNo": "70",
+        "boatRate": "39.78",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "7",
+        "lane": "4",
+        "registrationNo": "3987",
+        "racerName": "後藤 正宗",
+        "branch": "静岡/静岡",
+        "className": "B1",
+        "age": "48",
+        "weight": "53.3kg",
+        "nationalWinRate": "5.99",
+        "localWinRate": "6.54",
+        "motorNo": "39",
+        "motorRate": "29.31",
+        "boatNo": "56",
+        "boatRate": "44.44",
+        "avgST": "0.15",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "7",
+        "lane": "5",
+        "registrationNo": "3516",
+        "racerName": "吉原 聖人",
+        "branch": "広島/広島",
+        "className": "B1",
+        "age": "58",
+        "weight": "51.5kg",
+        "nationalWinRate": "4.32",
+        "localWinRate": "4.44",
+        "motorNo": "46",
+        "motorRate": "30.46",
+        "boatNo": "33",
+        "boatRate": "31.94",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "7",
+        "lane": "6",
+        "registrationNo": "5449",
+        "racerName": "堀井 涼平",
+        "branch": "東京/長野",
+        "className": "B2",
+        "age": "23",
+        "weight": "50.0kg",
+        "nationalWinRate": "2.13",
+        "localWinRate": "0.00",
+        "motorNo": "5",
+        "motorRate": "37.75",
+        "boatNo": "14",
+        "boatRate": "36.36",
+        "avgST": "",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "toda",
+      "raceNo": "7",
+      "weather": "曇",
+      "windDirection": "",
+      "windSpeed": "2",
+      "waveHeight": "1",
+      "airTemperature": "27.0",
+      "waterTemperature": "25.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "3",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "16",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "5",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "15",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "6",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "13",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "toda",
+      "raceNo": "7",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "toda",
+      "raceNo": "7",
+      "order": "",
+      "kimarite": "逃げ",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "1---4---2",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "1---4",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "270-1",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "400-3",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "160-2",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-07T09:45:40.487Z"
+  },
+  {
+    "date": "20260701",
+    "venueId": "toda",
+    "raceNo": "8",
+    "entries": [
+      {
+        "venueId": "toda",
+        "raceNo": "8",
+        "lane": "1",
+        "registrationNo": "3482",
+        "racerName": "金子 猛志",
+        "branch": "群馬/群馬",
+        "className": "A2",
+        "age": "55",
+        "weight": "57.3kg",
+        "nationalWinRate": "5.09",
+        "localWinRate": "6.71",
+        "motorNo": "8",
+        "motorRate": "32.07",
+        "boatNo": "23",
+        "boatRate": "31.09",
+        "avgST": "0.16",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "8",
+        "lane": "2",
+        "registrationNo": "3687",
+        "racerName": "花田 和明",
+        "branch": "愛知/愛知",
+        "className": "B1",
+        "age": "56",
+        "weight": "52.2kg",
+        "nationalWinRate": "5.30",
+        "localWinRate": "4.40",
+        "motorNo": "11",
+        "motorRate": "42.64",
+        "boatNo": "46",
+        "boatRate": "31.72",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "8",
+        "lane": "3",
+        "registrationNo": "3922",
+        "racerName": "菅沼 佳昭",
+        "branch": "愛知/愛知",
+        "className": "B1",
+        "age": "51",
+        "weight": "51.5kg",
+        "nationalWinRate": "3.74",
+        "localWinRate": "4.07",
+        "motorNo": "47",
+        "motorRate": "28.24",
+        "boatNo": "68",
+        "boatRate": "36.70",
+        "avgST": "0.19",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "8",
+        "lane": "4",
+        "registrationNo": "4944",
+        "racerName": "田代 達也",
+        "branch": "東京/東京",
+        "className": "B1",
+        "age": "35",
+        "weight": "52.8kg",
+        "nationalWinRate": "4.11",
+        "localWinRate": "4.11",
+        "motorNo": "23",
+        "motorRate": "32.81",
+        "boatNo": "34",
+        "boatRate": "37.30",
+        "avgST": "0.15",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "8",
+        "lane": "5",
+        "registrationNo": "5226",
+        "racerName": "藤田 俊祐",
+        "branch": "東京/東京",
+        "className": "A2",
+        "age": "24",
+        "weight": "52.2kg",
+        "nationalWinRate": "5.93",
+        "localWinRate": "5.43",
+        "motorNo": "17",
+        "motorRate": "32.28",
+        "boatNo": "32",
+        "boatRate": "31.38",
+        "avgST": "0.15",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "8",
+        "lane": "6",
+        "registrationNo": "5455",
+        "racerName": "澁澤 周羽",
+        "branch": "群馬/群馬",
+        "className": "B2",
+        "age": "20",
+        "weight": "52.8kg",
+        "nationalWinRate": "1.52",
+        "localWinRate": "0.00",
+        "motorNo": "64",
+        "motorRate": "37.29",
+        "boatNo": "52",
+        "boatRate": "39.68",
+        "avgST": "",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "toda",
+      "raceNo": "8",
+      "weather": "曇",
+      "windDirection": "",
+      "windSpeed": "1",
+      "waveHeight": "1",
+      "airTemperature": "27.0",
+      "waterTemperature": "25.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "6",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "16",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "4",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "14",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "1",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "18",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "3",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "13",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "2",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "12",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "toda",
+      "raceNo": "8",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "toda",
+      "raceNo": "8",
+      "order": "",
+      "kimarite": "逃げ",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "1---2---4",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "1---2",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "560-2",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "190-1",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "180-2",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-07T09:45:40.773Z"
+  },
+  {
+    "date": "20260701",
+    "venueId": "toda",
+    "raceNo": "9",
+    "entries": [
+      {
+        "venueId": "toda",
+        "raceNo": "9",
+        "lane": "1",
+        "registrationNo": "4966",
+        "racerName": "田川 大貴",
+        "branch": "長崎/長崎",
+        "className": "A2",
+        "age": "28",
+        "weight": "53.8kg",
+        "nationalWinRate": "5.35",
+        "localWinRate": "5.43",
+        "motorNo": "25",
+        "motorRate": "33.65",
+        "boatNo": "12",
+        "boatRate": "32.61",
+        "avgST": "0.14",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "9",
+        "lane": "2",
+        "registrationNo": "3656",
+        "racerName": "伯母 芳恒",
+        "branch": "東京/山梨",
+        "className": "B1",
+        "age": "52",
+        "weight": "54.1kg",
+        "nationalWinRate": "5.15",
+        "localWinRate": "0.00",
+        "motorNo": "42",
+        "motorRate": "33.01",
+        "boatNo": "16",
+        "boatRate": "37.44",
+        "avgST": "0.16",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "9",
+        "lane": "3",
+        "registrationNo": "4404",
+        "racerName": "岸蔭 亮",
+        "branch": "兵庫/兵庫",
+        "className": "B1",
+        "age": "41",
+        "weight": "53.5kg",
+        "nationalWinRate": "3.70",
+        "localWinRate": "2.73",
+        "motorNo": "38",
+        "motorRate": "37.32",
+        "boatNo": "48",
+        "boatRate": "32.97",
+        "avgST": "0.18",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "9",
+        "lane": "4",
+        "registrationNo": "4112",
+        "racerName": "大久保信一郎",
+        "branch": "佐賀/佐賀",
+        "className": "B1",
+        "age": "45",
+        "weight": "52.0kg",
+        "nationalWinRate": "5.91",
+        "localWinRate": "0.00",
+        "motorNo": "19",
+        "motorRate": "28.88",
+        "boatNo": "69",
+        "boatRate": "34.55",
+        "avgST": "0.18",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "9",
+        "lane": "5",
+        "registrationNo": "3878",
+        "racerName": "胡本 悟志",
+        "branch": "山口/山口",
+        "className": "B1",
+        "age": "49",
+        "weight": "52.0kg",
+        "nationalWinRate": "4.28",
+        "localWinRate": "3.00",
+        "motorNo": "40",
+        "motorRate": "35.23",
+        "boatNo": "29",
+        "boatRate": "41.27",
+        "avgST": "0.18",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "9",
+        "lane": "6",
+        "registrationNo": "3268",
+        "racerName": "森 竜也",
+        "branch": "三重/三重",
+        "className": "B1",
+        "age": "61",
+        "weight": "52.5kg",
+        "nationalWinRate": "4.44",
+        "localWinRate": "4.00",
+        "motorNo": "61",
+        "motorRate": "37.50",
+        "boatNo": "76",
+        "boatRate": "32.62",
+        "avgST": "0.17",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "toda",
+      "raceNo": "9",
+      "weather": "曇",
+      "windDirection": "",
+      "windSpeed": "1",
+      "waveHeight": "1",
+      "airTemperature": "27.0",
+      "waterTemperature": "25.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "5",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "09",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "4",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "15",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "6",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "09",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "2",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "21",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "3",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "08",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "2",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "21",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "toda",
+      "raceNo": "9",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "toda",
+      "raceNo": "9",
+      "order": "",
+      "kimarite": "差し",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "5---4---1",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "5---4",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "230-2",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "620-4",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "170-5",
+          "payout": "4",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "5",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "5",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-07T09:45:41.111Z"
+  },
+  {
+    "date": "20260701",
+    "venueId": "toda",
+    "raceNo": "10",
+    "entries": [
+      {
+        "venueId": "toda",
+        "raceNo": "10",
+        "lane": "1",
+        "registrationNo": "3327",
+        "racerName": "野長瀬 正孝",
+        "branch": "静岡/静岡",
+        "className": "A2",
+        "age": "58",
+        "weight": "52.0kg",
+        "nationalWinRate": "6.01",
+        "localWinRate": "6.31",
+        "motorNo": "31",
+        "motorRate": "33.01",
+        "boatNo": "47",
+        "boatRate": "35.08",
+        "avgST": "0.16",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "10",
+        "lane": "2",
+        "registrationNo": "3681",
+        "racerName": "山谷 央",
+        "branch": "東京/東京",
+        "className": "B1",
+        "age": "52",
+        "weight": "52.1kg",
+        "nationalWinRate": "4.47",
+        "localWinRate": "5.46",
+        "motorNo": "62",
+        "motorRate": "33.90",
+        "boatNo": "21",
+        "boatRate": "35.87",
+        "avgST": "0.15",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "10",
+        "lane": "3",
+        "registrationNo": "4049",
+        "racerName": "荒川 健太",
+        "branch": "三重/三重",
+        "className": "A2",
+        "age": "45",
+        "weight": "55.5kg",
+        "nationalWinRate": "6.11",
+        "localWinRate": "6.12",
+        "motorNo": "43",
+        "motorRate": "35.29",
+        "boatNo": "65",
+        "boatRate": "43.32",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "10",
+        "lane": "4",
+        "registrationNo": "5351",
+        "racerName": "齊藤 廉",
+        "branch": "福岡/福岡",
+        "className": "B1",
+        "age": "21",
+        "weight": "52.0kg",
+        "nationalWinRate": "4.51",
+        "localWinRate": "0.00",
+        "motorNo": "21",
+        "motorRate": "31.18",
+        "boatNo": "63",
+        "boatRate": "34.25",
+        "avgST": "0.15",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "10",
+        "lane": "5",
+        "registrationNo": "3659",
+        "racerName": "藤生 雄人",
+        "branch": "群馬/群馬",
+        "className": "B1",
+        "age": "51",
+        "weight": "54.0kg",
+        "nationalWinRate": "5.69",
+        "localWinRate": "5.24",
+        "motorNo": "41",
+        "motorRate": "33.73",
+        "boatNo": "27",
+        "boatRate": "37.97",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "10",
+        "lane": "6",
+        "registrationNo": "3484",
+        "racerName": "芝田 浩治",
+        "branch": "兵庫/兵庫",
+        "className": "A2",
+        "age": "54",
+        "weight": "53.0kg",
+        "nationalWinRate": "5.86",
+        "localWinRate": "6.06",
+        "motorNo": "58",
+        "motorRate": "35.00",
+        "boatNo": "22",
+        "boatRate": "36.17",
+        "avgST": "0.16",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "toda",
+      "raceNo": "10",
+      "weather": "曇",
+      "windDirection": "",
+      "windSpeed": "2",
+      "waveHeight": "1",
+      "airTemperature": "27.0",
+      "waterTemperature": "25.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "5",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "21",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "4",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "17",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "2",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "14",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "1",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "10",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "1",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "27",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "3",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "13",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "toda",
+      "raceNo": "10",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "toda",
+      "raceNo": "10",
+      "order": "",
+      "kimarite": "逃げ",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "1---2---3",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "1---2",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "310-1",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "270-1",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "160-2",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-07T09:45:41.471Z"
+  },
+  {
+    "date": "20260701",
+    "venueId": "toda",
+    "raceNo": "11",
+    "entries": [
+      {
+        "venueId": "toda",
+        "raceNo": "11",
+        "lane": "1",
+        "registrationNo": "3719",
+        "racerName": "辻 栄蔵",
+        "branch": "広島/広島",
+        "className": "A1",
+        "age": "51",
+        "weight": "52.2kg",
+        "nationalWinRate": "6.91",
+        "localWinRate": "7.10",
+        "motorNo": "15",
+        "motorRate": "43.72",
+        "boatNo": "36",
+        "boatRate": "36.56",
+        "avgST": "0.15",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "11",
+        "lane": "2",
+        "registrationNo": "4553",
+        "racerName": "坪口 竜也",
+        "branch": "長崎/長崎",
+        "className": "A2",
+        "age": "37",
+        "weight": "53.3kg",
+        "nationalWinRate": "5.75",
+        "localWinRate": "0.00",
+        "motorNo": "63",
+        "motorRate": "39.70",
+        "boatNo": "73",
+        "boatRate": "30.99",
+        "avgST": "0.14",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "11",
+        "lane": "3",
+        "registrationNo": "3987",
+        "racerName": "後藤 正宗",
+        "branch": "静岡/静岡",
+        "className": "B1",
+        "age": "48",
+        "weight": "53.3kg",
+        "nationalWinRate": "5.99",
+        "localWinRate": "6.54",
+        "motorNo": "39",
+        "motorRate": "29.31",
+        "boatNo": "56",
+        "boatRate": "44.44",
+        "avgST": "0.15",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "11",
+        "lane": "4",
+        "registrationNo": "3516",
+        "racerName": "吉原 聖人",
+        "branch": "広島/広島",
+        "className": "B1",
+        "age": "58",
+        "weight": "51.5kg",
+        "nationalWinRate": "4.32",
+        "localWinRate": "4.44",
+        "motorNo": "46",
+        "motorRate": "30.46",
+        "boatNo": "33",
+        "boatRate": "31.94",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "11",
+        "lane": "5",
+        "registrationNo": "3912",
+        "racerName": "川原 正明",
+        "branch": "福井/石川",
+        "className": "A2",
+        "age": "52",
+        "weight": "52.1kg",
+        "nationalWinRate": "5.66",
+        "localWinRate": "6.11",
+        "motorNo": "16",
+        "motorRate": "39.81",
+        "boatNo": "53",
+        "boatRate": "32.77",
+        "avgST": "0.14",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "11",
+        "lane": "6",
+        "registrationNo": "4471",
+        "racerName": "新田 泰章",
+        "branch": "広島/広島",
+        "className": "A1",
+        "age": "39",
+        "weight": "52.7kg",
+        "nationalWinRate": "6.57",
+        "localWinRate": "7.22",
+        "motorNo": "36",
+        "motorRate": "33.16",
+        "boatNo": "57",
+        "boatRate": "34.39",
+        "avgST": "0.15",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "toda",
+      "raceNo": "11",
+      "weather": "曇",
+      "windDirection": "",
+      "windSpeed": "2",
+      "waveHeight": "1",
+      "airTemperature": "27.0",
+      "waterTemperature": "25.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "4",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "14",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "1",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "15",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "4",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "15",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "5",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "08",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "4",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "23",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "1",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "10",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "toda",
+      "raceNo": "11",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "toda",
+      "raceNo": "11",
+      "order": "",
+      "kimarite": "逃げ",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "1---2---6",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "1---2",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "780-4",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "220-1",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "140-1",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "1",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-07T09:45:41.843Z"
+  },
+  {
+    "date": "20260701",
+    "venueId": "toda",
+    "raceNo": "12",
+    "entries": [
+      {
+        "venueId": "toda",
+        "raceNo": "12",
+        "lane": "1",
+        "registrationNo": "3257",
+        "racerName": "田頭 実",
+        "branch": "福岡/福岡",
+        "className": "A2",
+        "age": "59",
+        "weight": "51.0kg",
+        "nationalWinRate": "6.63",
+        "localWinRate": "0.00",
+        "motorNo": "30",
+        "motorRate": "28.24",
+        "boatNo": "26",
+        "boatRate": "32.60",
+        "avgST": "0.13",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "12",
+        "lane": "2",
+        "registrationNo": "5035",
+        "racerName": "櫻井 優",
+        "branch": "埼玉/埼玉",
+        "className": "B1",
+        "age": "28",
+        "weight": "52.2kg",
+        "nationalWinRate": "5.59",
+        "localWinRate": "5.57",
+        "motorNo": "37",
+        "motorRate": "38.16",
+        "boatNo": "42",
+        "boatRate": "38.30",
+        "avgST": "0.17",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "12",
+        "lane": "3",
+        "registrationNo": "4072",
+        "racerName": "森永 淳",
+        "branch": "佐賀/佐賀",
+        "className": "A1",
+        "age": "45",
+        "weight": "51.5kg",
+        "nationalWinRate": "6.92",
+        "localWinRate": "0.00",
+        "motorNo": "7",
+        "motorRate": "29.74",
+        "boatNo": "51",
+        "boatRate": "30.73",
+        "avgST": "0.14",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "12",
+        "lane": "4",
+        "registrationNo": "5238",
+        "racerName": "笹木 香吾",
+        "branch": "山口/山口",
+        "className": "A2",
+        "age": "26",
+        "weight": "52.0kg",
+        "nationalWinRate": "5.68",
+        "localWinRate": "5.06",
+        "motorNo": "55",
+        "motorRate": "39.32",
+        "boatNo": "20",
+        "boatRate": "30.85",
+        "avgST": "0.14",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "12",
+        "lane": "5",
+        "registrationNo": "3473",
+        "racerName": "石川 真二",
+        "branch": "福岡/福岡",
+        "className": "A1",
+        "age": "56",
+        "weight": "51.5kg",
+        "nationalWinRate": "6.11",
+        "localWinRate": "6.58",
+        "motorNo": "3",
+        "motorRate": "30.48",
+        "boatNo": "59",
+        "boatRate": "42.55",
+        "avgST": "0.13",
+        "recentResults": ""
+      },
+      {
+        "venueId": "toda",
+        "raceNo": "12",
+        "lane": "6",
+        "registrationNo": "3627",
+        "racerName": "井上 恵一",
+        "branch": "福岡/福岡",
+        "className": "A2",
+        "age": "56",
+        "weight": "54.8kg",
+        "nationalWinRate": "4.96",
+        "localWinRate": "3.33",
+        "motorNo": "12",
+        "motorRate": "39.81",
+        "boatNo": "62",
+        "boatRate": "32.39",
+        "avgST": "0.18",
+        "recentResults": ""
+      }
+    ],
+    "beforeInfo": {
+      "venueId": "toda",
+      "raceNo": "12",
+      "weather": "曇",
+      "windDirection": "",
+      "windSpeed": "2",
+      "waveHeight": "1",
+      "airTemperature": "27.0",
+      "waterTemperature": "25.0",
+      "entries": [
+        {
+          "lane": "1",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "2",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "3",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "4",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "5",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        },
+        {
+          "lane": "6",
+          "course": "",
+          "exhibitionTime": "",
+          "exhibitionRank": "",
+          "tilt": "",
+          "startTiming": "",
+          "partsChange": ""
+        }
+      ]
+    },
+    "odds": {
+      "venueId": "toda",
+      "raceNo": "12",
+      "trifecta": [],
+      "exacta": [],
+      "quinella": [],
+      "quinellaPlace": []
+    },
+    "result": {
+      "venueId": "toda",
+      "raceNo": "12",
+      "order": "",
+      "kimarite": "まくり",
+      "finishers": [],
+      "payouts": [
+        {
+          "type": "3連単",
+          "ticket": "4---3---5",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連単",
+          "ticket": "4---3",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "3連複",
+          "ticket": "570-13",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "2連複",
+          "ticket": "280-7",
+          "payout": "2",
+          "popularity": ""
+        },
+        {
+          "type": "拡連複",
+          "ticket": "420-7",
+          "payout": "3",
+          "popularity": ""
+        },
+        {
+          "type": "単勝",
+          "ticket": "",
+          "payout": "4",
+          "popularity": ""
+        },
+        {
+          "type": "複勝",
+          "ticket": "",
+          "payout": "4",
+          "popularity": ""
+        }
+      ]
+    },
+    "importedAt": "2026-07-07T09:45:42.186Z"
+  }
+]

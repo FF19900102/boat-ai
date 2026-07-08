@@ -1,1 +1,20 @@
-import Link from'next/link';import{Venue}from'@/lib/types';export default function VenueCard({venue}:{venue:Venue}){return <Link href={`/venues?venue=${venue.id}`} className='card'><div className='row' style={{justifyContent:'space-between'}}><h3 style={{margin:0,fontSize:22}}>{venue.name}</h3><span className='badge'>{venue.isOpenToday?'本日開催':'休み'}</span></div><p className='muted'>{venue.region}</p><p className='muted'>{venue.weather.condition} / 風{venue.weather.windSpeed}m / 波{venue.weather.waveHeight}cm</p></Link>}
+{
+  "name": "boat-ai",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite",
+    "start": "vite --host 0.0.0.0",
+    "start:server": "node server/server.js"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "latest",
+    "express": "^5.2.1",
+    "lucide-react": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "typescript": "latest",
+    "vite": "latest"
+  }
+}

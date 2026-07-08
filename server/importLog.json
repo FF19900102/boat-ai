@@ -1,0 +1,341 @@
+[
+  {
+    "timestamp": "2026-07-07T10:31:00.748Z",
+    "dateFrom": "20260701",
+    "dateTo": "20260701",
+    "venueIds": [
+      "kiryu"
+    ],
+    "imported": 0,
+    "updated": 0,
+    "failed": 12,
+    "failedDetails": [
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "1",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=1&jcd=01&hd=20260701",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "2",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=2&jcd=01&hd=20260701",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "3",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=3&jcd=01&hd=20260701",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "4",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=4&jcd=01&hd=20260701",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "5",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=5&jcd=01&hd=20260701",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "6",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=6&jcd=01&hd=20260701",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "7",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=7&jcd=01&hd=20260701",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "8",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=8&jcd=01&hd=20260701",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "9",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=9&jcd=01&hd=20260701",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "10",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=10&jcd=01&hd=20260701",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "11",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=11&jcd=01&hd=20260701",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "12",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=12&jcd=01&hd=20260701",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-07-07T10:16:17.027Z",
+    "dateFrom": "20260701",
+    "dateTo": "20260701",
+    "venueIds": [
+      "kiryu"
+    ],
+    "imported": 0,
+    "updated": 0,
+    "failed": 12,
+    "failedDetails": [
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "1",
+        "reason": "network error",
+        "url": "https://www.boatrace.jp/owpc/pc/race/raceindex?jcd=01&hd=20260701",
+        "title": ""
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "2",
+        "reason": "network error",
+        "url": "https://www.boatrace.jp/owpc/pc/race/raceindex?jcd=01&hd=20260701",
+        "title": ""
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "3",
+        "reason": "network error",
+        "url": "https://www.boatrace.jp/owpc/pc/race/raceindex?jcd=01&hd=20260701",
+        "title": ""
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "4",
+        "reason": "network error",
+        "url": "https://www.boatrace.jp/owpc/pc/race/raceindex?jcd=01&hd=20260701",
+        "title": ""
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "5",
+        "reason": "network error",
+        "url": "https://www.boatrace.jp/owpc/pc/race/raceindex?jcd=01&hd=20260701",
+        "title": ""
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "6",
+        "reason": "network error",
+        "url": "https://www.boatrace.jp/owpc/pc/race/raceindex?jcd=01&hd=20260701",
+        "title": ""
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "7",
+        "reason": "network error",
+        "url": "https://www.boatrace.jp/owpc/pc/race/raceindex?jcd=01&hd=20260701",
+        "title": ""
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "8",
+        "reason": "network error",
+        "url": "https://www.boatrace.jp/owpc/pc/race/raceindex?jcd=01&hd=20260701",
+        "title": ""
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "9",
+        "reason": "network error",
+        "url": "https://www.boatrace.jp/owpc/pc/race/raceindex?jcd=01&hd=20260701",
+        "title": ""
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "10",
+        "reason": "network error",
+        "url": "https://www.boatrace.jp/owpc/pc/race/raceindex?jcd=01&hd=20260701",
+        "title": ""
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "11",
+        "reason": "network error",
+        "url": "https://www.boatrace.jp/owpc/pc/race/raceindex?jcd=01&hd=20260701",
+        "title": ""
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "12",
+        "reason": "network error",
+        "url": "https://www.boatrace.jp/owpc/pc/race/raceindex?jcd=01&hd=20260701",
+        "title": ""
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-07-07T10:00:21.217Z",
+    "dateFrom": "20260701",
+    "dateTo": "20260701",
+    "venueIds": [
+      "kiryu"
+    ],
+    "imported": 0,
+    "updated": 0,
+    "failed": 12,
+    "failedDetails": [
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "1",
+        "reason": "entries parse failed"
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "2",
+        "reason": "entries parse failed"
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "3",
+        "reason": "entries parse failed"
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "4",
+        "reason": "entries parse failed"
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "5",
+        "reason": "entries parse failed"
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "6",
+        "reason": "entries parse failed"
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "7",
+        "reason": "entries parse failed"
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "8",
+        "reason": "entries parse failed"
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "9",
+        "reason": "entries parse failed"
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "10",
+        "reason": "entries parse failed"
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "11",
+        "reason": "entries parse failed"
+      },
+      {
+        "date": "20260701",
+        "venueId": "kiryu",
+        "raceNo": "12",
+        "reason": "entries parse failed"
+      }
+    ]
+  }
+]

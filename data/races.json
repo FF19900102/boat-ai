@@ -1,0 +1,228 @@
+{
+  "浜名湖": {
+    "1": [
+      {"boat":1,"registrationNo":101,"name":"井上拓海","branch":"浜名湖","className":"A1","age":29,"nationalWin":6.8,"localWin":7.1,"national2Win":3.2,"local2Win":3.5,"avgSt":0.14,"motorRate":41,"boatRate":39,"exhibitionTime":6.72,"weight":53,"tilt":2,"currentForm":"6-4-2"},
+      {"boat":2,"registrationNo":102,"name":"宮川隼人","branch":"浜名湖","className":"A1","age":31,"nationalWin":6.4,"localWin":6.7,"national2Win":3.0,"local2Win":3.2,"avgSt":0.15,"motorRate":37,"boatRate":35,"exhibitionTime":6.78,"weight":54,"tilt":1,"currentForm":"5-3-1"},
+      {"boat":3,"registrationNo":103,"name":"藤田誠","branch":"愛知","className":"A2","age":34,"nationalWin":6.1,"localWin":6.3,"national2Win":2.8,"local2Win":3.0,"avgSt":0.16,"motorRate":33,"boatRate":32,"exhibitionTime":6.86,"weight":55,"tilt":0,"currentForm":"4-5-3"},
+      {"boat":4,"registrationNo":104,"name":"山内亮","branch":"静岡","className":"A2","age":27,"nationalWin":5.9,"localWin":6.1,"national2Win":2.7,"local2Win":2.9,"avgSt":0.17,"motorRate":31,"boatRate":30,"exhibitionTime":6.91,"weight":56,"tilt":-1,"currentForm":"3-4-5"},
+      {"boat":5,"registrationNo":105,"name":"佐々木翔","branch":"岐阜","className":"B1","age":36,"nationalWin":5.6,"localWin":5.9,"national2Win":2.4,"local2Win":2.6,"avgSt":0.18,"motorRate":29,"boatRate":28,"exhibitionTime":6.95,"weight":57,"tilt":-2,"currentForm":"2-6-4"},
+      {"boat":6,"registrationNo":106,"name":"渡辺大地","branch":"三重","className":"B1","age":33,"nationalWin":5.3,"localWin":5.5,"national2Win":2.2,"local2Win":2.4,"avgSt":0.19,"motorRate":27,"boatRate":26,"exhibitionTime":7.02,"weight":58,"tilt":-3,"currentForm":"1-5-6"}
+    ],
+    "2": [
+      {"boat":1,"registrationNo":107,"name":"小林直人","branch":"蒲郡","className":"A1","age":30,"nationalWin":6.9,"localWin":7.2,"national2Win":3.3,"local2Win":3.6,"avgSt":0.13,"motorRate":42,"boatRate":40,"exhibitionTime":6.68,"weight":52,"tilt":3,"currentForm":"7-3-1"},
+      {"boat":2,"registrationNo":108,"name":"高橋優","branch":"愛知","className":"A1","age":28,"nationalWin":6.6,"localWin":6.9,"national2Win":3.1,"local2Win":3.3,"avgSt":0.14,"motorRate":38,"boatRate":36,"exhibitionTime":6.74,"weight":53,"tilt":1,"currentForm":"6-2-2"},
+      {"boat":3,"registrationNo":109,"name":"石川大","branch":"静岡","className":"A2","age":32,"nationalWin":6.3,"localWin":6.5,"national2Win":2.9,"local2Win":3.1,"avgSt":0.15,"motorRate":34,"boatRate":33,"exhibitionTime":6.81,"weight":54,"tilt":0,"currentForm":"4-4-4"},
+      {"boat":4,"registrationNo":110,"name":"中村航","branch":"岐阜","className":"A2","age":26,"nationalWin":6.0,"localWin":6.2,"national2Win":2.7,"local2Win":2.9,"avgSt":0.16,"motorRate":32,"boatRate":31,"exhibitionTime":6.88,"weight":55,"tilt":-1,"currentForm":"3-5-5"},
+      {"boat":5,"registrationNo":111,"name":"加藤慎","branch":"三重","className":"B1","age":35,"nationalWin":5.8,"localWin":6.0,"national2Win":2.5,"local2Win":2.7,"avgSt":0.17,"motorRate":30,"boatRate":29,"exhibitionTime":6.93,"weight":56,"tilt":-2,"currentForm":"2-4-6"},
+      {"boat":6,"registrationNo":112,"name":"森田裕","branch":"兵庫","className":"B1","age":34,"nationalWin":5.4,"localWin":5.7,"national2Win":2.3,"local2Win":2.5,"avgSt":0.18,"motorRate":28,"boatRate":27,"exhibitionTime":7.00,"weight":57,"tilt":-3,"currentForm":"1-6-5"}
+    ],
+    "3": [
+      {"boat":1,"registrationNo":113,"name":"田中健太","branch":"浜名湖","className":"A1","age":30,"nationalWin":6.7,"localWin":7.0,"national2Win":3.1,"local2Win":3.4,"avgSt":0.14,"motorRate":39,"boatRate":37,"exhibitionTime":6.74,"weight":53,"tilt":2,"currentForm":"5-4-2"},
+      {"boat":2,"registrationNo":114,"name":"松本将","branch":"愛知","className":"A1","age":29,"nationalWin":6.5,"localWin":6.8,"national2Win":2.9,"local2Win":3.2,"avgSt":0.15,"motorRate":35,"boatRate":34,"exhibitionTime":6.79,"weight":54,"tilt":1,"currentForm":"4-3-3"},
+      {"boat":3,"registrationNo":115,"name":"伊藤悠","branch":"静岡","className":"A2","age":33,"nationalWin":6.2,"localWin":6.4,"national2Win":2.8,"local2Win":3.0,"avgSt":0.16,"motorRate":33,"boatRate":32,"exhibitionTime":6.85,"weight":55,"tilt":0,"currentForm":"4-5-2"},
+      {"boat":4,"registrationNo":116,"name":"吉田和也","branch":"岐阜","className":"A2","age":27,"nationalWin":6.0,"localWin":6.2,"national2Win":2.6,"local2Win":2.8,"avgSt":0.16,"motorRate":31,"boatRate":30,"exhibitionTime":6.90,"weight":56,"tilt":-1,"currentForm":"3-6-4"},
+      {"boat":5,"registrationNo":117,"name":"木村仁","branch":"三重","className":"B1","age":35,"nationalWin":5.7,"localWin":6.0,"national2Win":2.5,"local2Win":2.7,"avgSt":0.17,"motorRate":29,"boatRate":28,"exhibitionTime":6.96,"weight":57,"tilt":-2,"currentForm":"2-5-6"},
+      {"boat":6,"registrationNo":118,"name":"池田俊","branch":"兵庫","className":"B1","age":34,"nationalWin":5.3,"localWin":5.6,"national2Win":2.2,"local2Win":2.4,"avgSt":0.18,"motorRate":27,"boatRate":26,"exhibitionTime":7.03,"weight":58,"tilt":-3,"currentForm":"1-4-5"}
+    ],
+    "4": [
+      {"boat":1,"registrationNo":119,"name":"今野陽斗","branch":"浜名湖","className":"A1","age":31,"nationalWin":6.6,"localWin":6.9,"national2Win":3.0,"local2Win":3.3,"avgSt":0.15,"motorRate":38,"boatRate":36,"exhibitionTime":6.77,"weight":54,"tilt":1,"currentForm":"5-2-3"},
+      {"boat":2,"registrationNo":120,"name":"岸本真","branch":"愛知","className":"A1","age":28,"nationalWin":6.4,"localWin":6.7,"national2Win":2.9,"local2Win":3.1,"avgSt":0.15,"motorRate":35,"boatRate":34,"exhibitionTime":6.82,"weight":54,"tilt":0,"currentForm":"4-4-4"},
+      {"boat":3,"registrationNo":121,"name":"平野剛","branch":"静岡","className":"A2","age":32,"nationalWin":6.1,"localWin":6.3,"national2Win":2.7,"local2Win":2.9,"avgSt":0.16,"motorRate":33,"boatRate":32,"exhibitionTime":6.87,"weight":55,"tilt":0,"currentForm":"4-3-5"},
+      {"boat":4,"registrationNo":122,"name":"武田哲","branch":"岐阜","className":"A2","age":29,"nationalWin":5.9,"localWin":6.1,"national2Win":2.6,"local2Win":2.8,"avgSt":0.17,"motorRate":31,"boatRate":30,"exhibitionTime":6.92,"weight":56,"tilt":-1,"currentForm":"3-5-4"},
+      {"boat":5,"registrationNo":123,"name":"福田翔","branch":"三重","className":"B1","age":36,"nationalWin":5.7,"localWin":5.9,"national2Win":2.4,"local2Win":2.6,"avgSt":0.18,"motorRate":29,"boatRate":28,"exhibitionTime":6.97,"weight":57,"tilt":-2,"currentForm":"2-4-6"},
+      {"boat":6,"registrationNo":124,"name":"原田勝","branch":"兵庫","className":"B1","age":33,"nationalWin":5.4,"localWin":5.6,"national2Win":2.2,"local2Win":2.4,"avgSt":0.19,"motorRate":27,"boatRate":26,"exhibitionTime":7.04,"weight":58,"tilt":-3,"currentForm":"1-5-5"}
+    ],
+    "5": [
+      {"boat":1,"registrationNo":125,"name":"青木誠","branch":"浜名湖","className":"A1","age":30,"nationalWin":6.5,"localWin":6.8,"national2Win":3.0,"local2Win":3.2,"avgSt":0.14,"motorRate":37,"boatRate":35,"exhibitionTime":6.75,"weight":53,"tilt":2,"currentForm":"5-3-2"},
+      {"boat":2,"registrationNo":126,"name":"大島優","branch":"愛知","className":"A1","age":27,"nationalWin":6.3,"localWin":6.6,"national2Win":2.8,"local2Win":3.0,"avgSt":0.15,"motorRate":35,"boatRate":34,"exhibitionTime":6.80,"weight":54,"tilt":1,"currentForm":"4-2-4"},
+      {"boat":3,"registrationNo":127,"name":"辻本拓","branch":"静岡","className":"A2","age":32,"nationalWin":6.0,"localWin":6.2,"national2Win":2.6,"local2Win":2.8,"avgSt":0.16,"motorRate":32,"boatRate":31,"exhibitionTime":6.84,"weight":55,"tilt":0,"currentForm":"3-4-5"},
+      {"boat":4,"registrationNo":128,"name":"長谷川誠","branch":"岐阜","className":"A2","age":30,"nationalWin":5.8,"localWin":6.0,"national2Win":2.5,"local2Win":2.7,"avgSt":0.17,"motorRate":31,"boatRate":30,"exhibitionTime":6.90,"weight":56,"tilt":-1,"currentForm":"3-5-3"},
+      {"boat":5,"registrationNo":129,"name":"本田健","branch":"三重","className":"B1","age":35,"nationalWin":5.6,"localWin":5.8,"national2Win":2.3,"local2Win":2.5,"avgSt":0.18,"motorRate":29,"boatRate":28,"exhibitionTime":6.96,"weight":57,"tilt":-2,"currentForm":"2-4-6"},
+      {"boat":6,"registrationNo":130,"name":"近藤秀","branch":"兵庫","className":"B1","age":34,"nationalWin":5.2,"localWin":5.4,"national2Win":2.1,"local2Win":2.3,"avgSt":0.19,"motorRate":27,"boatRate":26,"exhibitionTime":7.02,"weight":58,"tilt":-3,"currentForm":"1-5-5"}
+    ],
+    "6": [
+      {"boat":1,"registrationNo":101,"name":"井上拓海","branch":"浜名湖","className":"A1","age":29,"nationalWin":6.8,"localWin":7.1,"national2Win":3.2,"local2Win":3.5,"avgSt":0.14,"motorRate":41,"boatRate":39,"exhibitionTime":6.72,"weight":53,"tilt":2,"currentForm":"6-4-2"},
+      {"boat":2,"registrationNo":102,"name":"宮川隼人","branch":"浜名湖","className":"A1","age":31,"nationalWin":6.4,"localWin":6.7,"national2Win":3.0,"local2Win":3.2,"avgSt":0.15,"motorRate":37,"boatRate":35,"exhibitionTime":6.78,"weight":54,"tilt":1,"currentForm":"5-3-1"},
+      {"boat":3,"registrationNo":103,"name":"藤田誠","branch":"愛知","className":"A2","age":34,"nationalWin":6.1,"localWin":6.3,"national2Win":2.8,"local2Win":3.0,"avgSt":0.16,"motorRate":33,"boatRate":32,"exhibitionTime":6.86,"weight":55,"tilt":0,"currentForm":"4-5-3"},
+      {"boat":4,"registrationNo":104,"name":"山内亮","branch":"静岡","className":"A2","age":27,"nationalWin":5.9,"localWin":6.1,"national2Win":2.7,"local2Win":2.9,"avgSt":0.17,"motorRate":31,"boatRate":30,"exhibitionTime":6.91,"weight":56,"tilt":-1,"currentForm":"3-4-5"},
+      {"boat":5,"registrationNo":105,"name":"佐々木翔","branch":"岐阜","className":"B1","age":36,"nationalWin":5.6,"localWin":5.9,"national2Win":2.4,"local2Win":2.6,"avgSt":0.18,"motorRate":29,"boatRate":28,"exhibitionTime":6.95,"weight":57,"tilt":-2,"currentForm":"2-6-4"},
+      {"boat":6,"registrationNo":106,"name":"渡辺大地","branch":"三重","className":"B1","age":33,"nationalWin":5.3,"localWin":5.5,"national2Win":2.2,"local2Win":2.4,"avgSt":0.19,"motorRate":27,"boatRate":26,"exhibitionTime":7.02,"weight":58,"tilt":-3,"currentForm":"1-5-6"}
+    ],
+    "7": [
+      {"boat":1,"registrationNo":107,"name":"小林直人","branch":"蒲郡","className":"A1","age":30,"nationalWin":6.9,"localWin":7.2,"national2Win":3.3,"local2Win":3.6,"avgSt":0.13,"motorRate":42,"boatRate":40,"exhibitionTime":6.68,"weight":52,"tilt":3,"currentForm":"7-3-1"},
+      {"boat":2,"registrationNo":108,"name":"高橋優","branch":"愛知","className":"A1","age":28,"nationalWin":6.6,"localWin":6.9,"national2Win":3.1,"local2Win":3.3,"avgSt":0.14,"motorRate":38,"boatRate":36,"exhibitionTime":6.74,"weight":53,"tilt":1,"currentForm":"6-2-2"},
+      {"boat":3,"registrationNo":109,"name":"石川大","branch":"静岡","className":"A2","age":32,"nationalWin":6.3,"localWin":6.5,"national2Win":2.9,"local2Win":3.1,"avgSt":0.15,"motorRate":34,"boatRate":33,"exhibitionTime":6.81,"weight":54,"tilt":0,"currentForm":"4-4-4"},
+      {"boat":4,"registrationNo":110,"name":"中村航","branch":"岐阜","className":"A2","age":26,"nationalWin":6.0,"localWin":6.2,"national2Win":2.7,"local2Win":2.9,"avgSt":0.16,"motorRate":32,"boatRate":31,"exhibitionTime":6.88,"weight":55,"tilt":-1,"currentForm":"3-5-5"},
+      {"boat":5,"registrationNo":111,"name":"加藤慎","branch":"三重","className":"B1","age":35,"nationalWin":5.8,"localWin":6.0,"national2Win":2.5,"local2Win":2.7,"avgSt":0.17,"motorRate":30,"boatRate":29,"exhibitionTime":6.93,"weight":56,"tilt":-2,"currentForm":"2-4-6"},
+      {"boat":6,"registrationNo":112,"name":"森田裕","branch":"兵庫","className":"B1","age":34,"nationalWin":5.4,"localWin":5.7,"national2Win":2.3,"local2Win":2.5,"avgSt":0.18,"motorRate":28,"boatRate":27,"exhibitionTime":7.00,"weight":57,"tilt":-3,"currentForm":"1-6-5"}
+    ],
+    "8": [
+      {"boat":1,"registrationNo":113,"name":"田中健太","branch":"浜名湖","className":"A1","age":30,"nationalWin":6.7,"localWin":7.0,"national2Win":3.1,"local2Win":3.4,"avgSt":0.14,"motorRate":39,"boatRate":37,"exhibitionTime":6.74,"weight":53,"tilt":2,"currentForm":"5-4-2"},
+      {"boat":2,"registrationNo":114,"name":"松本将","branch":"愛知","className":"A1","age":29,"nationalWin":6.5,"localWin":6.8,"national2Win":2.9,"local2Win":3.2,"avgSt":0.15,"motorRate":35,"boatRate":34,"exhibitionTime":6.79,"weight":54,"tilt":1,"currentForm":"4-3-3"},
+      {"boat":3,"registrationNo":115,"name":"伊藤悠","branch":"静岡","className":"A2","age":33,"nationalWin":6.2,"localWin":6.4,"national2Win":2.8,"local2Win":3.0,"avgSt":0.16,"motorRate":33,"boatRate":32,"exhibitionTime":6.85,"weight":55,"tilt":0,"currentForm":"4-5-2"},
+      {"boat":4,"registrationNo":116,"name":"吉田和也","branch":"岐阜","className":"A2","age":27,"nationalWin":6.0,"localWin":6.2,"national2Win":2.6,"local2Win":2.8,"avgSt":0.16,"motorRate":31,"boatRate":30,"exhibitionTime":6.90,"weight":56,"tilt":-1,"currentForm":"3-6-4"},
+      {"boat":5,"registrationNo":117,"name":"木村仁","branch":"三重","className":"B1","age":35,"nationalWin":5.7,"localWin":6.0,"national2Win":2.5,"local2Win":2.7,"avgSt":0.17,"motorRate":29,"boatRate":28,"exhibitionTime":6.96,"weight":57,"tilt":-2,"currentForm":"2-5-6"},
+      {"boat":6,"registrationNo":118,"name":"池田俊","branch":"兵庫","className":"B1","age":34,"nationalWin":5.3,"localWin":5.6,"national2Win":2.2,"local2Win":2.4,"avgSt":0.18,"motorRate":27,"boatRate":26,"exhibitionTime":7.03,"weight":58,"tilt":-3,"currentForm":"1-4-5"}
+    ],
+    "9": [
+      {"boat":1,"registrationNo":119,"name":"今野陽斗","branch":"浜名湖","className":"A1","age":31,"nationalWin":6.6,"localWin":6.9,"national2Win":3.0,"local2Win":3.3,"avgSt":0.15,"motorRate":38,"boatRate":36,"exhibitionTime":6.77,"weight":54,"tilt":1,"currentForm":"5-2-3"},
+      {"boat":2,"registrationNo":120,"name":"岸本真","branch":"愛知","className":"A1","age":28,"nationalWin":6.4,"localWin":6.7,"national2Win":2.9,"local2Win":3.1,"avgSt":0.15,"motorRate":35,"boatRate":34,"exhibitionTime":6.82,"weight":54,"tilt":0,"currentForm":"4-4-4"},
+      {"boat":3,"registrationNo":121,"name":"平野剛","branch":"静岡","className":"A2","age":32,"nationalWin":6.1,"localWin":6.3,"national2Win":2.7,"local2Win":2.9,"avgSt":0.16,"motorRate":33,"boatRate":32,"exhibitionTime":6.87,"weight":55,"tilt":0,"currentForm":"4-3-5"},
+      {"boat":4,"registrationNo":122,"name":"武田哲","branch":"岐阜","className":"A2","age":29,"nationalWin":5.9,"localWin":6.1,"national2Win":2.6,"local2Win":2.8,"avgSt":0.17,"motorRate":31,"boatRate":30,"exhibitionTime":6.92,"weight":56,"tilt":-1,"currentForm":"3-5-4"},
+      {"boat":5,"registrationNo":123,"name":"福田翔","branch":"三重","className":"B1","age":36,"nationalWin":5.7,"localWin":5.9,"national2Win":2.4,"local2Win":2.6,"avgSt":0.18,"motorRate":29,"boatRate":28,"exhibitionTime":6.97,"weight":57,"tilt":-2,"currentForm":"2-4-6"},
+      {"boat":6,"registrationNo":124,"name":"原田勝","branch":"兵庫","className":"B1","age":33,"nationalWin":5.4,"localWin":5.6,"national2Win":2.2,"local2Win":2.4,"avgSt":0.19,"motorRate":27,"boatRate":26,"exhibitionTime":7.04,"weight":58,"tilt":-3,"currentForm":"1-5-5"}
+    ],
+    "10": [
+      {"boat":1,"registrationNo":125,"name":"青木誠","branch":"浜名湖","className":"A1","age":30,"nationalWin":6.5,"localWin":6.8,"national2Win":3.0,"local2Win":3.2,"avgSt":0.14,"motorRate":37,"boatRate":35,"exhibitionTime":6.75,"weight":53,"tilt":2,"currentForm":"5-3-2"},
+      {"boat":2,"registrationNo":126,"name":"大島優","branch":"愛知","className":"A1","age":27,"nationalWin":6.3,"localWin":6.6,"national2Win":2.8,"local2Win":3.0,"avgSt":0.15,"motorRate":35,"boatRate":34,"exhibitionTime":6.80,"weight":54,"tilt":1,"currentForm":"4-2-4"},
+      {"boat":3,"registrationNo":127,"name":"辻本拓","branch":"静岡","className":"A2","age":32,"nationalWin":6.0,"localWin":6.2,"national2Win":2.6,"local2Win":2.8,"avgSt":0.16,"motorRate":32,"boatRate":31,"exhibitionTime":6.84,"weight":55,"tilt":0,"currentForm":"3-4-5"},
+      {"boat":4,"registrationNo":128,"name":"長谷川誠","branch":"岐阜","className":"A2","age":30,"nationalWin":5.8,"localWin":6.0,"national2Win":2.5,"local2Win":2.7,"avgSt":0.17,"motorRate":31,"boatRate":30,"exhibitionTime":6.90,"weight":56,"tilt":-1,"currentForm":"3-5-3"},
+      {"boat":5,"registrationNo":129,"name":"本田健","branch":"三重","className":"B1","age":35,"nationalWin":5.6,"localWin":5.8,"national2Win":2.3,"local2Win":2.5,"avgSt":0.18,"motorRate":29,"boatRate":28,"exhibitionTime":6.96,"weight":57,"tilt":-2,"currentForm":"2-4-6"},
+      {"boat":6,"registrationNo":130,"name":"近藤秀","branch":"兵庫","className":"B1","age":34,"nationalWin":5.2,"localWin":5.4,"national2Win":2.1,"local2Win":2.3,"avgSt":0.19,"motorRate":27,"boatRate":26,"exhibitionTime":7.02,"weight":58,"tilt":-3,"currentForm":"1-5-5"}
+    ],
+    "11": [
+      {"boat":1,"registrationNo":101,"name":"井上拓海","branch":"浜名湖","className":"A1","age":29,"nationalWin":6.8,"localWin":7.1,"national2Win":3.2,"local2Win":3.5,"avgSt":0.14,"motorRate":41,"boatRate":39,"exhibitionTime":6.72,"weight":53,"tilt":2,"currentForm":"6-4-2"},
+      {"boat":2,"registrationNo":102,"name":"宮川隼人","branch":"浜名湖","className":"A1","age":31,"nationalWin":6.4,"localWin":6.7,"national2Win":3.0,"local2Win":3.2,"avgSt":0.15,"motorRate":37,"boatRate":35,"exhibitionTime":6.78,"weight":54,"tilt":1,"currentForm":"5-3-1"},
+      {"boat":3,"registrationNo":103,"name":"藤田誠","branch":"愛知","className":"A2","age":34,"nationalWin":6.1,"localWin":6.3,"national2Win":2.8,"local2Win":3.0,"avgSt":0.16,"motorRate":33,"boatRate":32,"exhibitionTime":6.86,"weight":55,"tilt":0,"currentForm":"4-5-3"},
+      {"boat":4,"registrationNo":104,"name":"山内亮","branch":"静岡","className":"A2","age":27,"nationalWin":5.9,"localWin":6.1,"national2Win":2.7,"local2Win":2.9,"avgSt":0.17,"motorRate":31,"boatRate":30,"exhibitionTime":6.91,"weight":56,"tilt":-1,"currentForm":"3-4-5"},
+      {"boat":5,"registrationNo":105,"name":"佐々木翔","branch":"岐阜","className":"B1","age":36,"nationalWin":5.6,"localWin":5.9,"national2Win":2.4,"local2Win":2.6,"avgSt":0.18,"motorRate":29,"boatRate":28,"exhibitionTime":6.95,"weight":57,"tilt":-2,"currentForm":"2-6-4"},
+      {"boat":6,"registrationNo":106,"name":"渡辺大地","branch":"三重","className":"B1","age":33,"nationalWin":5.3,"localWin":5.5,"national2Win":2.2,"local2Win":2.4,"avgSt":0.19,"motorRate":27,"boatRate":26,"exhibitionTime":7.02,"weight":58,"tilt":-3,"currentForm":"1-5-6"}
+    ],
+    "12": [
+      {"boat":1,"registrationNo":107,"name":"小林直人","branch":"蒲郡","className":"A1","age":30,"nationalWin":6.9,"localWin":7.2,"national2Win":3.3,"local2Win":3.6,"avgSt":0.13,"motorRate":42,"boatRate":40,"exhibitionTime":6.68,"weight":52,"tilt":3,"currentForm":"7-3-1"},
+      {"boat":2,"registrationNo":108,"name":"高橋優","branch":"愛知","className":"A1","age":28,"nationalWin":6.6,"localWin":6.9,"national2Win":3.1,"local2Win":3.3,"avgSt":0.14,"motorRate":38,"boatRate":36,"exhibitionTime":6.74,"weight":53,"tilt":1,"currentForm":"6-2-2"},
+      {"boat":3,"registrationNo":109,"name":"石川大","branch":"静岡","className":"A2","age":32,"nationalWin":6.3,"localWin":6.5,"national2Win":2.9,"local2Win":3.1,"avgSt":0.15,"motorRate":34,"boatRate":33,"exhibitionTime":6.81,"weight":54,"tilt":0,"currentForm":"4-4-4"},
+      {"boat":4,"registrationNo":110,"name":"中村航","branch":"岐阜","className":"A2","age":26,"nationalWin":6.0,"localWin":6.2,"national2Win":2.7,"local2Win":2.9,"avgSt":0.16,"motorRate":32,"boatRate":31,"exhibitionTime":6.88,"weight":55,"tilt":-1,"currentForm":"3-5-5"},
+      {"boat":5,"registrationNo":111,"name":"加藤慎","branch":"三重","className":"B1","age":35,"nationalWin":5.8,"localWin":6.0,"national2Win":2.5,"local2Win":2.7,"avgSt":0.17,"motorRate":30,"boatRate":29,"exhibitionTime":6.93,"weight":56,"tilt":-2,"currentForm":"2-4-6"},
+      {"boat":6,"registrationNo":112,"name":"森田裕","branch":"兵庫","className":"B1","age":34,"nationalWin":5.4,"localWin":5.7,"national2Win":2.3,"local2Win":2.5,"avgSt":0.18,"motorRate":28,"boatRate":27,"exhibitionTime":7.00,"weight":57,"tilt":-3,"currentForm":"1-6-5"}
+    ]
+  },
+  "戸田": {
+    "1": [
+      {"boat":1,"registrationNo":201,"name":"佐藤真","branch":"戸田","className":"A1","age":29,"nationalWin":6.7,"localWin":7.0,"national2Win":3.0,"local2Win":3.4,"avgSt":0.14,"motorRate":39,"boatRate":37,"exhibitionTime":6.73,"weight":53,"tilt":2,"currentForm":"5-4-2"},
+      {"boat":2,"registrationNo":202,"name":"田辺剛","branch":"戸田","className":"A1","age":31,"nationalWin":6.3,"localWin":6.6,"national2Win":2.9,"local2Win":3.1,"avgSt":0.15,"motorRate":36,"boatRate":34,"exhibitionTime":6.79,"weight":54,"tilt":1,"currentForm":"4-3-3"},
+      {"boat":3,"registrationNo":203,"name":"西村慎","branch":"東京","className":"A2","age":33,"nationalWin":6.0,"localWin":6.2,"national2Win":2.7,"local2Win":2.9,"avgSt":0.16,"motorRate":33,"boatRate":32,"exhibitionTime":6.84,"weight":55,"tilt":0,"currentForm":"4-5-2"},
+      {"boat":4,"registrationNo":204,"name":"本間翔","branch":"埼玉","className":"A2","age":27,"nationalWin":5.8,"localWin":6.0,"national2Win":2.6,"local2Win":2.8,"avgSt":0.16,"motorRate":31,"boatRate":30,"exhibitionTime":6.90,"weight":56,"tilt":-1,"currentForm":"3-6-4"},
+      {"boat":5,"registrationNo":205,"name":"森脇亮","branch":"千葉","className":"B1","age":35,"nationalWin":5.6,"localWin":5.8,"national2Win":2.4,"local2Win":2.6,"avgSt":0.17,"motorRate":29,"boatRate":28,"exhibitionTime":6.96,"weight":57,"tilt":-2,"currentForm":"2-5-6"},
+      {"boat":6,"registrationNo":206,"name":"大橋拓","branch":"神奈川","className":"B1","age":34,"nationalWin":5.2,"localWin":5.4,"national2Win":2.2,"local2Win":2.4,"avgSt":0.18,"motorRate":27,"boatRate":26,"exhibitionTime":7.03,"weight":58,"tilt":-3,"currentForm":"1-4-5"}
+    ],
+    "2": [
+      {"boat":1,"registrationNo":207,"name":"藤原誠","branch":"戸田","className":"A1","age":28,"nationalWin":6.8,"localWin":7.1,"national2Win":3.1,"local2Win":3.5,"avgSt":0.13,"motorRate":40,"boatRate":38,"exhibitionTime":6.69,"weight":52,"tilt":3,"currentForm":"6-3-2"},
+      {"boat":2,"registrationNo":208,"name":"上野勇","branch":"戸田","className":"A1","age":30,"nationalWin":6.4,"localWin":6.7,"national2Win":2.9,"local2Win":3.2,"avgSt":0.14,"motorRate":37,"boatRate":35,"exhibitionTime":6.75,"weight":53,"tilt":1,"currentForm":"5-3-2"},
+      {"boat":3,"registrationNo":209,"name":"和田陸","branch":"東京","className":"A2","age":32,"nationalWin":6.1,"localWin":6.3,"national2Win":2.8,"local2Win":3.0,"avgSt":0.15,"motorRate":34,"boatRate":33,"exhibitionTime":6.80,"weight":54,"tilt":0,"currentForm":"4-4-4"},
+      {"boat":4,"registrationNo":210,"name":"北川弘","branch":"埼玉","className":"A2","age":26,"nationalWin":5.9,"localWin":6.1,"national2Win":2.6,"local2Win":2.8,"avgSt":0.16,"motorRate":32,"boatRate":31,"exhibitionTime":6.86,"weight":55,"tilt":-1,"currentForm":"3-5-5"},
+      {"boat":5,"registrationNo":211,"name":"小松仁","branch":"千葉","className":"B1","age":35,"nationalWin":5.7,"localWin":5.9,"national2Win":2.4,"local2Win":2.6,"avgSt":0.17,"motorRate":30,"boatRate":29,"exhibitionTime":6.92,"weight":56,"tilt":-2,"currentForm":"2-4-6"},
+      {"boat":6,"registrationNo":212,"name":"川崎晴","branch":"神奈川","className":"B1","age":34,"nationalWin":5.3,"localWin":5.5,"national2Win":2.2,"local2Win":2.4,"avgSt":0.18,"motorRate":28,"boatRate":27,"exhibitionTime":6.99,"weight":57,"tilt":-3,"currentForm":"1-5-5"}
+    ],
+    "3": [
+      {"boat":1,"registrationNo":213,"name":"関口裕","branch":"戸田","className":"A1","age":29,"nationalWin":6.6,"localWin":6.9,"national2Win":3.0,"local2Win":3.3,"avgSt":0.14,"motorRate":38,"boatRate":36,"exhibitionTime":6.74,"weight":53,"tilt":2,"currentForm":"5-3-2"},
+      {"boat":2,"registrationNo":214,"name":"堀江大","branch":"戸田","className":"A1","age":31,"nationalWin":6.2,"localWin":6.5,"national2Win":2.8,"local2Win":3.0,"avgSt":0.15,"motorRate":35,"boatRate":34,"exhibitionTime":6.80,"weight":54,"tilt":1,"currentForm":"4-4-3"},
+      {"boat":3,"registrationNo":215,"name":"浅野拓","branch":"東京","className":"A2","age":33,"nationalWin":6.0,"localWin":6.2,"national2Win":2.7,"local2Win":2.9,"avgSt":0.15,"motorRate":33,"boatRate":32,"exhibitionTime":6.85,"weight":55,"tilt":0,"currentForm":"4-5-2"},
+      {"boat":4,"registrationNo":216,"name":"山口慎","branch":"埼玉","className":"A2","age":27,"nationalWin":5.8,"localWin":6.0,"national2Win":2.6,"local2Win":2.8,"avgSt":0.16,"motorRate":31,"boatRate":30,"exhibitionTime":6.91,"weight":56,"tilt":-1,"currentForm":"3-6-4"},
+      {"boat":5,"registrationNo":217,"name":"朝倉晴","branch":"千葉","className":"B1","age":35,"nationalWin":5.6,"localWin":5.8,"national2Win":2.4,"local2Win":2.6,"avgSt":0.17,"motorRate":29,"boatRate":28,"exhibitionTime":6.96,"weight":57,"tilt":-2,"currentForm":"2-5-6"},
+      {"boat":6,"registrationNo":218,"name":"佐竹秀","branch":"神奈川","className":"B1","age":34,"nationalWin":5.2,"localWin":5.4,"national2Win":2.2,"local2Win":2.4,"avgSt":0.18,"motorRate":27,"boatRate":26,"exhibitionTime":7.02,"weight":58,"tilt":-3,"currentForm":"1-4-5"}
+    ],
+    "4": [
+      {"boat":1,"registrationNo":219,"name":"田上俊","branch":"戸田","className":"A1","age":31,"nationalWin":6.7,"localWin":6.9,"national2Win":3.0,"local2Win":3.3,"avgSt":0.14,"motorRate":39,"boatRate":37,"exhibitionTime":6.75,"weight":53,"tilt":2,"currentForm":"5-2-3"},
+      {"boat":2,"registrationNo":220,"name":"廣瀬誠","branch":"戸田","className":"A1","age":28,"nationalWin":6.3,"localWin":6.6,"national2Win":2.9,"local2Win":3.1,"avgSt":0.15,"motorRate":36,"boatRate":34,"exhibitionTime":6.81,"weight":54,"tilt":1,"currentForm":"4-4-4"},
+      {"boat":3,"registrationNo":221,"name":"古谷和","branch":"東京","className":"A2","age":32,"nationalWin":6.0,"localWin":6.2,"national2Win":2.7,"local2Win":2.9,"avgSt":0.15,"motorRate":33,"boatRate":32,"exhibitionTime":6.86,"weight":55,"tilt":0,"currentForm":"4-3-5"},
+      {"boat":4,"registrationNo":222,"name":"伊沢直","branch":"埼玉","className":"A2","age":29,"nationalWin":5.8,"localWin":6.0,"national2Win":2.6,"local2Win":2.8,"avgSt":0.16,"motorRate":31,"boatRate":30,"exhibitionTime":6.92,"weight":56,"tilt":-1,"currentForm":"3-5-4"},
+      {"boat":5,"registrationNo":223,"name":"松永竜","branch":"千葉","className":"B1","age":35,"nationalWin":5.6,"localWin":5.8,"national2Win":2.4,"local2Win":2.6,"avgSt":0.17,"motorRate":29,"boatRate":28,"exhibitionTime":6.97,"weight":57,"tilt":-2,"currentForm":"2-4-6"},
+      {"boat":6,"registrationNo":224,"name":"長田勝","branch":"神奈川","className":"B1","age":33,"nationalWin":5.2,"localWin":5.4,"national2Win":2.2,"local2Win":2.4,"avgSt":0.18,"motorRate":27,"boatRate":26,"exhibitionTime":7.04,"weight":58,"tilt":-3,"currentForm":"1-5-5"}
+    ],
+    "5": [
+      {"boat":1,"registrationNo":225,"name":"杉浦大","branch":"戸田","className":"A1","age":30,"nationalWin":6.6,"localWin":6.8,"national2Win":3.0,"local2Win":3.2,"avgSt":0.14,"motorRate":38,"boatRate":36,"exhibitionTime":6.76,"weight":53,"tilt":2,"currentForm":"5-3-2"},
+      {"boat":2,"registrationNo":226,"name":"高野晴","branch":"戸田","className":"A1","age":27,"nationalWin":6.3,"localWin":6.5,"national2Win":2.8,"local2Win":3.0,"avgSt":0.15,"motorRate":35,"boatRate":34,"exhibitionTime":6.81,"weight":54,"tilt":1,"currentForm":"4-2-4"},
+      {"boat":3,"registrationNo":227,"name":"金子拓","branch":"東京","className":"A2","age":32,"nationalWin":6.0,"localWin":6.2,"national2Win":2.7,"local2Win":2.9,"avgSt":0.15,"motorRate":33,"boatRate":32,"exhibitionTime":6.85,"weight":55,"tilt":0,"currentForm":"3-4-5"},
+      {"boat":4,"registrationNo":228,"name":"内山誠","branch":"埼玉","className":"A2","age":30,"nationalWin":5.8,"localWin":6.0,"national2Win":2.6,"local2Win":2.8,"avgSt":0.16,"motorRate":31,"boatRate":30,"exhibitionTime":6.90,"weight":56,"tilt":-1,"currentForm":"3-5-3"},
+      {"boat":5,"registrationNo":229,"name":"宮坂秀","branch":"千葉","className":"B1","age":35,"nationalWin":5.6,"localWin":5.8,"national2Win":2.4,"local2Win":2.6,"avgSt":0.17,"motorRate":29,"boatRate":28,"exhibitionTime":6.95,"weight":57,"tilt":-2,"currentForm":"2-4-6"},
+      {"boat":6,"registrationNo":230,"name":"真壁拓","branch":"神奈川","className":"B1","age":34,"nationalWin":5.2,"localWin":5.4,"national2Win":2.2,"local2Win":2.4,"avgSt":0.18,"motorRate":27,"boatRate":26,"exhibitionTime":7.01,"weight":58,"tilt":-3,"currentForm":"1-5-5"}
+    ],
+    "6": [
+      {"boat":1,"registrationNo":231,"name":"大久保晴","branch":"戸田","className":"A1","age":31,"nationalWin":6.7,"localWin":6.9,"national2Win":3.0,"local2Win":3.3,"avgSt":0.14,"motorRate":39,"boatRate":37,"exhibitionTime":6.74,"weight":53,"tilt":2,"currentForm":"5-2-3"},
+      {"boat":2,"registrationNo":232,"name":"松川真","branch":"戸田","className":"A1","age":28,"nationalWin":6.3,"localWin":6.6,"national2Win":2.9,"local2Win":3.1,"avgSt":0.15,"motorRate":36,"boatRate":34,"exhibitionTime":6.80,"weight":54,"tilt":1,"currentForm":"4-4-4"},
+      {"boat":3,"registrationNo":233,"name":"中井和","branch":"東京","className":"A2","age":32,"nationalWin":6.0,"localWin":6.2,"national2Win":2.7,"local2Win":2.9,"avgSt":0.15,"motorRate":33,"boatRate":32,"exhibitionTime":6.85,"weight":55,"tilt":0,"currentForm":"4-3-5"},
+      {"boat":4,"registrationNo":234,"name":"湊直","branch":"埼玉","className":"A2","age":29,"nationalWin":5.8,"localWin":6.0,"national2Win":2.6,"local2Win":2.8,"avgSt":0.16,"motorRate":31,"boatRate":30,"exhibitionTime":6.91,"weight":56,"tilt":-1,"currentForm":"3-5-4"},
+      {"boat":5,"registrationNo":235,"name":"岡本秀","branch":"千葉","className":"B1","age":35,"nationalWin":5.6,"localWin":5.8,"national2Win":2.4,"local2Win":2.6,"avgSt":0.17,"motorRate":29,"boatRate":28,"exhibitionTime":6.96,"weight":57,"tilt":-2,"currentForm":"2-4-6"},
+      {"boat":6,"registrationNo":236,"name":"久保拓","branch":"神奈川","className":"B1","age":34,"nationalWin":5.2,"localWin":5.4,"national2Win":2.2,"local2Win":2.4,"avgSt":0.18,"motorRate":27,"boatRate":26,"exhibitionTime":7.03,"weight":58,"tilt":-3,"currentForm":"1-5-5"}
+    ]
+  },
+  "蒲郡": {
+    "1": [
+      {"boat":1,"registrationNo":301,"name":"白石哲","branch":"蒲郡","className":"A1","age":29,"nationalWin":6.8,"localWin":7.2,"national2Win":3.2,"local2Win":3.6,"avgSt":0.13,"motorRate":41,"boatRate":39,"exhibitionTime":6.69,"weight":52,"tilt":3,"currentForm":"6-4-2"},
+      {"boat":2,"registrationNo":302,"name":"川上翔","branch":"蒲郡","className":"A1","age":31,"nationalWin":6.4,"localWin":6.8,"national2Win":3.0,"local2Win":3.2,"avgSt":0.14,"motorRate":37,"boatRate":35,"exhibitionTime":6.75,"weight":53,"tilt":1,"currentForm":"5-3-1"},
+      {"boat":3,"registrationNo":303,"name":"藤本大","branch":"愛知","className":"A2","age":34,"nationalWin":6.1,"localWin":6.3,"national2Win":2.8,"local2Win":3.0,"avgSt":0.15,"motorRate":33,"boatRate":32,"exhibitionTime":6.82,"weight":54,"tilt":0,"currentForm":"4-5-3"},
+      {"boat":4,"registrationNo":304,"name":"下田誠","branch":"静岡","className":"A2","age":27,"nationalWin":5.9,"localWin":6.1,"national2Win":2.7,"local2Win":2.9,"avgSt":0.16,"motorRate":31,"boatRate":30,"exhibitionTime":6.88,"weight":56,"tilt":-1,"currentForm":"3-4-5"},
+      {"boat":5,"registrationNo":305,"name":"石原亮","branch":"三重","className":"B1","age":36,"nationalWin":5.6,"localWin":5.9,"national2Win":2.4,"local2Win":2.6,"avgSt":0.17,"motorRate":29,"boatRate":28,"exhibitionTime":6.94,"weight":57,"tilt":-2,"currentForm":"2-6-4"},
+      {"boat":6,"registrationNo":306,"name":"井沢和","branch":"岐阜","className":"B1","age":33,"nationalWin":5.3,"localWin":5.5,"national2Win":2.2,"local2Win":2.4,"avgSt":0.18,"motorRate":27,"boatRate":26,"exhibitionTime":7.00,"weight":58,"tilt":-3,"currentForm":"1-5-6"}
+    ],
+    "2": [
+      {"boat":1,"registrationNo":307,"name":"新井秀","branch":"蒲郡","className":"A1","age":30,"nationalWin":6.7,"localWin":7.0,"national2Win":3.1,"local2Win":3.4,"avgSt":0.14,"motorRate":39,"boatRate":37,"exhibitionTime":6.72,"weight":53,"tilt":2,"currentForm":"5-4-2"},
+      {"boat":2,"registrationNo":308,"name":"岸田悟","branch":"蒲郡","className":"A1","age":28,"nationalWin":6.4,"localWin":6.7,"national2Win":2.9,"local2Win":3.1,"avgSt":0.15,"motorRate":35,"boatRate":34,"exhibitionTime":6.78,"weight":54,"tilt":1,"currentForm":"4-3-3"},
+      {"boat":3,"registrationNo":309,"name":"木下直","branch":"愛知","className":"A2","age":32,"nationalWin":6.1,"localWin":6.3,"national2Win":2.8,"local2Win":3.0,"avgSt":0.15,"motorRate":33,"boatRate":32,"exhibitionTime":6.84,"weight":55,"tilt":0,"currentForm":"4-5-2"},
+      {"boat":4,"registrationNo":310,"name":"田辺慎","branch":"静岡","className":"A2","age":26,"nationalWin":5.8,"localWin":6.0,"national2Win":2.6,"local2Win":2.8,"avgSt":0.16,"motorRate":31,"boatRate":30,"exhibitionTime":6.90,"weight":56,"tilt":-1,"currentForm":"3-6-4"},
+      {"boat":5,"registrationNo":311,"name":"小野晴","branch":"三重","className":"B1","age":35,"nationalWin":5.6,"localWin":5.8,"national2Win":2.4,"local2Win":2.6,"avgSt":0.17,"motorRate":29,"boatRate":28,"exhibitionTime":6.95,"weight":57,"tilt":-2,"currentForm":"2-5-6"},
+      {"boat":6,"registrationNo":312,"name":"峰岸拓","branch":"岐阜","className":"B1","age":34,"nationalWin":5.2,"localWin":5.4,"national2Win":2.2,"local2Win":2.4,"avgSt":0.18,"motorRate":27,"boatRate":26,"exhibitionTime":7.01,"weight":58,"tilt":-3,"currentForm":"1-4-5"}
+    ],
+    "3": [
+      {"boat":1,"registrationNo":313,"name":"安部誠","branch":"蒲郡","className":"A1","age":30,"nationalWin":6.8,"localWin":7.1,"national2Win":3.1,"local2Win":3.4,"avgSt":0.14,"motorRate":40,"boatRate":38,"exhibitionTime":6.71,"weight":53,"tilt":2,"currentForm":"5-3-2"},
+      {"boat":2,"registrationNo":314,"name":"桜井勇","branch":"蒲郡","className":"A1","age":28,"nationalWin":6.4,"localWin":6.7,"national2Win":2.9,"local2Win":3.1,"avgSt":0.15,"motorRate":36,"boatRate":34,"exhibitionTime":6.77,"weight":54,"tilt":1,"currentForm":"4-4-3"},
+      {"boat":3,"registrationNo":315,"name":"武田和","branch":"愛知","className":"A2","age":32,"nationalWin":6.0,"localWin":6.2,"national2Win":2.7,"local2Win":2.9,"avgSt":0.15,"motorRate":33,"boatRate":32,"exhibitionTime":6.83,"weight":55,"tilt":0,"currentForm":"4-3-5"},
+      {"boat":4,"registrationNo":316,"name":"村上直","branch":"静岡","className":"A2","age":29,"nationalWin":5.8,"localWin":6.0,"national2Win":2.6,"local2Win":2.8,"avgSt":0.16,"motorRate":31,"boatRate":30,"exhibitionTime":6.89,"weight":56,"tilt":-1,"currentForm":"3-5-4"},
+      {"boat":5,"registrationNo":317,"name":"高山秀","branch":"三重","className":"B1","age":35,"nationalWin":5.6,"localWin":5.8,"national2Win":2.4,"local2Win":2.6,"avgSt":0.17,"motorRate":29,"boatRate":28,"exhibitionTime":6.94,"weight":57,"tilt":-2,"currentForm":"2-4-6"},
+      {"boat":6,"registrationNo":318,"name":"佐野拓","branch":"岐阜","className":"B1","age":34,"nationalWin":5.2,"localWin":5.4,"national2Win":2.2,"local2Win":2.4,"avgSt":0.18,"motorRate":27,"boatRate":26,"exhibitionTime":7.00,"weight":58,"tilt":-3,"currentForm":"1-5-5"}
+    ]
+  },
+  "常滑": {
+    "1": [
+      {"boat":1,"registrationNo":401,"name":"森本晴","branch":"常滑","className":"A1","age":29,"nationalWin":6.7,"localWin":7.0,"national2Win":3.0,"local2Win":3.3,"avgSt":0.14,"motorRate":39,"boatRate":37,"exhibitionTime":6.73,"weight":53,"tilt":2,"currentForm":"5-4-2"},
+      {"boat":2,"registrationNo":402,"name":"永井誠","branch":"常滑","className":"A1","age":31,"nationalWin":6.3,"localWin":6.6,"national2Win":2.9,"local2Win":3.1,"avgSt":0.15,"motorRate":36,"boatRate":34,"exhibitionTime":6.79,"weight":54,"tilt":1,"currentForm":"4-3-3"},
+      {"boat":3,"registrationNo":403,"name":"福井和","branch":"愛知","className":"A2","age":33,"nationalWin":6.0,"localWin":6.2,"national2Win":2.7,"local2Win":2.9,"avgSt":0.15,"motorRate":33,"boatRate":32,"exhibitionTime":6.84,"weight":55,"tilt":0,"currentForm":"4-5-2"},
+      {"boat":4,"registrationNo":404,"name":"大塚直","branch":"静岡","className":"A2","age":27,"nationalWin":5.8,"localWin":6.0,"national2Win":2.6,"local2Win":2.8,"avgSt":0.16,"motorRate":31,"boatRate":30,"exhibitionTime":6.90,"weight":56,"tilt":-1,"currentForm":"3-6-4"},
+      {"boat":5,"registrationNo":405,"name":"橋口秀","branch":"三重","className":"B1","age":35,"nationalWin":5.6,"localWin":5.8,"national2Win":2.4,"local2Win":2.6,"avgSt":0.17,"motorRate":29,"boatRate":28,"exhibitionTime":6.96,"weight":57,"tilt":-2,"currentForm":"2-5-6"},
+      {"boat":6,"registrationNo":406,"name":"相馬拓","branch":"岐阜","className":"B1","age":34,"nationalWin":5.2,"localWin":5.4,"national2Win":2.2,"local2Win":2.4,"avgSt":0.18,"motorRate":27,"boatRate":26,"exhibitionTime":7.02,"weight":58,"tilt":-3,"currentForm":"1-4-5"}
+    ],
+    "2": [
+      {"boat":1,"registrationNo":407,"name":"秋山誠","branch":"常滑","className":"A1","age":28,"nationalWin":6.8,"localWin":7.1,"national2Win":3.1,"local2Win":3.5,"avgSt":0.13,"motorRate":40,"boatRate":38,"exhibitionTime":6.70,"weight":52,"tilt":3,"currentForm":"6-3-2"},
+      {"boat":2,"registrationNo":408,"name":"三好勇","branch":"常滑","className":"A1","age":30,"nationalWin":6.4,"localWin":6.7,"national2Win":2.9,"local2Win":3.2,"avgSt":0.14,"motorRate":37,"boatRate":35,"exhibitionTime":6.76,"weight":53,"tilt":1,"currentForm":"5-3-2"},
+      {"boat":3,"registrationNo":409,"name":"小澤和","branch":"愛知","className":"A2","age":32,"nationalWin":6.1,"localWin":6.3,"national2Win":2.8,"local2Win":3.0,"avgSt":0.15,"motorRate":34,"boatRate":33,"exhibitionTime":6.81,"weight":54,"tilt":0,"currentForm":"4-4-4"},
+      {"boat":4,"registrationNo":410,"name":"矢野直","branch":"静岡","className":"A2","age":26,"nationalWin":5.9,"localWin":6.1,"national2Win":2.6,"local2Win":2.8,"avgSt":0.16,"motorRate":32,"boatRate":31,"exhibitionTime":6.87,"weight":55,"tilt":-1,"currentForm":"3-5-5"},
+      {"boat":5,"registrationNo":411,"name":"池谷秀","branch":"三重","className":"B1","age":35,"nationalWin":5.7,"localWin":5.9,"national2Win":2.4,"local2Win":2.6,"avgSt":0.17,"motorRate":30,"boatRate":29,"exhibitionTime":6.92,"weight":56,"tilt":-2,"currentForm":"2-4-6"},
+      {"boat":6,"registrationNo":412,"name":"坂口拓","branch":"岐阜","className":"B1","age":34,"nationalWin":5.3,"localWin":5.5,"national2Win":2.2,"local2Win":2.4,"avgSt":0.18,"motorRate":28,"boatRate":27,"exhibitionTime":6.99,"weight":57,"tilt":-3,"currentForm":"1-5-5"}
+    ],
+    "3": [
+      {"boat":1,"registrationNo":413,"name":"石井晴","branch":"常滑","className":"A1","age":29,"nationalWin":6.6,"localWin":6.9,"national2Win":3.0,"local2Win":3.3,"avgSt":0.14,"motorRate":38,"boatRate":36,"exhibitionTime":6.74,"weight":53,"tilt":2,"currentForm":"5-3-2"},
+      {"boat":2,"registrationNo":414,"name":"中西勇","branch":"常滑","className":"A1","age":31,"nationalWin":6.2,"localWin":6.5,"national2Win":2.8,"local2Win":3.0,"avgSt":0.15,"motorRate":35,"boatRate":34,"exhibitionTime":6.80,"weight":54,"tilt":1,"currentForm":"4-4-3"},
+      {"boat":3,"registrationNo":415,"name":"横山和","branch":"愛知","className":"A2","age":33,"nationalWin":6.0,"localWin":6.2,"national2Win":2.7,"local2Win":2.9,"avgSt":0.15,"motorRate":33,"boatRate":32,"exhibitionTime":6.85,"weight":55,"tilt":0,"currentForm":"4-3-5"},
+      {"boat":4,"registrationNo":416,"name":"近藤直","branch":"静岡","className":"A2","age":27,"nationalWin":5.8,"localWin":6.0,"national2Win":2.6,"local2Win":2.8,"avgSt":0.16,"motorRate":31,"boatRate":30,"exhibitionTime":6.91,"weight":56,"tilt":-1,"currentForm":"3-5-4"},
+      {"boat":5,"registrationNo":417,"name":"本多秀","branch":"三重","className":"B1","age":35,"nationalWin":5.6,"localWin":5.8,"national2Win":2.4,"local2Win":2.6,"avgSt":0.17,"motorRate":29,"boatRate":28,"exhibitionTime":6.96,"weight":57,"tilt":-2,"currentForm":"2-4-6"},
+      {"boat":6,"registrationNo":418,"name":"古賀拓","branch":"岐阜","className":"B1","age":34,"nationalWin":5.2,"localWin":5.4,"national2Win":2.2,"local2Win":2.4,"avgSt":0.18,"motorRate":27,"boatRate":26,"exhibitionTime":7.02,"weight":58,"tilt":-3,"currentForm":"1-5-5"}
+    ]
+  },
+  "大村": {
+    "1": [
+      {"boat":1,"registrationNo":501,"name":"岡田誠","branch":"大村","className":"A1","age":29,"nationalWin":6.7,"localWin":7.0,"national2Win":3.0,"local2Win":3.3,"avgSt":0.14,"motorRate":39,"boatRate":37,"exhibitionTime":6.74,"weight":53,"tilt":2,"currentForm":"5-4-2"},
+      {"boat":2,"registrationNo":502,"name":"吉野勇","branch":"大村","className":"A1","age":31,"nationalWin":6.3,"localWin":6.6,"national2Win":2.9,"local2Win":3.1,"avgSt":0.15,"motorRate":36,"boatRate":34,"exhibitionTime":6.80,"weight":54,"tilt":1,"currentForm":"4-3-3"},
+      {"boat":3,"registrationNo":503,"name":"山田和","branch":"長崎","className":"A2","age":33,"nationalWin":6.0,"localWin":6.2,"national2Win":2.7,"local2Win":2.9,"avgSt":0.15,"motorRate":33,"boatRate":32,"exhibitionTime":6.85,"weight":55,"tilt":0,"currentForm":"4-5-2"},
+      {"boat":4,"registrationNo":504,"name":"村田直","branch":"熊本","className":"A2","age":27,"nationalWin":5.8,"localWin":6.0,"national2Win":2.6,"local2Win":2.8,"avgSt":0.16,"motorRate":31,"boatRate":30,"exhibitionTime":6.91,"weight":56,"tilt":-1,"currentForm":"3-6-4"},
+      {"boat":5,"registrationNo":505,"name":"堀口秀","branch":"鹿児島","className":"B1","age":35,"nationalWin":5.6,"localWin":5.8,"national2Win":2.4,"local2Win":2.6,"avgSt":0.17,"motorRate":29,"boatRate":28,"exhibitionTime":6.96,"weight":57,"tilt":-2,"currentForm":"2-5-6"},
+      {"boat":6,"registrationNo":506,"name":"藤川拓","branch":"福岡","className":"B1","age":34,"nationalWin":5.2,"localWin":5.4,"national2Win":2.2,"local2Win":2.4,"avgSt":0.18,"motorRate":27,"boatRate":26,"exhibitionTime":7.02,"weight":58,"tilt":-3,"currentForm":"1-4-5"}
+    ],
+    "2": [
+      {"boat":1,"registrationNo":507,"name":"寺田誠","branch":"大村","className":"A1","age":28,"nationalWin":6.8,"localWin":7.1,"national2Win":3.1,"local2Win":3.5,"avgSt":0.13,"motorRate":40,"boatRate":38,"exhibitionTime":6.71,"weight":52,"tilt":3,"currentForm":"6-3-2"},
+      {"boat":2,"registrationNo":508,"name":"山本勇","branch":"大村","className":"A1","age":30,"nationalWin":6.4,"localWin":6.7,"national2Win":2.9,"local2Win":3.2,"avgSt":0.14,"motorRate":37,"boatRate":35,"exhibitionTime":6.77,"weight":53,"tilt":1,"currentForm":"5-3-2"},
+      {"boat":3,"registrationNo":509,"name":"渡辺和","branch":"長崎","className":"A2","age":32,"nationalWin":6.1,"localWin":6.3,"national2Win":2.8,"local2Win":3.0,"avgSt":0.15,"motorRate":34,"boatRate":33,"exhibitionTime":6.82,"weight":54,"tilt":0,"currentForm":"4-4-4"},
+      {"boat":4,"registrationNo":510,"name":"西田直","branch":"熊本","className":"A2","age":26,"nationalWin":5.9,"localWin":6.1,"national2Win":2.6,"local2Win":2.8,"avgSt":0.16,"motorRate":32,"boatRate":31,"exhibitionTime":6.88,"weight":55,"tilt":-1,"currentForm":"3-5-5"},
+      {"boat":5,"registrationNo":511,"name":"小田秀","branch":"鹿児島","className":"B1","age":35,"nationalWin":5.7,"localWin":5.9,"national2Win":2.4,"local2Win":2.6,"avgSt":0.17,"motorRate":30,"boatRate":29,"exhibitionTime":6.93,"weight":56,"tilt":-2,"currentForm":"2-4-6"},
+      {"boat":6,"registrationNo":512,"name":"高瀬拓","branch":"福岡","className":"B1","age":34,"nationalWin":5.3,"localWin":5.5,"national2Win":2.2,"local2Win":2.4,"avgSt":0.18,"motorRate":28,"boatRate":27,"exhibitionTime":6.99,"weight":57,"tilt":-3,"currentForm":"1-5-5"}
+    ],
+    "3": [
+      {"boat":1,"registrationNo":513,"name":"細川晴","branch":"大村","className":"A1","age":29,"nationalWin":6.6,"localWin":6.9,"national2Win":3.0,"local2Win":3.3,"avgSt":0.14,"motorRate":38,"boatRate":36,"exhibitionTime":6.75,"weight":53,"tilt":2,"currentForm":"5-3-2"},
+      {"boat":2,"registrationNo":514,"name":"向井勇","branch":"大村","className":"A1","age":31,"nationalWin":6.2,"localWin":6.5,"national2Win":2.8,"local2Win":3.0,"avgSt":0.15,"motorRate":35,"boatRate":34,"exhibitionTime":6.81,"weight":54,"tilt":1,"currentForm":"4-4-3"},
+      {"boat":3,"registrationNo":515,"name":"長谷和","branch":"長崎","className":"A2","age":33,"nationalWin":6.0,"localWin":6.2,"national2Win":2.7,"local2Win":2.9,"avgSt":0.15,"motorRate":33,"boatRate":32,"exhibitionTime":6.86,"weight":55,"tilt":0,"currentForm":"4-3-5"},
+      {"boat":4,"registrationNo":516,"name":"中島直","branch":"熊本","className":"A2","age":27,"nationalWin":5.8,"localWin":6.0,"national2Win":2.6,"local2Win":2.8,"avgSt":0.16,"motorRate":31,"boatRate":30,"exhibitionTime":6.92,"weight":56,"tilt":-1,"currentForm":"3-5-4"},
+      {"boat":5,"registrationNo":517,"name":"野口秀","branch":"鹿児島","className":"B1","age":35,"nationalWin":5.6,"localWin":5.8,"national2Win":2.4,"local2Win":2.6,"avgSt":0.17,"motorRate":29,"boatRate":28,"exhibitionTime":6.97,"weight":57,"tilt":-2,"currentForm":"2-4-6"},
+      {"boat":6,"registrationNo":518,"name":"河野拓","branch":"福岡","className":"B1","age":34,"nationalWin":5.2,"localWin":5.4,"national2Win":2.2,"local2Win":2.4,"avgSt":0.18,"motorRate":27,"boatRate":26,"exhibitionTime":7.03,"weight":58,"tilt":-3,"currentForm":"1-5-5"}
+    ]
+  }
+}

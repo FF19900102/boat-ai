@@ -5,6 +5,400 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Boat AI</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .today-conclusion-card {
+      background: linear-gradient(160deg, #fff7ed 0%, #fff 60%);
+      border: 1px solid #fdba74;
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .today-conclusion-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .today-fire {
+      font-weight: 900;
+      font-size: 20px;
+      line-height: 1.2;
+      color: #9a3412;
+    }
+    .today-race-main {
+      font-size: 30px;
+      font-weight: 900;
+      line-height: 1.1;
+      color: #1f2937;
+      margin: 6px 0 10px;
+    }
+    .today-main-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .today-main-item {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 10px;
+    }
+    .today-main-item span {
+      display: block;
+      color: #6b7280;
+      font-size: 11px;
+      font-weight: 800;
+      margin-bottom: 3px;
+    }
+    .today-main-item strong {
+      font-size: 22px;
+      line-height: 1.15;
+      color: #111827;
+    }
+    .value-ranking-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin: 10px 0;
+    }
+    .value-ranking-card {
+      background: #fff;
+      border: 1px solid #c4b5fd;
+      border-radius: 14px;
+      padding: 10px 12px;
+      box-shadow: 0 8px 24px rgba(76, 29, 149, 0.06);
+    }
+    .value-ranking-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .value-stars {
+      color: #d97706;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+    }
+    .value-label {
+      background: #ede9fe;
+      color: #5b21b6;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .value-ranking-combo {
+      font-size: 24px;
+      font-weight: 900;
+      line-height: 1.1;
+      color: #111827;
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+    }
+    .value-ranking-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      color: #4b5563;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .value-ranking-meta span {
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 999px;
+      padding: 4px 8px;
+    }
+    .ev-chip {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 15px;
+      font-weight: 900;
+      border: 1px solid transparent;
+    }
+    .ev-130 {
+      background: #dcfce7;
+      border-color: #86efac;
+      color: #166534;
+    }
+    .ev-110 {
+      background: #fef3c7;
+      border-color: #fcd34d;
+      color: #92400e;
+    }
+    .ev-100 {
+      background: #fef9c3;
+      border-color: #fde047;
+      color: #854d0e;
+    }
+    .ev-under {
+      background: #f3f4f6;
+      border-color: #d1d5db;
+      color: #374151;
+    }
+    .ticket-big-list {
+      display: grid;
+      gap: 8px;
+      margin: 10px 0;
+    }
+    .ticket-big {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: #fff;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+    .ticket-big b {
+      font-size: 18px;
+      color: #7c2d12;
+    }
+    .ticket-big strong {
+      font-size: 28px;
+      letter-spacing: 0.02em;
+      color: #111827;
+      line-height: 1;
+    }
+    .dashboard-stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .dashboard-stats .stat,
+    .accuracy-card,
+    .mini-metric {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .dashboard-stats .stat b,
+    .mini-metric b {
+      display: block;
+      margin-top: 4px;
+      font-size: 24px;
+      line-height: 1.1;
+      color: #111827;
+    }
+    .accuracy-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .accuracy-grid .mini-metric span {
+      display: block;
+      color: #6b7280;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .accuracy-grid .mini-metric strong {
+      font-size: 22px;
+    }
+    .money-plan-card {
+      margin-top: 12px;
+      background: linear-gradient(180deg, #fffef7 0%, #ffffff 100%);
+      border: 1px solid #fcd34d;
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .money-plan-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-weight: 900;
+      color: #92400e;
+    }
+    .money-plan-stake {
+      font-size: 30px;
+      font-weight: 900;
+      line-height: 1.1;
+      color: #111827;
+    }
+    .money-plan-breakdown {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .money-plan-piece {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 10px;
+      text-align: center;
+    }
+    .money-plan-piece span {
+      display: block;
+      font-size: 11px;
+      font-weight: 800;
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+    .money-plan-piece strong {
+      font-size: 19px;
+      color: #111827;
+    }
+    .money-plan-reason {
+      margin-top: 8px;
+      color: #6b7280;
+      font-size: 12px;
+      line-height: 1.5;
+      font-weight: 700;
+    }
+    .reason-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 6px;
+    }
+    .reason-pill {
+      border-radius: 999px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e3a8a;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .today-recommend-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .recommend-mini {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 10px;
+    }
+    .recommend-mini-main {
+      font-weight: 800;
+      font-size: 17px;
+      color: #111827;
+      line-height: 1.2;
+    }
+    .recommend-mini-sub {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 3px;
+    }
+    .no-race-box {
+      background: #fff;
+      border: 1px dashed #9ca3af;
+      border-radius: 12px;
+      padding: 14px;
+      color: #374151;
+      font-weight: 700;
+      line-height: 1.6;
+    }
+    #toggleVenueDetailsBtn {
+      margin: 6px 0 12px;
+      width: 100%;
+      min-height: 44px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    #raceSection,
+    #analysisSection,
+    #resetBtn {
+      display: none !important;
+    }
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .header-right {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .bankroll-panel {
+      display: grid;
+      gap: 4px;
+      min-width: 190px;
+      padding: 10px 12px;
+      border: 1px solid #dbeafe;
+      border-radius: 12px;
+      background: #f8fbff;
+    }
+    .bankroll-panel span {
+      font-size: 11px;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .bankroll-panel input {
+      width: 100%;
+      min-height: 40px;
+      font-size: 18px;
+      font-weight: 800;
+      text-align: right;
+    }
+    .bankroll-panel strong {
+      font-size: 13px;
+      color: #0f172a;
+    }
+    @media (max-width: 800px) {
+      .app-header {
+        align-items: stretch;
+      }
+      .header-right {
+        justify-content: stretch;
+      }
+      .bankroll-panel {
+        min-width: 0;
+        width: 100%;
+      }
+      .today-main-grid {
+        grid-template-columns: 1fr;
+      }
+      .value-ranking-grid {
+        grid-template-columns: 1fr;
+      }
+      .dashboard-stats,
+      .accuracy-grid {
+        grid-template-columns: 1fr;
+      }
+      .money-plan-breakdown {
+        grid-template-columns: 1fr;
+      }
+      .today-race-main {
+        font-size: 32px;
+      }
+      .ticket-big strong {
+        font-size: 30px;
+      }
+      .recommend-mini {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
   <header class="app-header">
@@ -12,39 +406,107 @@
       <h1>Boat AI</h1>
       <p>競艇AI分析・期待値判定</p>
     </div>
-    <button id="resetBtn" class="ghost">保存データ初期化</button>
+    <div class="header-right">
+      <label class="bankroll-panel">
+        <span>現在資金</span>
+        <input id="bankrollInput" type="number" min="0" step="1000" value="100000" />
+        <strong>円</strong>
+      </label>
+      <button id="saveBankrollBtn" class="primary">保存</button>
+      <button id="resetBtn" class="ghost">保存データ初期化</button>
+    </div>
   </header>
 
   <main>
-    <section class="panel">
+    <section id="venuePanel" class="panel">
       <div class="section-head">
-        <h2>本日開催場</h2>
-        <span id="todayLabel"></span>
+        <div>
+          <h2>1. 今日の勝負レース</h2>
+          <p class="muted">必要な判断情報だけを上段に表示します。</p>
+        </div>
+        <span id="todayLabel" class="pill"></span>
       </div>
-      <div id="venueGrid" class="venue-grid"></div>
+      <button id="toggleVenueDetailsBtn" class="ghost">開催場一覧を開く</button>
+      <details id="venueDetails" class="result-card full hidden">
+        <summary><strong>詳細情報（開催場選択）</strong></summary>
+        <div id="flowSteps" class="flow-steps">
+          <div class="flow-step active"><span>1</span><div>開催場</div></div>
+          <div class="flow-step"><span>2</span><div>レース一覧</div></div>
+          <div class="flow-step"><span>3</span><div>詳細</div></div>
+          <div class="flow-step"><span>4</span><div>AI予想</div></div>
+        </div>
+        <div id="venueGrid" class="venue-grid"></div>
+      </details>
     </section>
 
     <section id="raceSection" class="panel hidden">
       <div class="section-head">
-        <h2 id="venueTitle">レース選択</h2>
+        <div>
+          <h2 id="venueTitle">2. レース一覧</h2>
+          <p id="venueHint" class="muted">レースを選択すると、詳細とAI予想に進めます。</p>
+        </div>
         <button id="backVenue" class="ghost">開催場に戻る</button>
       </div>
+      <div id="raceSummary" class="summary-box"></div>
       <div id="raceGrid" class="race-grid"></div>
     </section>
 
     <section id="analysisSection" class="panel hidden">
       <div class="section-head">
         <div>
-          <h2 id="raceTitle">AI予想</h2>
-          <p class="muted">現在は手入力＋AI計算。次に公式データ取得を接続する設計。</p>
+          <h2 id="raceTitle">3. レース詳細・AI予想</h2>
+          <p class="muted">まずはシンプルな流れを確認できるように、AI結論を最初に表示します。</p>
         </div>
         <button id="backRace" class="ghost">レース選択に戻る</button>
       </div>
+
+      <div class="race-hero">
+        <div class="race-hero__title">
+          <div id="raceMainTitle" class="race-hero__main">戸田 1R / 発走 10:45 / 結果 未確定</div>
+          <div id="raceMetaSummary" class="race-hero__sub">開催地・発走時刻・締切予定時刻を先頭に表示します</div>
+        </div>
+        <div class="race-hero__status">
+          <div class="status-pill">天候 <strong id="detailWeather">-</strong></div>
+          <div class="status-pill">風向 <strong id="detailWindDir">-</strong></div>
+          <div class="status-pill">風速 <strong id="detailWindSpeed">-</strong></div>
+          <div class="status-pill">波高 <strong id="detailWave">-</strong></div>
+        </div>
+      </div>
+
+      <div class="ai-hero">
+        <p class="ai-hero__eyebrow">AI評価</p>
+        <h3 id="aiDecision" class="decision">未計算</h3>
+        <div class="ai-summary-grid compact-grid">
+          <div class="ai-summary-item"><span>本命</span><strong id="favoriteReason">-</strong></div>
+          <div class="ai-summary-item"><span>対抗</span><strong id="secondReason">-</strong></div>
+          <div class="ai-summary-item"><span>穴</span><strong id="darkReason">-</strong></div>
+          <div class="ai-summary-item"><span>推奨買い目</span><strong id="ticketReason">-</strong></div>
+        </div>
+        <div class="ai-comment-box">
+          <p class="ai-comment-label">一言コメント</p>
+          <p id="aiShortComment" class="ai-short-comment">-</p>
+        </div>
+        <button id="toggleAiDetailBtn" class="ghost ai-detail-toggle">詳しい根拠を見る</button>
+        <div id="aiDetailPanel" class="ai-detail-panel hidden"></div>
+      </div>
+
+      <div id="resultSummaryBox" class="result-summary-box"></div>
 
       <div class="toolbar">
         <button id="sampleBtn">サンプル入力</button>
         <button id="calcBtn" class="primary">AI計算</button>
         <button id="saveBtn">保存</button>
+      </div>
+
+      <div class="race-overview-grid">
+        <div class="overview-card">
+          <h3>レース概要</h3>
+          <div id="raceOverview" class="overview-list"></div>
+        </div>
+        <div class="overview-card">
+          <h3>主要選手情報</h3>
+          <div id="topPlayerSummary" class="overview-list"></div>
+        </div>
       </div>
 
       <div class="weather-box">
@@ -55,14 +517,20 @@
       </div>
 
       <div class="table-wrap">
+        <div class="table-caption">重要項目</div>
         <table id="entryTable">
           <thead>
             <tr>
-              <th>艇</th><th>選手名</th><th>級</th><th>全国勝率</th><th>当地</th><th>ST</th><th>モーター%</th><th>ボート%</th><th>展示</th><th>チルト</th><th>体重</th>
+              <th>艇</th><th>選手名</th><th>級別</th><th>全国勝率</th><th>当地勝率</th><th>平均ST</th><th>モーター2連率</th><th>ボート2連率</th><th>今節成績</th><th>詳細</th>
             </tr>
           </thead>
           <tbody></tbody>
         </table>
+      </div>
+
+      <div class="result-card full">
+        <button id="toggleDetailsBtn" class="ghost full-width">詳細項目を表示</button>
+        <div id="detailRows" class="detail-rows hidden"></div>
       </div>
 
       <div class="cards">
@@ -71,9 +539,8 @@
           <div id="probList"></div>
         </div>
         <div class="result-card">
-          <h3>AI判定</h3>
-          <div id="aiDecision" class="decision">未計算</div>
-          <p id="aiReason" class="muted"></p>
+          <h3>期待値の見方</h3>
+          <p class="muted">AIの結論は上段に表示し、以下で各艇の確率と3連単期待値を確認できます。</p>
         </div>
       </div>
 
@@ -102,12 +569,17 @@
       </div>
 
       <div class="result-card full">
-        <h3>成績</h3>
-        <div id="stats" class="stats"></div>
+        <details>
+          <summary><strong>統計・履歴</strong></summary>
+          <div style="margin-top:10px;">
+            <div id="stats" class="stats"></div>
+          </div>
+        </details>
       </div>
     </section>
   </main>
 
+  <script src="officialDataService.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
