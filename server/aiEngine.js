@@ -9,6 +9,7 @@ const { buildLeaguePredictions, saveLeagueHistory, buildLeagueLeaderboard } = re
 const { updateAiWeightsFromLeagueResults, getWeightsSnapshot } = require('./weightLearningEngine');
 const { buildValueRanking } = require('./valueEngine');
 const { predictModel, getModelStatus } = require('./mlEngine');
+const { classifyRaceCondition, updateHeadCoachLearning } = require('./headCoachEngine');
 
 const venueCodeMap = {
   kiryu: '01',
@@ -21,10 +22,22 @@ const venueCodeMap = {
   tokoname: '09',
   tsu: '12',
   mikuni: '13',
+  biwako: '14',
+  suminoe: '15',
+  amagasaki: '16',
+  naruto: '17',
   marugame: '18',
+  tokuyama: '19',
+  shimonoseki: '20',
+  wakamatsu: '21',
+  ashiya: '23',
+  fukuoka: '22',
+  karatsu: '23',
+  omura: '24',
   sakaide: '21',
   kojima: '22',
-  miya: '24'
+  miya: '24',
+  miyajima: '24'
 };
 
 function formatJstDate(date = new Date()) {
@@ -35,6 +48,11 @@ function formatJstDate(date = new Date()) {
   const month = String(jstDate.getMonth() + 1).padStart(2, '0');
   const day = String(jstDate.getDate()).padStart(2, '0');
   return `${year}${month}${day}`;
+}
+
+function normalizeTargetDate(value) {
+  const digits = String(value || '').replace(/\D/g, '');
+  return digits.length === 8 ? digits : '';
 }
 
 async function fetchHtmlFromCandidates(candidateUrls) {
@@ -102,7 +120,7 @@ function buildStatisticsComment(scored) {
   return comments.join('。');
 }
 
-function buildPrediction({ venueId, raceNo, entries, beforeInfo, odds, result }) {
+function buildPrediction({ venueId, raceNo, entries, beforeInfo, odds, result, todayVenues, raceList }) {
   const modelStatus = getModelStatus();
   const fallbackScored = modelStatus.available ? null : scoreRace({ entries, beforeInfo, odds });
   const modelPrediction = modelStatus.available ? predictModel({ entries, beforeInfo, odds }) : null;
@@ -122,6 +140,15 @@ function buildPrediction({ venueId, raceNo, entries, beforeInfo, odds, result })
   const roughRace = buildRoughRace({ scoreRows: scored.score, beforeInfo, odds });
   const confidence = scored.ranked[0]?.score || 0;
   const league = buildLeaguePredictions({ venueId, raceNo, entries, beforeInfo, odds, result });
+  const raceRow = (Array.isArray(raceList) ? raceList : []).find((row) => String(row?.raceNo || '') === String(raceNo || '')) || {};
+  const venueRow = (Array.isArray(todayVenues) ? todayVenues : []).find((row) => String(row?.venueId || '') === String(venueId || '')) || {};
+  const conditionContext = classifyRaceCondition({
+    venueId,
+    raceNo,
+    conditionContext: {
+      raceName: String(raceRow?.raceName || venueRow?.raceName || '')
+    }
+  });
 
   const anchors = {
     honmei: scored.ranked[0] || null,
@@ -163,6 +190,7 @@ function buildPrediction({ venueId, raceNo, entries, beforeInfo, odds, result })
     roughRace,
     decision,
     league,
+    conditionContext,
     statistics: scored.statisticsContext,
     historyStats: scored.historyStats
   };
@@ -171,7 +199,7 @@ function buildPrediction({ venueId, raceNo, entries, beforeInfo, odds, result })
 async function predictRace(venueId, raceNo, options = {}) {
   const { persistLearning = true } = options || {};
   const raceData = options?.raceData || null;
-  const date = formatJstDate();
+  const date = normalizeTargetDate(options?.targetDate) || formatJstDate();
   const venueCode = venueCodeMap[venueId] || '';
 
   const todayUrl = 'https://www.boatrace.jp/owpc/pc/race/index';
@@ -179,6 +207,9 @@ async function predictRace(venueId, raceNo, options = {}) {
   const entriesUrl = venueCode ? `https://www.boatrace.jp/owpc/pc/race/racelist?rno=${raceNo}&jcd=${venueCode}&hd=${date}` : '';
   const beforeUrl = venueCode ? `https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=${raceNo}&jcd=${venueCode}&hd=${date}` : '';
   const oddsUrls = [
+    `https://www.boatrace.jp/owpc/pc/race/odds3t?rno=${raceNo}&jcd=${venueCode}&hd=${date}`,
+    `https://www.boatrace.jp/owpc/pc/race/odds2tf?rno=${raceNo}&jcd=${venueCode}&hd=${date}`,
+    `https://www.boatrace.jp/owpc/pc/race/oddsk?rno=${raceNo}&jcd=${venueCode}&hd=${date}`,
     `https://www.boatrace.jp/owpc/pc/race/odds?rno=${raceNo}&jcd=${venueCode}&hd=${date}`,
     `https://www.boatrace.jp/owpc/pc/race/odds?jcd=${venueCode}&rno=${raceNo}&hd=${date}`,
     `https://www.boatrace.jp/owpc/pc/race/odds3?rno=${raceNo}&jcd=${venueCode}&hd=${date}`,
@@ -251,6 +282,18 @@ async function predictRace(venueId, raceNo, options = {}) {
   if (learningResult?.learningComment) {
     prediction.aiComment = `${prediction.aiComment}\n学習: ${learningResult.learningComment}`;
     prediction.learning = learningResult;
+  }
+
+  if (persistLearning && finalResult?.order) {
+    prediction.headCoachLearning = updateHeadCoachLearning({
+      prediction,
+      result: finalResult,
+      venueId,
+      raceNo,
+      outcome: {
+        selectedAiId: prediction?.bestAiRecommendation?.aiId || ''
+      }
+    });
   }
 
   if (leagueLeaderboard[0]) {

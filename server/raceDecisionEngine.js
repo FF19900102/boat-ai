@@ -15,6 +15,21 @@ function budgetRate(level) {
 
 function buildRaceDecision({ scoreRows, roughRace, buyDetails, confidence, odds, beforeInfo }) {
   const tickets = Array.isArray(buyDetails) ? buyDetails : [];
+  const hasOfficialOdds = tickets.some((ticket) => {
+    const source = String(ticket?.oddsSource || '');
+    const oddsValue = toNumber(ticket?.odds, 0);
+    return source === 'official' && oddsValue > 0;
+  });
+  if (!hasOfficialOdds) {
+    return {
+      decision: '見送り',
+      reason: '公式3連単オッズ未取得',
+      stakeLevel: 0,
+      stakeStars: buildStars(0),
+      recommendedBudgetRate: budgetRate(0)
+    };
+  }
+
   const strongCount = tickets.filter((ticket) => toNumber(ticket?.expectedValue, 0) >= 130).length;
   const decentCount = tickets.filter((ticket) => toNumber(ticket?.expectedValue, 0) >= 110).length;
   const topExpectedValue = tickets.reduce((max, ticket) => Math.max(max, toNumber(ticket?.expectedValue, 0)), 0);

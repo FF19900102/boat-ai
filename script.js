@@ -1,4 +1,29 @@
-const venues=['桐生','戸田','江戸川','平和島','多摩川','浜名湖','蒲郡','常滑','津','三国','びわこ','住之江','尼崎','鳴門','丸亀','児島','宮島','徳山','下関','若松','芦屋','福岡','唐津','大村'];
+const venues = [
+  '桐生',
+  '戸田',
+  '江戸川',
+  '平和島',
+  '多摩川',
+  '浜名湖',
+  '蒲郡',
+  '常滑',
+  '津',
+  '三国',
+  'びわこ',
+  '住之江',
+  '尼崎',
+  '鳴門',
+  '丸亀',
+  '児島',
+  '宮島',
+  '徳山',
+  '下関',
+  '若松',
+  '芦屋',
+  '福岡',
+  '唐津',
+  '大村'
+];
 
 const raceEntryStore={
   source:'local',
@@ -15,7 +40,7 @@ const raceEntryStore={
       this.data=await raceRes.json();
       this.players=await playerRes.json();
     }catch(error){
-      console.warn('Race data load failed', error);
+      setDataStatus('出走表取得失敗: ローカルデータへフォールバック');
       this.data={};
       this.players=[];
     }
@@ -47,17 +72,28 @@ const raceEntryStore={
     };
   }
 };
-let state={venue:null,race:null,entries:[],bets:[],raceMeta:{},weatherSource:'local',resultSource:'local',raceScheduleSource:'local',officialPrediction:null};
+let state={venue:null,race:null,entries:[],bets:[],raceMeta:{},weatherSource:'local',resultSource:'local',raceScheduleSource:'local',officialPrediction:null,headCoach:null,pollingId:null,pollingKey:'',isSyncingResult:false,lastSettlement:null};
 const $=id=>document.getElementById(id);
 const BANKROLL_STORAGE_KEY='boat_ai_bankroll';
+const RECOMMEND_DATE_STORAGE_KEY='boat_ai_recommend_date_target';
 const VENUE_ID_MAP={
   '桐生':'kiryu','戸田':'toda','江戸川':'edogawa','平和島':'heiwajima','多摩川':'tamagawa','浜名湖':'hamanako','蒲郡':'gamagori',
-  '常滑':'tokoname','津':'tsu','三国':'mikuni','丸亀':'marugame','児島':'kojima','宮島':'miya'
+  '常滑':'tokoname','津':'tsu','三国':'mikuni','びわこ':'biwako','住之江':'suminoe','尼崎':'amagasaki','鳴門':'naruto',
+  '丸亀':'marugame','児島':'kojima','宮島':'miyajima','徳山':'tokuyama','下関':'shimonoseki','若松':'wakamatsu','芦屋':'ashiya',
+  '福岡':'fukuoka','唐津':'karatsu','大村':'omura'
 };
+const VENUE_LABEL_TO_ID=VENUE_ID_MAP;
+const ALL_VENUE_IDS=Array.from(new Set(Object.values(VENUE_ID_MAP)));
 
 function setText(id,value){
   const el=$(id);
   if(el) el.textContent=value;
+}
+
+function setDataStatus(message){
+  const el=$('dataStatus');
+  if(!el) return;
+  el.textContent=String(message || '');
 }
 
 function getVenueId(venueName){
@@ -155,7 +191,27 @@ function formatValuePercent(value){
 }
 
 function filterBuyableValues(valueRanking){
-  return Array.isArray(valueRanking) ? valueRanking.filter((row)=>Number(row?.expectedValue || 0) >= 100) : [];
+  return Array.isArray(valueRanking) ? valueRanking.filter((row)=>Boolean(row?.evCalculable) && Number(row?.expectedValue || 0) >= 100) : [];
+}
+
+function valueDecisionLabel(item){
+  if(!item || !item.evCalculable || Number(item?.odds || 0) <= 0) return '見送り(期待値計算不可)';
+  const ev=Number(item?.expectedValue || 0);
+  if(ev >= 120) return '買い候補';
+  if(ev >= 100) return '注意';
+  return '見送り';
+}
+
+function valueDecisionClass(item){
+  const label=valueDecisionLabel(item);
+  if(label.includes('買い')) return 'buy';
+  if(label.includes('注意')) return 'watch';
+  return 'skip';
+}
+
+function hasOfficialTrifectaOdds(valueRanking){
+  if(!Array.isArray(valueRanking) || !valueRanking.length) return false;
+  return valueRanking.some((row)=>Boolean(row?.evCalculable) && Number(row?.odds || 0) > 0);
 }
 
 function renderValueRankHtml(valueRows, emptyMessage='価値100%以上の買い目はありません'){
@@ -200,6 +256,21 @@ function syncBankrollInput(){
   if(input) input.value=String(state.bankroll ?? 100000);
 }
 
+function loadRecommendDateTarget(){
+  const value=String(localStorage.getItem(RECOMMEND_DATE_STORAGE_KEY) || 'today');
+  return value === 'tomorrow' ? 'tomorrow' : 'today';
+}
+
+function saveRecommendDateTarget(target){
+  const value=target === 'tomorrow' ? 'tomorrow' : 'today';
+  state.recommendDateTarget=value;
+  localStorage.setItem(RECOMMEND_DATE_STORAGE_KEY, value);
+  const todayBtn=$('recommendTodayBtn');
+  const tomorrowBtn=$('recommendTomorrowBtn');
+  if(todayBtn) todayBtn.classList.toggle('active', value === 'today');
+  if(tomorrowBtn) tomorrowBtn.classList.toggle('active', value === 'tomorrow');
+}
+
 async function renderMoneyPlan(row){
   const block=$('moneyPlanBlock');
   if(!block) return;
@@ -230,6 +301,88 @@ async function renderMoneyPlan(row){
   }
 }
 
+async function renderAnalysisMoneyPlan(){
+  const amountEl=$('analysisMoneyPlan');
+  if(!amountEl) return;
+  if(!state.venue || !state.race || !state.bankroll){
+    amountEl.textContent='-';
+    return;
+  }
+
+  const venueId=getVenueId(state.venue);
+  if(!venueId){
+    amountEl.textContent='-';
+    return;
+  }
+
+  try{
+    const response=await fetch('/api/money/calculate', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        bankroll:state.bankroll,
+        venueId,
+        raceNo:String(state.race)
+      })
+    });
+    if(!response.ok) throw new Error('analysis money fetch failed');
+    const payload=await response.json();
+    if(!payload?.success) throw new Error('analysis money calc failed');
+    amountEl.textContent=formatMoney(payload.recommendedStake || 0);
+  }catch(error){
+    amountEl.textContent='-';
+  }
+}
+
+function normalizeTicket(value){
+  return String(value || '')
+    .trim()
+    .replace(/[\s・／]+/g,'-')
+    .replace(/-+/g,'-')
+    .replace(/^-|-$/g,'');
+}
+
+function renderOddsListHtml(rows){
+  const list=Array.isArray(rows) ? rows.filter((row)=>row?.odds).slice(0,12) : [];
+  if(!list.length) return '<div class="muted">データなし</div>';
+  return `<div class="table-wrap small"><table><thead><tr><th>買い目</th><th>オッズ</th></tr></thead><tbody>${list.map((row,index)=>`<tr><td>${escapeHtml(normalizeTicket(row.ticket) || `No.${index+1}`)}</td><td>${escapeHtml(String(row.odds))}</td></tr>`).join('')}</tbody></table></div>`;
+}
+
+function renderOddsSummary(oddsPayload){
+  const odds=oddsPayload?.odds || {};
+  const trifecta=Array.isArray(odds?.trifecta) ? odds.trifecta : [];
+  const exacta=Array.isArray(odds?.exacta) ? odds.exacta : [];
+  const quinellaPlace=Array.isArray(odds?.quinellaPlace) ? odds.quinellaPlace : [];
+  const trifectaEl=$('oddsTrifecta');
+  const exactaEl=$('oddsExacta');
+  const quinellaEl=$('oddsQuinellaPlace');
+  if(trifectaEl) trifectaEl.innerHTML=renderOddsListHtml(trifecta);
+  if(exactaEl) exactaEl.innerHTML=renderOddsListHtml(exacta);
+  if(quinellaEl) quinellaEl.innerHTML=renderOddsListHtml(quinellaPlace);
+}
+
+function applyOfficialOddsToBets(oddsPayload){
+  const trifecta=Array.isArray(oddsPayload?.odds?.trifecta) ? oddsPayload.odds.trifecta : [];
+  if(!trifecta.length || !Array.isArray(state.bets) || !state.bets.length) return;
+
+  const oddsMap=new Map(
+    trifecta
+      .filter((row)=>row?.ticket && row?.odds)
+      .map((row)=>[normalizeTicket(row.ticket), Number(row.odds)])
+      .filter(([,odds])=>Number.isFinite(odds) && odds > 0)
+  );
+
+  if(!oddsMap.size) return;
+  state.bets.forEach((bet)=>{
+    const marketOdds=oddsMap.get(normalizeTicket(bet.mark));
+    if(Number.isFinite(marketOdds) && marketOdds > 0){
+      bet.odds=marketOdds;
+      bet.ev=bet.p*marketOdds*100;
+    }
+  });
+  state.bets.sort((a,b)=>b.ev-a.ev);
+}
+
 function ensureAiAnalysisPanel(){
   const hero=document.querySelector('.ai-hero');
   if(!hero) return null;
@@ -244,6 +397,78 @@ function ensureAiAnalysisPanel(){
   panel.style.background='white';
   hero.insertBefore(panel, $('toggleAiDetailBtn'));
   return panel;
+}
+
+function ensureConferencePanel(){
+  const analysisSection=$('analysisSection');
+  if(!analysisSection) return null;
+  let panel=analysisSection.querySelector('[data-role="ver10-conference-panel"]');
+  if(panel) return panel;
+  panel=document.createElement('div');
+  panel.className='result-card full';
+  panel.setAttribute('data-role','ver10-conference-panel');
+  panel.innerHTML='<h3 style="margin:0 0 10px;">AI会議</h3><div id="ver10ConferenceBody" class="muted">読み込み中...</div>';
+  const resultSummary=$('resultSummaryBox');
+  if(resultSummary && resultSummary.parentNode===analysisSection){
+    analysisSection.insertBefore(panel, resultSummary);
+  }else{
+    analysisSection.appendChild(panel);
+  }
+  return panel;
+}
+
+function conferenceDecisionClass(decision){
+  const text=String(decision || '');
+  if(text.includes('買い')) return 'decision-buy';
+  if(text.includes('少額')) return 'decision-watch';
+  return 'decision-skip';
+}
+
+function renderConferenceFallback(message){
+  ensureConferencePanel();
+  const body=$('ver10ConferenceBody');
+  if(!body) return;
+  body.innerHTML=`<div class="no-race-box">${escapeHtml(message || 'AI会議データを取得できませんでした')}</div>`;
+}
+
+async function renderConferencePanel(){
+  ensureConferencePanel();
+  const body=$('ver10ConferenceBody');
+  if(!body) return;
+  if(!state.venue || !state.race){
+    renderConferenceFallback('レース選択後にAI会議を表示します');
+    return;
+  }
+
+  const venueId=getVenueId(state.venue);
+  if(!venueId){
+    renderConferenceFallback('会場IDを判定できません');
+    return;
+  }
+
+  body.textContent='AI会議を集計中...';
+
+  try{
+    const response=await fetch(apiPath(`/api/ver10/conference?venueId=${encodeURIComponent(venueId)}&raceNo=${encodeURIComponent(state.race)}`));
+    const payload=await response.json();
+    const conference=payload?.conference;
+    const aiDecisions=Array.isArray(conference?.aiDecisions)?conference.aiDecisions:[];
+    const roleRanking=Array.isArray(conference?.roleRanking)?conference.roleRanking:[];
+    const roleMap=new Map(roleRanking.map((row)=>[String(row?.roleId||''), row]));
+    const verdict=conference?.verdict || {};
+    if(!response.ok || !conference || !aiDecisions.length){
+      throw new Error(payload?.error || 'conference fetch failed');
+    }
+
+    const starsHtml=aiDecisions.map((row)=>{
+      const rankRow=roleMap.get(String(row?.roleId || '')) || {};
+      return `<article class="conference-ai-card"><div class="conference-ai-head"><strong>${escapeHtml(row?.roleName || '-')}</strong><span class="muted">重み ${Number(rankRow?.weight || 1).toFixed(2)} / Ver9順位 ${Number(rankRow?.rank || 0)}</span></div><div class="conference-stars">${escapeHtml(row?.stars || '-')}</div><div class="conference-kv-grid"><div><span>本命</span><b>${escapeHtml(String(row?.anchors?.honmei || '-'))}号艇</b></div><div><span>対抗</span><b>${escapeHtml(String(row?.anchors?.taiko || '-'))}号艇</b></div><div><span>穴</span><b>${escapeHtml(String(row?.anchors?.ana || '-'))}号艇</b></div><div><span>期待値</span><b>${Number(row?.expectedValue || 0).toFixed(1)}%</b></div><div><span>購入可否</span><b>${escapeHtml(row?.buyable ? '買い' : '見送り')}</b></div></div><p class="muted" style="margin:8px 0 0;">${escapeHtml(row?.reason || '-')}</p></article>`;
+    }).join('');
+
+    body.innerHTML=`<div class="conference-grid">${starsHtml}</div><div class="conference-final"><h4 style="margin:0 0 8px;">最終結論</h4><div class="conference-final-grid"><div><span>判断</span><strong class="decision-chip ${conferenceDecisionClass(verdict?.finalDecision)}">${escapeHtml(verdict?.finalDecision || '見送り')}</strong></div><div><span>期待値</span><strong>${Number(verdict?.expectedValue || 0).toFixed(1)}%</strong></div><div><span>購入金額</span><strong>${formatMoney(verdict?.purchaseAmount || 0)}</strong></div><div><span>信頼度</span><strong>${escapeHtml(verdict?.confidenceStars || '-')}</strong></div></div><div class="conference-reason">${escapeHtml(verdict?.reason || '-')}</div></div>`;
+  }catch(error){
+    renderConferenceFallback('AI会議データを取得できませんでした');
+  }
 }
 
 function ensureLeaguePanel(){
@@ -272,11 +497,11 @@ function ensureRecommendPanel(){
   panel=document.createElement('div');
   panel.className='summary-box';
   panel.setAttribute('data-role','today-recommend');
-  panel.innerHTML='<div class="section-head compact"><h3>本日のAI結論カード</h3><span id="recommendModeLabel" class="muted">開催中の場から抽出</span></div><div id="todayConclusionCard" class="today-conclusion-card">読み込み中...</div><div id="todayRecommendationList" class="today-recommend-list"></div>';
+  panel.innerHTML='<div class="section-head compact"><h3 id="recommendTitleLabel">本日のAI結論カード</h3><div class="recommend-date-switch"><button id="recommendTodayBtn" class="ghost-btn active">今日</button><button id="recommendTomorrowBtn" class="ghost-btn">明日</button></div><span id="recommendModeLabel" class="muted">開催中の場から抽出</span></div><div id="todayConclusionCard" class="today-conclusion-card">読み込み中...</div><div id="todayRecommendationList" class="today-recommend-list"></div>';
   const venueGrid=$('venueGrid');
-  const venueDetails=$('venueDetails');
-  if(venueDetails && venueDetails.parentNode===venuePanel){
-    venuePanel.insertBefore(panel, venueDetails);
+  const venueCard=venueGrid?.closest('.result-card');
+  if(venueCard && venueCard.parentNode===venuePanel){
+    venuePanel.insertBefore(panel, venueCard);
   }else if(venueGrid && venueGrid.parentNode===venuePanel){
     venuePanel.insertBefore(panel, venueGrid);
   }else{
@@ -288,15 +513,24 @@ function ensureRecommendPanel(){
 async function renderDashboardStats(bestAiRecommendation){
   const statsBlock=$('dashboardStats') || $('stats');
   const accuracyBlock=$('dashboardAccuracy');
+  let dbSummaryBlock=$('dashboardDatabaseSummary');
+  if(!dbSummaryBlock && statsBlock && statsBlock.parentNode){
+    dbSummaryBlock=document.createElement('div');
+    dbSummaryBlock.id='dashboardDatabaseSummary';
+    dbSummaryBlock.className='dashboard-stats';
+    statsBlock.parentNode.appendChild(dbSummaryBlock);
+  }
   try{
-    const [statsRes, modelRes] = await Promise.all([
+    const [statsRes, modelRes, dbRes] = await Promise.all([
       fetch('/api/stats'),
-      fetch('/api/model/status')
+      fetch('/api/model/status'),
+      fetch('/api/ver12/database/status')
     ]);
     if(!statsRes.ok || !modelRes.ok) throw new Error('dashboard stats fetch failed');
     const stats=await statsRes.json();
     const modelPayload=await modelRes.json();
     const model=modelPayload?.status || {};
+    const dbPayload=dbRes.ok ? await dbRes.json() : null;
 
     if(statsBlock){
       statsBlock.innerHTML=`
@@ -313,12 +547,22 @@ async function renderDashboardStats(bestAiRecommendation){
         periodMetricHtml('全期間', stats.periods?.all)
       ].join('') + `<div class="accuracy-card"><span class="muted">モデル状態</span><strong style="display:block;margin-top:4px;">${escapeHtml(model.available ? '学習済み' : '未学習')}</strong><div class="muted">精度 ${escapeHtml(formatPercent(model.trainingAccuracy ?? 0))} / サンプル ${Number(model.sampleCount || 0).toLocaleString()} / 最強AI ${escapeHtml(bestAiRecommendation?.aiName || '-')}${bestAiRecommendation?.roi != null ? ` / ROI ${formatPercent(bestAiRecommendation?.roi || 0)}` : ''}</div></div>`;
     }
+
+    if(dbSummaryBlock){
+      const summary=dbPayload?.success ? dbPayload : null;
+      dbSummaryBlock.innerHTML=summary
+        ? `<div class="stat">保存レース<b>${Number(summary.totalRaces || 0).toLocaleString()}</b></div><div class="stat">会場数<b>${Number(summary.venues || 0).toLocaleString()}</b></div><div class="stat">最新取込日<b>${escapeHtml(summary.latestDate || '-')}</b></div><div class="stat">学習対象<b>${Number(summary.learningRaceCount || 0).toLocaleString()}</b></div><div class="stat">統計信頼度<b>${Number(summary.statsConfidence || 0).toFixed(1)}%</b></div>`
+        : '<div class="stat">保存レース<b>-</b></div><div class="stat">会場数<b>-</b></div><div class="stat">最新取込日<b>-</b></div><div class="stat">学習対象<b>-</b></div><div class="stat">統計信頼度<b>-</b></div>';
+    }
   }catch(error){
     if(statsBlock){
       statsBlock.innerHTML='<div class="stat">今日ROI<b>-</b></div><div class="stat">今月ROI<b>-</b></div><div class="stat">全期間ROI<b>-</b></div><div class="stat">総収支<b>-</b></div>';
     }
     if(accuracyBlock){
       accuracyBlock.innerHTML='<div class="accuracy-card">精度データを取得できませんでした</div>';
+    }
+    if(dbSummaryBlock){
+      dbSummaryBlock.innerHTML='<div class="stat">保存レース<b>-</b></div><div class="stat">会場数<b>-</b></div><div class="stat">最新取込日<b>-</b></div><div class="stat">学習対象<b>-</b></div><div class="stat">統計信頼度<b>-</b></div>';
     }
   }
 }
@@ -364,34 +608,80 @@ function shortenReasonList(reasonText, row){
   return tokens.slice(0, 4).length ? tokens.slice(0, 4) : ['総合評価'];
 }
 
+function recommendApiUrl(){
+  const target=state.recommendDateTarget === 'tomorrow' ? 'tomorrow' : 'today';
+  const isViteDev = typeof window !== 'undefined'
+    && String(window.location?.hostname || '') === 'localhost'
+    && String(window.location?.port || '') !== '3001';
+  const path=target === 'tomorrow' ? '/api/recommend/tomorrow' : '/api/recommend/today';
+  return isViteDev
+    ? `http://localhost:3001${path}`
+    : path;
+}
+
+function apiPath(path){
+  const isViteDev = typeof window !== 'undefined'
+    && String(window.location?.hostname || '') === 'localhost'
+    && String(window.location?.port || '') !== '3001';
+  return isViteDev ? `http://localhost:3001${path}` : path;
+}
+
 async function renderRecommendPanel(){
   const panel=ensureRecommendPanel();
   if(!panel) return;
   try{
-    const response=await fetch('/api/recommend/today');
-    if(!response.ok) throw new Error('recommend fetch failed');
+    const titleLabel=$('recommendTitleLabel');
+    if(titleLabel){
+      titleLabel.textContent=state.recommendDateTarget === 'tomorrow' ? '明日のAI結論カード' : '本日のAI結論カード';
+    }
+    const response=await fetch(recommendApiUrl());
     const payload=await response.json();
-    const strictRows=Array.isArray(payload?.recommendations)?payload.recommendations:[];
+    const recommendationRows=Array.isArray(payload?.recommendations)?payload.recommendations:[];
     const fallbackRows=Array.isArray(payload?.fallbackRecommendations)?payload.fallbackRecommendations:[];
-    const tradableRows=strictRows.filter((row)=>isTradableDecision(row?.decision));
-    const isFallback=!strictRows.length && fallbackRows.length>0;
+    const rows=recommendationRows.length>0 ? recommendationRows : fallbackRows;
+    const statusMessage=String(payload?.statusMessage || '');
+    const mode=String(payload?.mode || '');
+    if(!response.ok && recommendationRows.length===0 && fallbackRows.length===0){
+      throw new Error('recommend fetch failed');
+    }
     const modeLabel=$('recommendModeLabel');
     const card=$('todayConclusionCard');
     const list=$('todayRecommendationList');
     if(modeLabel){
-      modeLabel.textContent=isFallback?'勝負レースなし':'開催中の場から抽出';
+      if(statusMessage){
+        modeLabel.textContent=statusMessage;
+      }else if(mode === 'unpublished'){
+        modeLabel.textContent='明日の出走表はまだ公開されていません';
+      }else if(mode === 'reference' || mode === 'small'){
+        modeLabel.textContent='積極的に買うレースはありません';
+      }else if(mode === 'no-race'){
+        modeLabel.textContent='今日は勝負レースなし';
+      }else{
+        modeLabel.textContent='開催中の場から抽出';
+      }
     }
-    if(isFallback || !strictRows.length){
+
+    if(!rows.length){
       if(card){
-        card.innerHTML='<div class="no-race-box">今日は勝負レースなし<br>無理に買わない方がよい日です</div>';
+        const noRaceText=(mode === 'unpublished')
+          ? '明日の出走表はまだ公開されていません'
+          : (mode === 'no-race')
+          ? '今日は勝負レースなし'
+          : '積極的に買うレースはありません';
+        card.innerHTML=`<div class="no-race-box">${escapeHtml(noRaceText)}<br>無理に買わない方がよい日です</div>`;
       }
       if(list){
-        list.innerHTML='<div class="no-race-box">今日は勝負レースなし</div>';
+        const noRaceText=(mode === 'unpublished')
+          ? '明日の出走表はまだ公開されていません'
+          : (mode === 'no-race')
+          ? '今日は勝負レースなし'
+          : '積極的に買うレースはありません';
+        list.innerHTML=`<div class="no-race-box">${escapeHtml(noRaceText)}</div>`;
       }
       return;
     }
 
-    const topRow=strictRows[0] || null;
+    const topRow=rows[0] || null;
     const valueRows=filterBuyableValues(topRow?.valueRanking);
     const reasons=shortenReasonList(topRow?.reason, topRow);
     const evClass=expectedValueClass(valueRows[0]?.expectedValue || topRow?.expectedValue);
@@ -403,10 +693,10 @@ async function renderRecommendPanel(){
     }
 
     if(list){
-      list.innerHTML=tradableRows.map((row)=>{
+      list.innerHTML=rows.map((row)=>{
         const topValue=row?.valueRanking?.find((item)=>Number(item?.expectedValue || 0) >= 100) || row?.valueRanking?.[0] || null;
         return `<article class="recommend-mini"><div><div class="recommend-mini-main">${escapeHtml(row.venueName||row.venueId||'-')} ${escapeHtml(`${row.raceNo}R`)}</div><div class="recommend-mini-sub">${escapeHtml(topValue?.combo || row.topPick || '-')} / 期待値${escapeHtml(Number(topValue?.expectedValue || row.expectedValue || 0).toFixed(1))}%</div></div><div><span class="decision-chip ${decisionClassName(row.decision)}">${escapeHtml(row.decision || '-')}</span> <span class="ev-chip ${expectedValueClass(topValue?.expectedValue || row.expectedValue)}">${Number(topValue?.expectedValue || row.expectedValue || 0).toFixed(1)}%</span></div></article>`;
-      }).join('') || '<div class="no-race-box">今日は勝負レースなし</div>';
+      }).join('') || '<div class="no-race-box">積極的に買うレースはありません</div>';
     }
   }catch(error){
     const modeLabel=$('recommendModeLabel');
@@ -466,6 +756,24 @@ function ensureImportLogPanel(){
   const optimizerPanel=analysisSection.querySelector('[data-role="optimizer-panel"]');
   if(optimizerPanel){
     analysisSection.insertBefore(panel, optimizerPanel.nextSibling);
+  }else{
+    analysisSection.appendChild(panel);
+  }
+  return panel;
+}
+
+function ensureVer12ImportPanel(){
+  const analysisSection=$('analysisSection');
+  if(!analysisSection) return null;
+  let panel=analysisSection.querySelector('[data-role="ver12-import-panel"]');
+  if(panel) return panel;
+  panel=document.createElement('div');
+  panel.className='result-card full';
+  panel.setAttribute('data-role','ver12-import-panel');
+  panel.innerHTML='<details open><summary><strong>過去データ取込 (Ver12)</strong></summary><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin:8px 0;align-items:end;"><label>開始日<input id="ver12DateFrom" type="text" placeholder="YYYYMMDD" style="width:100%;"></label><label>終了日<input id="ver12DateTo" type="text" placeholder="YYYYMMDD" style="width:100%;"></label><label>会場(カンマ区切り)<input id="ver12VenueIds" type="text" placeholder="toda,hamanako" style="width:100%;"></label><label>日数上限<input id="ver12DayMaxLimit" type="number" min="1" max="365" value="120" style="width:100%;"></label><label><input id="ver12Resume" type="checkbox" checked> 再開モード</label><label><input id="ver12ContinueOnFailure" type="checkbox" checked> 失敗継続</label><div style="display:flex;gap:8px;"><button id="ver12ImportStartBtn" class="ghost-btn">取込開始</button><button id="ver12ImportStopBtn" class="ghost-btn">停止</button></div></div><div id="ver12ImportSummary" class="muted">待機中</div><div class="table-wrap small" style="margin-top:8px;"><table><thead><tr><th>項目</th><th>値</th></tr></thead><tbody id="ver12ImportStatusTable"><tr><td colspan="2">読み込み中</td></tr></tbody></table></div></details>';
+  const backtestPanel=analysisSection.querySelector('[data-role="backtest-panel"]');
+  if(backtestPanel){
+    analysisSection.insertBefore(panel, backtestPanel.nextSibling);
   }else{
     analysisSection.appendChild(panel);
   }
@@ -545,8 +853,129 @@ async function renderOptimizerPanel(){
   return;
 }
 
+function normalizeVer12VenueIds(input){
+  const text=String(input || '').trim();
+  if(!text) return [];
+  return text
+    .split(',')
+    .map((value)=>String(value || '').trim())
+    .filter(Boolean)
+    .map((value)=>VENUE_LABEL_TO_ID[value] || value);
+}
+
+function defaultVer12DateRange(){
+  const to=new Date();
+  const from=new Date(to.getTime());
+  from.setDate(from.getDate()-6);
+  const fmt=(d)=>`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+  return { dateFrom: fmt(from), dateTo: fmt(to) };
+}
+
+async function refreshVer12ImportStatus(){
+  const table=$('ver12ImportStatusTable');
+  const summary=$('ver12ImportSummary');
+  if(!table) return;
+  try{
+    const response=await fetch(apiPath('/api/ver12/import/status'));
+    const payload=await response.json();
+    if(!response.ok || !payload?.success) throw new Error(payload?.error || 'status failed');
+    const status=payload.status || {};
+    const progress=status.progress || {};
+    const running=Boolean(status.running);
+    const percent=Number(progress.percent || 0).toFixed(1);
+    const text=running
+      ? `取込中: ${percent}% (${Number(progress.processedPairs||0)}/${Number(progress.totalPairs||0)} 組)`
+      : (status.stopRequested ? '停止要求中' : '待機中');
+    if(summary) summary.textContent=text;
+    table.innerHTML=`<tr><td>状態</td><td>${escapeHtml(running ? 'running' : 'idle')}</td></tr><tr><td>ジョブID</td><td>${escapeHtml(String(status.lastJobId || '-'))}</td></tr><tr><td>進捗</td><td>${percent}% / ${Number(progress.processedPairs||0)} / ${Number(progress.totalPairs||0)}</td></tr><tr><td>保存</td><td>新規 ${Number(progress.imported||0)} / 更新 ${Number(progress.updated||0)} / 失敗 ${Number(progress.failed||0)}</td></tr><tr><td>現在</td><td>${escapeHtml(String(progress.currentDate || '-'))} ${escapeHtml(String(progress.currentVenueId || ''))}</td></tr><tr><td>開始</td><td>${escapeHtml(String(status.startedAt || '-'))}</td></tr><tr><td>終了</td><td>${escapeHtml(String(status.finishedAt || '-'))}</td></tr>`;
+  }catch(error){
+    if(summary) summary.textContent='取込ステータス取得失敗';
+    table.innerHTML='<tr><td colspan="2">取込ステータス取得失敗</td></tr>';
+  }
+}
+
+async function runVer12ImportFromUi(){
+  const summary=$('ver12ImportSummary');
+  const dateFrom=String($('ver12DateFrom')?.value || '').trim();
+  const dateTo=String($('ver12DateTo')?.value || '').trim();
+  const venueIds=normalizeVer12VenueIds($('ver12VenueIds')?.value);
+  const dayMaxLimit=Number($('ver12DayMaxLimit')?.value || 120);
+  const resume=Boolean($('ver12Resume')?.checked);
+  const continueOnFailure=Boolean($('ver12ContinueOnFailure')?.checked);
+  const payload={
+    dateFrom,
+    dateTo,
+    venueIds: venueIds.length ? venueIds : ALL_VENUE_IDS,
+    dayMaxLimit,
+    resume,
+    continueOnFailure,
+    maxRacesPerVenue: 12
+  };
+  if(summary) summary.textContent='取込開始要求を送信中...';
+  try{
+    const response=await fetch(apiPath('/api/ver12/import'), {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
+    });
+    const result=await response.json();
+    if(!response.ok || !result?.success) throw new Error(result?.error || 'import start failed');
+    if(summary) summary.textContent=`取込開始: job=${result.jobId || '-'}`;
+    await refreshVer12ImportStatus();
+  }catch(error){
+    if(summary) summary.textContent=`取込開始失敗: ${error.message || 'error'}`;
+  }
+}
+
+async function stopVer12ImportFromUi(){
+  const summary=$('ver12ImportSummary');
+  if(summary) summary.textContent='停止要求を送信中...';
+  try{
+    const response=await fetch(apiPath('/api/ver12/import/stop'), { method:'POST' });
+    const result=await response.json();
+    if(!response.ok || !result?.success) throw new Error(result?.error || 'import stop failed');
+    if(summary) summary.textContent='停止要求を送信しました';
+    await refreshVer12ImportStatus();
+  }catch(error){
+    if(summary) summary.textContent='停止要求に失敗しました';
+  }
+}
+
 async function renderImportLogPanel(){
-  return;
+  ensureImportLogPanel();
+  ensureVer12ImportPanel();
+  const tbody=$('importLogTable')?.querySelector('tbody');
+  if(tbody){
+    try{
+      const response=await fetch(apiPath('/api/database/import-log'));
+      const payload=await response.json();
+      const logs=Array.isArray(payload?.logs) ? payload.logs : [];
+      tbody.innerHTML=logs.length
+        ? logs.slice(0,50).map((row)=>{
+          const failedDetails=Array.isArray(row?.failedDetails) ? row.failedDetails : [];
+          const reason=failedDetails[0]?.reason || '-';
+          const imported=Number(row?.imported || 0) + Number(row?.updated || 0);
+          return `<tr><td>${escapeHtml(String(row?.timestamp || '-'))}</td><td>${imported.toLocaleString()}</td><td>${Number(row?.failed || 0).toLocaleString()}</td><td>${escapeHtml(reason)}</td></tr>`;
+        }).join('')
+        : '<tr><td colspan="4">ログなし</td></tr>';
+    }catch(error){
+      tbody.innerHTML='<tr><td colspan="4">取込ログの取得に失敗しました</td></tr>';
+    }
+  }
+
+  const dateFromInput=$('ver12DateFrom');
+  const dateToInput=$('ver12DateTo');
+  if(dateFromInput && dateToInput && !dateFromInput.value && !dateToInput.value){
+    const defaults=defaultVer12DateRange();
+    dateFromInput.value=defaults.dateFrom;
+    dateToInput.value=defaults.dateTo;
+  }
+
+  const startBtn=$('ver12ImportStartBtn');
+  const stopBtn=$('ver12ImportStopBtn');
+  if(startBtn) startBtn.onclick=()=>{ void runVer12ImportFromUi(); };
+  if(stopBtn) stopBtn.onclick=()=>{ void stopVer12ImportFromUi(); };
+  await refreshVer12ImportStatus();
 }
 
 async function runBacktestFromUi(){
@@ -600,6 +1029,8 @@ function renderOfficialPrediction(prediction){
   ensureBestAiSlot();
   const analysisPanel=ensureAiAnalysisPanel();
   renderBestAiRecommendation(prediction.bestAiRecommendation);
+  const headCoach=state.headCoach || prediction.headCoach || null;
+  const coach=headCoach?.coach || null;
 
   const scoreRows=Array.isArray(prediction.score)?prediction.score.slice():[];
   const buyDetails=Array.isArray(prediction.buyDetails)?prediction.buyDetails.slice():[];
@@ -617,24 +1048,33 @@ function renderOfficialPrediction(prediction){
   const buys=(Array.isArray(prediction.buy)?prediction.buy:[]).slice(0,5);
   const topTicket=buyableValueRanking[0] || valueRanking[0] || buyDetails[0] || {};
   const aiComment=prediction.aiComment || `◎${favorite.lane||'-'}号艇中心で組み立て。`;
+  const coachSummary=coach?.summary || '';
+  const coachReason=coach?.reason || '';
+  const coachDecision=String(coach?.finalDecision || '').trim();
+  const visibleDecision=coachDecision || String(decision?.decision || '見送り');
+  const visibleStake=coach?.purchaseAmount ? `${Number(coach.purchaseAmount).toLocaleString('ja-JP')}円` : (decision.stakeStars || '-');
 
   const aiDecision=$('aiDecision');
   if(aiDecision){
-    aiDecision.textContent='公式AI予想';
-    aiDecision.className='decision buy';
+    const decisionText=visibleDecision;
+    aiDecision.textContent=decisionText;
+    aiDecision.className=`decision ${decisionClassName(decisionText).replace('decision-','')}`;
   }
 
   setText('favoriteReason', `◎ ${favorite.lane||'-'}号艇`);
   setText('secondReason', `○ ${second.lane||'-'}号艇`);
   setText('darkReason', `▲ ${dark.lane||'-'}号艇`);
-  setText('ticketReason', topTicket.combo ? `${topTicket.valueStars || topTicket.rating || ''} 価値No${topTicket.valueRank || '-'} ${topTicket.combo} 期待値${Math.round(Number(topTicket.expectedValue)||0)}%` : (buys.length ? buys.join(' / ') : '-'));
-  setText('confidenceReason', `${confidence.toFixed(1)}%`);
+  const oddsAvailable=hasOfficialTrifectaOdds(valueRanking);
+  const topTicketEvText=topTicket?.evCalculable ? `${Math.round(Number(topTicket.expectedValue)||0)}%` : '期待値計算不可';
+  setText('ticketReason', topTicket.combo ? `${topTicket.valueStars || topTicket.rating || ''} 価値No${topTicket.valueRank || '-'} ${topTicket.combo} ${topTicketEvText}` : (buys.length ? buys.join(' / ') : '-'));
+  setText('valueReason', oddsAvailable ? topTicketEvText : '公式3連単オッズ未取得');
+  setText('confidenceReason', coach ? `${coach.confidenceStars || '-'} / ${coach.trustScore?.toFixed ? coach.trustScore.toFixed(3) : coach.trustScore || '-'} ` : `${confidence.toFixed(1)}%`);
   setText('roughRaceReason', roughRace.stars && roughRace.roughLevel ? `${roughRace.stars} ${roughRace.roughLevel}` : '-');
-  setText('decisionReason', decision.decision || '-');
-  setText('stakeLevelReason', decision.stakeStars || '-');
+  setText('decisionReason', visibleDecision || '-');
+  setText('stakeLevelReason', visibleStake || '-');
   const commentEl=$('aiShortComment');
   if(commentEl){
-    commentEl.innerHTML=formatMultilineComment(aiComment);
+    commentEl.innerHTML=formatMultilineComment(coachSummary ? `${coachSummary}\n${aiComment}` : aiComment);
   }
 
   if(analysisPanel){
@@ -657,13 +1097,15 @@ function renderOfficialPrediction(prediction){
   if(betsTable){
     const tbody=betsTable.querySelector('tbody');
     if(tbody && valueRanking.length){
-      tbody.innerHTML=valueRanking.slice(0, 15).map((item)=>`<tr><td>${item.valueRank||'-'}</td><td><b>${escapeHtml(item.combo||'-')}</b></td><td>${Number(item.probability||0).toFixed(1)}%</td><td>${Number(item.odds||0).toFixed(1)}</td><td>${Math.round(Number(item.expectedValue)||0)}%</td><td class="${Number(item.expectedValue)>=300?'buy':Number(item.expectedValue)>=100?'watch':'skip'}">${escapeHtml(item.valueStars || '-')}</td></tr>`).join('');
+      tbody.innerHTML=valueRanking.slice(0, 15).map((item)=>`<tr><td>${item.valueRank||'-'}</td><td><b>${escapeHtml(item.combo||'-')}</b></td><td>${Number(item.probability||0).toFixed(1)}%</td><td>${Number(item.odds||0).toFixed(1)}</td><td>${item.evCalculable ? `${Math.round(Number(item.expectedValue)||0)}%` : '計算不可'}</td><td class="${valueDecisionClass(item)}">${escapeHtml(valueDecisionLabel(item))}</td></tr>`).join('');
     }
   }
 
   const detailPanel=$('aiDetailPanel');
   if(detailPanel){
-    const ticketHtml=valueRanking.slice(0,5).map((item)=>`<p>${escapeHtml(item.valueStars || '')} 価値No${item.valueRank || '-'} ${escapeHtml(item.combo)} / 期待値${Math.round(Number(item.expectedValue)||0)}% / 勝率${Number(item.probability||0).toFixed(1)}%</p>`).join('');
+    const top3Rows=valueRanking.slice(0,3);
+    const ticketHtml=top3Rows.map((item)=>`<p>${escapeHtml(item.valueStars || '')} 価値No${item.valueRank || '-'} ${escapeHtml(item.combo)} / 予測確率${Number(item.probability||0).toFixed(1)}% / 公式オッズ${Number(item.odds||0).toFixed(1)}倍 / 期待値${item.evCalculable ? `${Math.round(Number(item.expectedValue)||0)}%` : '計算不可'} / 判断${escapeHtml(valueDecisionLabel(item))}</p>`).join('');
+    const oddsStatusHtml=oddsAvailable ? '' : '<p>公式3連単オッズ未取得</p>';
     const strengthsHtml=(Array.isArray(explanation.strengths)?explanation.strengths:[]).map((item)=>`<li>${escapeHtml(item)}</li>`).join('');
     const risksHtml=(Array.isArray(explanation.risks)?explanation.risks:[]).map((item)=>`<li>${escapeHtml(item)}</li>`).join('');
     const roughReasonsHtml=(Array.isArray(roughRace.reasons)?roughRace.reasons:[]).map((item)=>`<li>${escapeHtml(item)}</li>`).join('');
@@ -671,11 +1113,12 @@ function renderOfficialPrediction(prediction){
       <div><strong>◎ 本命</strong><p>${favorite.lane||'-'}号艇 / score ${Number(favorite.score||0).toFixed(1)}</p></div>
       <div><strong>○ 対抗</strong><p>${second.lane||'-'}号艇 / score ${Number(second.score||0).toFixed(1)}</p></div>
       <div><strong>▲ 穴</strong><p>${dark.lane||'-'}号艇 / score ${Number(dark.score||0).toFixed(1)}</p></div>
-      <div><strong>価値ランキング</strong>${ticketHtml || `<p>${buys.length ? buys.join(' / ') : '-'}</p>`}</div>
+      <div><strong>AI監督コメント</strong><p>${escapeHtml(coachSummary || '監督AIの判定を集計中')}</p><p>${escapeHtml(coachReason || '-')}</p><p>${escapeHtml(coach?.trustedRoleName ? `採用AI: ${coach.trustedRoleName}` : '-')}</p><p>${escapeHtml(coachDecision ? `最終判断: ${coachDecision}` : '-')}</p></div>
+      <div><strong>価値ランキング</strong>${oddsStatusHtml}${ticketHtml || `<p>${buys.length ? buys.join(' / ') : '-'}</p>`}</div>
       <div><strong>AIコメント</strong><p>${formatMultilineComment(aiComment)}</p></div>
       <div><strong>強み</strong><ul>${strengthsHtml || '<li>-</li>'}</ul></div>
       <div><strong>不安要素</strong><ul>${risksHtml || '<li>-</li>'}</ul></div>
-      <div><strong>推奨</strong><p>${escapeHtml(explanation.recommendation || '-')}</p></div>
+      <div><strong>推奨</strong><p>${escapeHtml(explanation.recommendation || '-')}</p><p>${escapeHtml(visibleDecision || '-')}</p><p>${escapeHtml(visibleStake || '-')}</p></div>
       <div><strong>荒れ度</strong><p>${escapeHtml(roughRace.stars && roughRace.roughLevel ? `${roughRace.stars} ${roughRace.roughLevel}` : '-')}</p><ul>${roughReasonsHtml || '<li>-</li>'}</ul></div>
       <div><strong>判断</strong><p>${escapeHtml(decision.decision || '-')}</p><p>${escapeHtml(decision.reason || '-')}</p><p>${escapeHtml(decision.recommendedBudgetRate || '-')}</p></div>
     </div>`;
@@ -692,9 +1135,26 @@ async function fetchOfficialPrediction(){
     if(!response.ok) return null;
     const payload=await response.json();
     if(!payload || !payload.success || !payload.prediction) return null;
+    setDataStatus('');
     return payload.prediction;
   }catch(error){
-    console.warn('official predict fetch failed', error);
+    setDataStatus('予想取得失敗: 予想APIはフォールバック中');
+    return null;
+  }
+}
+
+async function fetchHeadCoachRecommendation(){
+  if(!state.venue || !state.race) return null;
+  const venueId=getVenueId(state.venue);
+  if(!venueId) return null;
+
+  try{
+    const response=await fetch(`/api/ver11/headcoach?venueId=${encodeURIComponent(venueId)}&raceNo=${encodeURIComponent(state.race)}`);
+    if(!response.ok) return null;
+    const payload=await response.json();
+    if(!payload || !payload.success || !payload.headCoach) return null;
+    return payload.headCoach;
+  }catch(error){
     return null;
   }
 }
@@ -703,6 +1163,8 @@ async function applyOfficialPredictionIfAvailable(){
   const prediction=await fetchOfficialPrediction();
   if(!prediction){
     state.officialPrediction=null;
+    state.headCoach=null;
+    await renderConferencePanel();
     await renderLeaguePanel();
     await renderWeightsPanel();
     await renderOptimizerPanel();
@@ -711,7 +1173,9 @@ async function applyOfficialPredictionIfAvailable(){
     return;
   }
   state.officialPrediction=prediction;
+  state.headCoach=await fetchHeadCoachRecommendation();
   renderOfficialPrediction(prediction);
+  await renderConferencePanel();
   await renderLeaguePanel();
   await renderWeightsPanel();
   await renderOptimizerPanel();
@@ -721,44 +1185,9 @@ async function applyOfficialPredictionIfAvailable(){
 const today=new Date();
 $('todayLabel').textContent=today.toLocaleDateString('ja-JP');
 
-const raceScheduleDefaults={
-  '浜名湖': { '1': { start:'10:45', close:'10:20', status:'live', weather:'晴', windDir:'向かい風', windSpeed:2, wave:3 } },
-  '戸田': { '1': { start:'10:45', close:'10:20', status:'live', weather:'雨', windDir:'追い風', windSpeed:5, wave:4 } },
-  '蒲郡': { '1': { start:'10:40', close:'10:12', status:'live', weather:'晴', windDir:'横風', windSpeed:3, wave:2 } },
-  '常滑': { '1': { start:'10:35', close:'10:08', status:'live', weather:'曇', windDir:'向かい風', windSpeed:2, wave:3 } },
-  '大村': { '1': { start:'10:30', close:'10:05', status:'live', weather:'晴', windDir:'追い風', windSpeed:4, wave:2 } }
-};
-
-// 公式データへ差し替え可能なように、結果は別オブジェクトとして切り分ける。
-const resultData={
-  '浜名湖': { '1': { isFinal:true, order:'1-2-5', winMethod:'逃げ', payout:'1,230円', confirmedAt:'12:15' } },
-  '戸田': {
-    '1': { isFinal:true, order:'2-4-6', winMethod:'差し', payout:'1,980円', confirmedAt:'12:20' },
-    '2': { isFinal:true, order:'1-3-5', winMethod:'逃げ', payout:'1,760円', confirmedAt:'12:28' },
-    '3': { isFinal:true, order:'3-1-6', winMethod:'まくり', payout:'2,140円', confirmedAt:'12:35' },
-    '4': { isFinal:true, order:'4-2-7', winMethod:'差し', payout:'1,540円', confirmedAt:'12:42' },
-    '5': { isFinal:true, order:'5-1-3', winMethod:'捲り', payout:'2,310円', confirmedAt:'12:49' },
-    '6': { isFinal:true, order:'6-2-4', winMethod:'逃げ', payout:'1,870円', confirmedAt:'12:56' },
-    '7': { isFinal:true, order:'2-5-1', winMethod:'差し', payout:'1,940円', confirmedAt:'13:03' },
-    '8': { isFinal:true, order:'4-1-7', winMethod:'まくり', payout:'2,060円', confirmedAt:'13:10' },
-    '9': { isFinal:true, order:'3-6-2', winMethod:'捲り', payout:'1,720円', confirmedAt:'13:17' },
-    '10': { isFinal:true, order:'1-4-8', winMethod:'逃げ', payout:'2,220円', confirmedAt:'13:24' },
-    '11': { isFinal:true, order:'5-2-6', winMethod:'差し', payout:'1,860円', confirmedAt:'13:31' },
-    '12': { isFinal:true, order:'7-3-1', winMethod:'まくり', payout:'2,480円', confirmedAt:'13:38' }
-  },
-  '蒲郡': { '1': { isFinal:false, order:'', winMethod:'', payout:'', confirmedAt:'' } },
-  '常滑': { '1': { isFinal:false, order:'', winMethod:'', payout:'', confirmedAt:'' } },
-  '大村': { '1': { isFinal:false, order:'', winMethod:'', payout:'', confirmedAt:'' } }
-};
-const raceResultDefaults=resultData;
-
-// 公式データへ差し替え可能なように、開催場の今日情報はローカルJSON/定数として扱う。
-const venueHomeData=[
-  { venue:'戸田', currentRace:4, closeTime:'12:12', weather:'晴', windSpeed:3 },
-  { venue:'浜名湖', currentRace:6, closeTime:'13:05', weather:'曇', windSpeed:2 },
-  { venue:'蒲郡', currentRace:5, closeTime:'12:45', weather:'雨', windSpeed:4 },
-  { venue:'常滑', currentRace:3, closeTime:'11:50', weather:'晴', windSpeed:1 }
-];
+const raceScheduleDefaults={};
+const resultData={};
+const venueHomeData=[];
 
 const officialDataService=createDataHubService({
   venues,
@@ -771,7 +1200,136 @@ const officialDataService=createDataHubService({
 });
 
 function getResultData(venue,raceNo){
+  if(state.venue===venue && Number(state.race)===Number(raceNo) && state.raceMeta?.resultDetails){
+    return state.raceMeta.resultDetails;
+  }
   return resultData[venue]?.[String(raceNo)] || resultData[venue]?.[raceNo] || null;
+}
+
+function getPredictedTopMark(){
+  if(state.officialPrediction?.buyDetails?.[0]?.combo){
+    return String(state.officialPrediction.buyDetails[0].combo);
+  }
+  if(Array.isArray(state.bets) && state.bets[0]?.mark){
+    return String(state.bets[0].mark);
+  }
+  return '';
+}
+
+function renderPredictionVsResult(resultDetails){
+  const predicted=getPredictedTopMark();
+  const actual=String(resultDetails?.order || '');
+  if(!predicted){
+    return '<div class="result-compare-box"><div class="muted">予想データを読み込み中です</div></div>';
+  }
+  if(!actual){
+    return `<div class="result-compare-box"><div class="overview-item"><span>予想買い目</span><strong>${escapeHtml(predicted)}</strong></div><div class="overview-item"><span>判定</span><strong>結果待ち</strong></div></div>`;
+  }
+  const hit=predicted===actual;
+  const label=hit ? '的中' : '不的中';
+  const cls=hit ? 'final' : 'pending';
+  const hasSettlement=state.lastSettlement && state.lastSettlement.purchaseAmount != null;
+  const purchase=hasSettlement ? Number(state.lastSettlement.purchaseAmount) : 0;
+  const payout=hasSettlement ? Number(state.lastSettlement.payoutAmount) : Number(resultDetails?.trifectaPayout || 0);
+  const profit=hasSettlement ? Number(state.lastSettlement.profit) : (hit ? payout - purchase : -purchase);
+  const roi=hasSettlement ? Number(state.lastSettlement.roi) : (purchase > 0 ? (payout / purchase) * 100 : 0);
+  return `<div class="result-compare-box"><div class="overview-item"><span>予想買い目</span><strong>${escapeHtml(predicted)}</strong></div><div class="overview-item"><span>実着順</span><strong>${escapeHtml(actual)}</strong></div><div class="overview-item"><span>判定</span><strong class="result-summary-badge ${cls}">${label}</strong></div><div class="overview-item"><span>払戻</span><strong>${Number(payout || 0).toLocaleString()}円</strong></div><div class="overview-item"><span>利益</span><strong>${Number(profit || 0).toLocaleString()}円</strong></div><div class="overview-item"><span>ROI</span><strong>${Number(roi || 0).toFixed(1)}%</strong></div></div>`;
+}
+
+async function refreshVer8Dashboard(){
+  const statsBlock=$('dashboardStats') || $('stats');
+  if(!statsBlock) return;
+  try{
+    const response=await fetch('/api/ver8/dashboard');
+    const payload=await response.json();
+    const dash=payload?.dashboard;
+    if(!response.ok || !dash) return;
+    statsBlock.innerHTML=`
+      <div class="stat">本日投資<b>${Number(dash.purchaseAmount||0).toLocaleString()}円</b></div>
+      <div class="stat">本日回収<b>${Number(dash.payoutAmount||0).toLocaleString()}円</b></div>
+      <div class="stat">本日収支<b>${Number(dash.profit||0).toLocaleString()}円</b></div>
+      <div class="stat">本日ROI<b>${Number(dash.roi||0).toFixed(1)}%</b></div>
+      <div class="stat">的中数<b>${Number(dash.hitCount||0)}件</b></div>
+      <div class="stat">購入数<b>${Number(dash.buyCount||0)}件</b></div>`;
+  }catch(error){
+    // keep existing dashboard rendering
+  }
+}
+
+function stopRacePolling(){
+  if(state.pollingId){
+    clearInterval(state.pollingId);
+    state.pollingId=null;
+  }
+  state.pollingKey='';
+}
+
+async function refreshRaceMetaAndSummary(){
+  if(!state.venue || !state.race) return;
+  state.raceMeta=await getRaceMeta(state.venue,state.race);
+  renderResultSummary();
+  renderRaceOverview();
+}
+
+function startRacePolling(){
+  stopRacePolling();
+  if(!state.venue || !state.race) return;
+  state.pollingKey=`${state.venue}-${state.race}`;
+  state.pollingId=setInterval(async()=>{
+    if(!state.venue || !state.race) return;
+    const result=getResultData(state.venue,state.race) || {};
+    if(Boolean(result.isFinal)){
+      stopRacePolling();
+      return;
+    }
+    try{
+      await syncRaceResult(true);
+    }catch(error){
+      // ignore silent polling failures
+    }
+  },60000);
+}
+
+async function syncRaceResult(silent=false){
+  if(!state.venue || !state.race || state.isSyncingResult) return;
+  const venueId=getVenueId(state.venue);
+  if(!venueId) return;
+  state.isSyncingResult=true;
+  const statusEl=$('resultSyncStatus');
+  if(statusEl) statusEl.textContent='結果を更新中...';
+  try{
+    const response=await fetch('/api/ver8/result/sync',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({venueId,raceNo:state.race})
+    });
+    const payload=await response.json();
+    await refreshRaceMetaAndSummary();
+    await refreshVer8Dashboard();
+    if(payload?.settled){
+      state.lastSettlement={
+        hit:Boolean(payload?.hit),
+        purchaseAmount:Number(payload?.purchaseAmount || 0),
+        payoutAmount:Number(payload?.payoutAmount || 0),
+        profit:Number(payload?.profit || 0),
+        roi:Number(payload?.roi || 0)
+      };
+      renderResultSummary();
+      renderRaceOverview();
+      if(statusEl) statusEl.textContent='結果を確定して収支・学習を更新しました';
+      stopRacePolling();
+    }else if(statusEl){
+      statusEl.textContent='まだ結果未確定です';
+    }
+    if(!silent && payload?.error){
+      setDataStatus(`結果更新に失敗: ${payload.error}`);
+    }
+  }catch(error){
+    if(statusEl) statusEl.textContent='結果更新に失敗しました';
+    if(!silent) setDataStatus('結果更新APIの呼び出しに失敗しました');
+  }finally{
+    state.isSyncingResult=false;
+  }
 }
 
 async function getRaceMeta(venue,raceNo){
@@ -803,26 +1361,15 @@ async function getRaceMeta(venue,raceNo){
 
 function init(){
   state.bankroll=loadBankroll();
+  state.recommendDateTarget=loadRecommendDateTarget();
   syncBankrollInput();
   renderRecommendPanel();
-  renderVenueHome();
+  void renderVenueHome();
   renderStats();
-  const venueDetails=$('venueDetails');
-  const toggleVenueDetailsBtn=$('toggleVenueDetailsBtn');
   const saveBankrollBtn=$('saveBankrollBtn');
   const bankrollInput=$('bankrollInput');
-  if(venueDetails){
-    venueDetails.open=false;
-    venueDetails.classList.add('hidden');
-  }
-  if(toggleVenueDetailsBtn && venueDetails){
-    toggleVenueDetailsBtn.onclick=()=>{
-      const willShow=venueDetails.classList.contains('hidden');
-      venueDetails.classList.toggle('hidden', !willShow);
-      venueDetails.open=willShow;
-      toggleVenueDetailsBtn.textContent=willShow?'開催場一覧を閉じる':'開催場一覧を開く';
-    };
-  }
+  const recommendTodayBtn=$('recommendTodayBtn');
+  const recommendTomorrowBtn=$('recommendTomorrowBtn');
   if(saveBankrollBtn){
     saveBankrollBtn.onclick=()=>{
       saveBankroll(bankrollInput?.value ?? state.bankroll);
@@ -839,13 +1386,33 @@ function init(){
       }
     };
   }
-  $('backVenue').onclick=()=>{state.venue=null;state.race=null;renderVenueHome();show('venue');updateSteps(1);};
+  if(recommendTodayBtn){
+    recommendTodayBtn.onclick=()=>{
+      saveRecommendDateTarget('today');
+      renderRecommendPanel();
+    };
+  }
+  if(recommendTomorrowBtn){
+    recommendTomorrowBtn.onclick=()=>{
+      saveRecommendDateTarget('tomorrow');
+      renderRecommendPanel();
+    };
+  }
+  saveRecommendDateTarget(state.recommendDateTarget);
+  $('backVenue').onclick=()=>{state.venue=null;state.race=null;void renderVenueHome();show('venue');updateSteps(1);};
   $('backRace').onclick=()=>{show('race');updateSteps(2);};
   $('sampleBtn').onclick=sample;
   $('calcBtn').onclick=calculate;
   $('saveBtn').onclick=saveRace;
   $('reflectBtn').onclick=reflect;
   $('toggleDetailsBtn').onclick=toggleDetailRows;
+  document.addEventListener('click',(event)=>{
+    const target=event.target;
+    if(!(target instanceof HTMLElement)) return;
+    if(target.id==='refreshResultBtn'){
+      void syncRaceResult(false);
+    }
+  });
   const toggleAiDetailBtn=$('toggleAiDetailBtn');
   if(toggleAiDetailBtn){
     toggleAiDetailBtn.onclick=()=>{
@@ -859,33 +1426,66 @@ function init(){
   show('venue');
 }
 
-function renderVenueHome(){
+async function renderVenueHome(){
+  const venueGrid = $('venueGrid');
+  if(!venueGrid){
+    return;
+  }
+
+  const renderVenues = (items=[]) => {
+    const itemMap = new Map((Array.isArray(items) ? items : []).map((item) => [String(item?.venue || '').trim(), item]));
+    venueGrid.innerHTML = venues.map((venueName) => {
+      const item = itemMap.get(venueName);
+      const isOpen = Boolean(item);
+      const currentRace = item?.currentRace ? `現在 ${item.currentRace}R` : '本日非開催';
+      const closeTime = item?.closeTime ? `締切 ${item.closeTime}` : 'レース情報なし';
+      const weather = isOpen ? `${item?.weather || '-'} / ${item?.windSpeed ?? '-'}m` : '本日は開催がありません';
+      return `<button class="venue ${state.venue===venueName?'active':''} ${isOpen?'open':'closed'}" data-venue="${venueName}"><strong>${venueName}</strong><span>${currentRace}</span><span>${closeTime}</span><span>${weather}</span></button>`;
+    }).join('');
+    venueGrid.querySelectorAll('.venue').forEach((btn)=>btn.onclick=()=>selectVenue(btn.dataset.venue));
+  };
+
+  renderVenues();
+
   officialDataService.getTodayVenues().then((items)=>{
-    $('venueGrid').innerHTML=items.map(item=>`<button class="venue ${state.venue===item.venue?'active':''}" data-venue="${item.venue}">
-      <strong>${item.venue}</strong>
-      <span>現在 ${item.currentRace}R</span>
-      <span>締切 ${item.closeTime}</span>
-      <span>${item.weather} / ${item.windSpeed}m</span>
-    </button>`).join('');
-    document.querySelectorAll('.venue').forEach(btn=>btn.onclick=()=>selectVenue(btn.dataset.venue));
+    renderVenues(items);
+    const lastError=officialDataService.getLastError ? officialDataService.getLastError() : '';
+    if(lastError) setDataStatus(`${lastError}（ローカルへフォールバック）`);
+  }).catch(()=>{
+    setDataStatus('開催場取得失敗: ローカル表示へフォールバック');
   });
 }
 
-function renderVenues(){
-  $('venueGrid').innerHTML=venues.map(v=>`<button class="venue ${state.venue===v?'active':''}">${v}</button>`).join('');
-  document.querySelectorAll('.venue').forEach(b=>b.onclick=()=>selectVenue(b.textContent));
-}
-
-function selectVenue(v){
+async function selectVenue(v){
   state.venue=v;
   state.race=null;
-  $('venueTitle').textContent=`2. ${v} レース一覧`;
-  $('venueHint').textContent=`${v}のレースを選択してください。ローカルJSONの出走表データを読み込みます。`;
-  $('raceSummary').innerHTML=`<div class="summary-box__title">${v}</div><p class="muted">ローカルJSONのレースデータを利用して、開催場→レース→AI予想の流れを確認できます。</p>`;
+  const raceList=await officialDataService.getRaceList(v).catch(()=>[]);
+  const raceRows=Array.isArray(raceList)?raceList:[];
+  const listError=officialDataService.getLastError ? officialDataService.getLastError() : '';
+  if(listError) setDataStatus(`${listError}（ローカルへフォールバック）`);
+  const hasHolding=raceRows.length>0;
+  const raceMap=new Map(raceRows.map((row)=>[Number(row?.raceNo||0), row]));
+  state.hasRaceHolding=hasHolding;
+  $('venueTitle').textContent=`3. ${v} レース一覧`;
+  $('venueHint').textContent=`${v}のレースを選択してください。`;
+  $('raceSummary').innerHTML=hasHolding
+    ? `<div class="summary-box__title">${v}</div><p class="muted">1R〜12Rを選択して予想を表示します。</p>`
+    : `<div class="summary-box__title">${v}</div><p class="muted">本日は開催がありません</p>`;
   $('raceGrid').innerHTML=Array.from({length:12},(_,i)=>{
-    const resultItem=getResultData(v,i+1);
-    const badge=resultItem?.isFinal ? '結果確定' : '結果未確定';
-    return `<button class="race" data-race="${i+1}"><span class="race-number">${i+1}R</span><span class="race-badge ${resultItem?.isFinal?'final':'pending'}">${badge}</span></button>`;
+    const raceNo=i+1;
+    const raceInfo=raceMap.get(raceNo);
+    const resultItem=getResultData(v,raceNo);
+    const status=!hasHolding
+      ? '本日非開催'
+      : resultItem?.isFinal
+      ? '結果確定'
+      : raceInfo?.status
+      ? String(raceInfo.status)
+      : '未公開';
+    const start=raceInfo?.start ? `発走 ${raceInfo.start}` : '発走 --:--';
+    const close=raceInfo?.close ? `締切 ${raceInfo.close}` : '締切 --:--';
+    const statusClass=resultItem?.isFinal?'final':(status==='未公開'?'pending':'live');
+    return `<button class="race" data-race="${raceNo}"><span class="race-number">${raceNo}R</span><span>${start}</span><span>${close}</span><span class="race-badge ${statusClass}">${status}</span></button>`;
   }).join('');
   document.querySelectorAll('.race').forEach(btn=>btn.onclick=()=>selectRace(Number(btn.dataset.race)));
   show('race');
@@ -895,13 +1495,14 @@ function selectVenue(v){
 async function selectRace(r){
   state.race=r;
   state.raceMeta=await getRaceMeta(state.venue,r);
-  $('raceTitle').textContent=`3. ${state.venue} ${r}R レース詳細・AI予想`;
+  $('raceTitle').textContent=`4. ${state.venue} ${r}R レース詳細・AI予想`;
   $('detailWeather').textContent=state.raceMeta.weather;
   $('detailWindDir').textContent=state.raceMeta.windDir;
   $('detailWindSpeed').textContent=`${state.raceMeta.windSpeed}m`;
   $('detailWave').textContent=`${state.raceMeta.wave}cm`;
   $('raceMainTitle').textContent=`${state.venue} ${r}R / 発走 ${state.raceMeta.start} / ${state.raceMeta.result}`;
   $('raceMetaSummary').textContent=`開催地 ${state.venue} / ${state.raceMeta.raceStatusLabel} ${state.raceMeta.close} / 天候 ${state.raceMeta.weather} (${state.raceMeta.weatherSource})`;
+  setDataStatus('');
   $('weather').value=state.raceMeta.weather;
   $('windDir').value=state.raceMeta.windDir;
   $('windSpeed').value=state.raceMeta.windSpeed;
@@ -909,22 +1510,43 @@ async function selectRace(r){
   renderResultSummary();
   renderRaceOverview();
   $('aiDecision').textContent='読み込み中';
-  $('aiReason').textContent='出走表データを取得しています。';
+  setText('aiReason','出走表データを取得しています。');
   state.entries=await raceEntryStore.load(state.venue,r);
   renderEntryTable();
   renderDetailRows();
   $('probList').innerHTML='';
   $('betsTable').querySelector('tbody').innerHTML='';
   calculate();
+  const oddsPayload=await officialDataService.getOdds(state.venue,r).catch(()=>null);
+  if(oddsPayload?.odds){
+    renderOddsSummary(oddsPayload);
+    applyOfficialOddsToBets(oddsPayload);
+    renderBets();
+    decision();
+  }else{
+    renderOddsSummary(null);
+  }
   await applyOfficialPredictionIfAvailable();
+  const lastError=officialDataService.getLastError ? officialDataService.getLastError() : '';
+  if(lastError){
+    setDataStatus(`${lastError}（ローカルへフォールバック）`);
+  }
+  await renderAnalysisMoneyPlan();
+  await refreshVer8Dashboard();
+  startRacePolling();
   show('analysis');
   updateSteps(4);
 }
 
-function show(){
-  $('venuePanel').classList.remove('hidden');
-  $('raceSection').classList.add('hidden');
-  $('analysisSection').classList.add('hidden');
+function show(stage='venue'){
+  const venuePanel=$('venuePanel');
+  const raceSection=$('raceSection');
+  const analysisSection=$('analysisSection');
+  if(!venuePanel || !raceSection || !analysisSection) return;
+  venuePanel.classList.toggle('hidden', stage!=='venue');
+  raceSection.classList.toggle('hidden', stage!=='race');
+  analysisSection.classList.toggle('hidden', stage!=='analysis');
+  if(stage!=='analysis') stopRacePolling();
 }
 
 function updateSteps(step){
@@ -1002,10 +1624,11 @@ function renderResultSummary(){
   const resultDetails=getResultData(state.venue,state.race) || {};
   const isFinal=Boolean(resultDetails.isFinal);
   const resultLabel=isFinal ? '結果確定' : '結果未確定';
+  const compareHtml=renderPredictionVsResult(resultDetails);
   const resultRows=isFinal
     ? `<div class="result-summary-item"><span>着順</span><strong>${resultDetails.order || '-'}</strong></div><div class="result-summary-item"><span>決まり手</span><strong>${resultDetails.winMethod || '-'}</strong></div><div class="result-summary-item"><span>払戻金</span><strong>${resultDetails.payout || '-'}</strong></div><div class="result-summary-item"><span>確定時刻</span><strong>${resultDetails.confirmedAt || '-'}</strong></div>`
     : `<div class="result-summary-item"><span>結果</span><strong>${resultLabel}</strong></div>`;
-  resultBox.innerHTML=`<div class="result-summary-head"><span class="result-summary-badge ${isFinal?'final':'pending'}">${resultLabel}</span><strong>${state.venue} ${state.race}R</strong></div><div class="result-summary-grid">${resultRows}</div>`;
+  resultBox.innerHTML=`<div class="result-summary-head"><span class="result-summary-badge ${isFinal?'final':'pending'}">${resultLabel}</span><strong>${state.venue} ${state.race}R</strong><button id="refreshResultBtn" class="ghost" style="margin-left:auto;">結果を更新</button></div><div id="resultSyncStatus" class="muted" style="margin-bottom:6px;"></div><div class="result-summary-grid">${resultRows}</div>${compareHtml}`;
 }
 
 function renderRaceOverview(){
@@ -1160,12 +1783,12 @@ function decision(){
   if(secondReason) secondReason.textContent=secondSummary || '-';
   if(darkReason) darkReason.textContent=darkSummary || '-';
   if(riskReason) riskReason.textContent=riskComment || '-';
-  if(valueReason) valueReason.textContent=`${top.ev.toFixed(0)}`;
   if(confidenceReason) confidenceReason.textContent=`${confidence}%`;
   if(favoriteDetail) favoriteDetail.textContent=favoriteComment || '-';
   if(secondDetail) secondDetail.textContent=secondComment || '-';
   if(riskDetail) riskDetail.textContent=riskComment || '-';
   if(ticketReason) ticketReason.textContent=top.mark;
+  if(valueReason) valueReason.textContent=`${top.ev.toFixed(0)}%`;
 
   if(state.officialPrediction){
     renderBestAiRecommendation(state.officialPrediction.bestAiRecommendation);

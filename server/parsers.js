@@ -1,9 +1,3 @@
-const mockRaceList = Array.from({ length: 12 }, (_, index) => ({
-  raceNo: index + 1,
-  status: 'open',
-  start: `${10 + Math.floor(index / 4)}:${30 + index * 2}`.padStart(5, '0')
-}));
-
 const venueIdMap = {
   桐生: 'kiryu',
   戸田: 'toda',
@@ -15,20 +9,22 @@ const venueIdMap = {
   常滑: 'tokoname',
   津: 'tsu',
   三国: 'mikuni',
+  びわこ: 'biwako',
+  住之江: 'suminoe',
+  尼崎: 'amagasaki',
+  鳴門: 'naruto',
   丸亀: 'marugame',
-  坂出: 'sakaide',
   児島: 'kojima',
-  宮島: 'miya',
+  宮島: 'miyajima',
   徳山: 'tokuyama',
   下関: 'shimonoseki',
   若松: 'wakamatsu',
   芦屋: 'ashiya',
   福岡: 'fukuoka',
+  唐津: 'karatsu',
   大村: 'omura',
-  びわこ: 'biwako',
-  鳴門: 'naruto',
-  住之江: 'suminoe',
-  今津: 'imizu'
+  常滑: 'tokoname',
+  津: 'tsu'
 };
 
 function normalizeText(value) {
@@ -98,6 +94,12 @@ function extractCurrentRace(text) {
   return match ? match[1] : '';
 }
 
+function extractCurrentRaceFromLinks(rowHtml) {
+  const linkMatches = Array.from(String(rowHtml || '').matchAll(/rno=(\d+)/gi));
+  if (!linkMatches.length) return '';
+  return String(linkMatches[0][1] || '');
+}
+
 function extractDeadline(text) {
   const match = text.match(/(\d{1,2}:\d{2})/);
   return match ? match[1] : '';
@@ -147,12 +149,14 @@ function parseTodayVenues(html) {
       seen.add(key);
 
       const venueText = normalizeText(rowHtml);
+      const currentRace = extractCurrentRace(venueText) || extractCurrentRaceFromLinks(rowHtml);
+      const deadline = extractDeadline(venueText);
       venues.push({
         venueId: inferVenueId(venueName),
         venueName,
-        status: extractStatus(venueText),
-        currentRace: extractCurrentRace(venueText),
-        deadline: extractDeadline(venueText),
+        status: extractStatus(venueText) || (currentRace ? 'open' : ''),
+        currentRace,
+        deadline,
         weather: extractWeather(venueText),
         windSpeed: extractWindSpeed(venueText),
         waveHeight: extractWaveHeight(venueText)
@@ -205,8 +209,9 @@ function parseRaceList(html, venueId) {
         continue;
       }
 
-      const startTimeMatch = rowHtml.match(/>(\d{1,2}:\d{2})<\//i) || rowHtml.match(/>(\d{1,2}:\d{2})\s*</i);
-      const startTime = startTimeMatch ? startTimeMatch[1] : '';
+      const timeMatches = Array.from(rowHtml.matchAll(/(\d{1,2}:\d{2})/g)).map((match) => match[1]);
+      const startTime = timeMatches[0] || '';
+      const deadline = timeMatches[1] || '';
 
       const statusMatch = text.match(/(発売中|締切|中止|休催|発売前|発走前)/);
       const status = statusMatch ? statusMatch[1] : '';
@@ -222,22 +227,10 @@ function parseRaceList(html, venueId) {
         raceNo,
         raceName,
         startTime,
-        deadline: '',
-        status,
+        deadline: deadline || startTime,
+        status: status || resultStatus,
         resultStatus
       });
-    }
-
-    if (races.length === 0) {
-      return mockRaceList.map((race) => ({
-        venueId: venueId || '',
-        raceNo: String(race.raceNo),
-        raceName: '',
-        startTime: '',
-        deadline: '',
-        status: '',
-        resultStatus: ''
-      }));
     }
 
     return races;
@@ -600,41 +593,82 @@ function parseOdds(html, venueId, raceNo) {
       .replace(/<script[\s\S]*?<\/script>/gi, ' ')
       .replace(/<style[\s\S]*?<\/style>/gi, ' ');
 
-    const sections = {
+    const sectionRows = {
       trifecta: [],
       exacta: [],
       quinella: [],
       quinellaPlace: []
     };
 
-    const blocks = Array.from(normalizedHtml.matchAll(/<(tr|li|div|p)\b[^>]*>[\s\S]*?<\/\1>/gi));
-    let currentSection = '';
-
-    const normalizeTicket = (value) => normalizeText(value)
+    const normalizeTicket = (value) => String(value || '')
       .replace(/\s+/g, '-')
       .replace(/[／・]/g, '-')
       .replace(/-+/g, '-')
       .replace(/^-|-$/g, '');
 
-    const extractTicket = (text) => {
-      const match = text.match(/\b\d+(?:[・\-/／\s]+\d+){1,}\b/);
-      return match ? normalizeTicket(match[0]) : '';
-    };
-
-    const extractOdds = (text) => {
-      const decimalMatch = text.match(/(\d+\.\d+)/);
-      if (decimalMatch) {
-        return decimalMatch[1];
+    const toOddsNumber = (value) => {
+      const text = normalizeText(value);
+      const match = text.match(/\d+(?:\.\d+)?/);
+      if (!match) {
+        return 0;
       }
-
-      const integerMatch = text.match(/\b(\d{1,3})\b/);
-      return integerMatch ? integerMatch[1] : '';
+      const oddsValue = Number(match[0]);
+      return Number.isFinite(oddsValue) ? oddsValue : 0;
     };
 
-    for (const blockMatch of blocks) {
-      const blockHtml = blockMatch[0];
-      const rowText = normalizeText(blockHtml);
-      const sectionName = /3連単|三連単|trifecta/i.test(rowText)
+    const isValidExactaTicket = (ticket) => {
+      const value = normalizeTicket(ticket);
+      if (!/^[1-6]-[1-6]$/.test(value)) {
+        return false;
+      }
+      const [a, b] = value.split('-');
+      return a !== b;
+    };
+
+    const isValidTrifectaTicket = (ticket) => {
+      const value = normalizeTicket(ticket);
+      if (!/^[1-6]-[1-6]-[1-6]$/.test(value)) {
+        return false;
+      }
+      const [a, b, c] = value.split('-');
+      return a !== b && a !== c && b !== c;
+    };
+
+    const dedupeRows = (rows) => {
+      const byTicket = new Map();
+      for (const row of rows) {
+        byTicket.set(row.ticket, row);
+      }
+      return Array.from(byTicket.values())
+        .sort((a, b) => Number(a.ticket.split('-')[0]) - Number(b.ticket.split('-')[0]) || a.ticket.localeCompare(b.ticket))
+        .map((row, index) => ({
+          rank: String(index + 1),
+          ticket: row.ticket,
+          odds: String(row.odds)
+        }));
+    };
+
+    const parseTableCells = (rowHtml) => Array.from(String(rowHtml || '').matchAll(/<td\b([^>]*)>([\s\S]*?)<\/td>/gi)).map((match) => {
+      const attrText = String(match[1] || '');
+      const classMatch = attrText.match(/class=["']([^"']+)["']/i);
+      const rowspanMatch = attrText.match(/rowspan=["']?(\d+)["']?/i);
+      const colspanMatch = attrText.match(/colspan=["']?(\d+)["']?/i);
+      return {
+        text: normalizeText(match[2]),
+        classes: String(classMatch ? classMatch[1] : ''),
+        rowspan: Math.max(1, Number(rowspanMatch ? rowspanMatch[1] : 1)),
+        colspan: Math.max(1, Number(colspanMatch ? colspanMatch[1] : 1))
+      };
+    });
+
+    const parseTitleTableBlocks = () => {
+      const blocks = Array.from(normalizedHtml.matchAll(/<span\s+class=["']title7_mainLabel["']>\s*([^<]+?)\s*<\/span>[\s\S]*?<div\s+class=["']table1["']>[\s\S]*?<table>([\s\S]*?)<\/table>/gi));
+      return blocks.map((match) => ({ title: normalizeText(match[1]), tableHtml: String(match[2] || '') }));
+    };
+
+    const detectSection = (title) => {
+      const rowText = normalizeText(title);
+      return /3連単|三連単|trifecta/i.test(rowText)
         ? 'trifecta'
         : /2連単|exacta/i.test(rowText)
           ? 'exacta'
@@ -643,63 +677,143 @@ function parseOdds(html, venueId, raceNo) {
             : /拡連複|quinella place|quinellaplace/i.test(rowText)
               ? 'quinellaPlace'
               : '';
+    };
+
+    const parseTrifectaRows = (tableHtml) => {
+      const rows = [];
+      const bodyRows = Array.from(String(tableHtml || '').matchAll(/<tbody[^>]*>[\s\S]*?<\/tbody>/gi))
+        .flatMap((tbodyMatch) => Array.from(String(tbodyMatch[0]).matchAll(/<tr\b[^>]*>[\s\S]*?<\/tr>/gi)).map((trMatch) => trMatch[0]));
+      if (!bodyRows.length) {
+        return rows;
+      }
+
+      const groupFirst = ['', '', '', '', '', ''];
+      for (const rowHtml of bodyRows) {
+        const cells = parseTableCells(rowHtml);
+        let cursor = 0;
+        for (let group = 0; group < 6; group += 1) {
+          const firstLane = String(group + 1);
+          const maybeFirst = cells[cursor];
+          if (maybeFirst && !String(maybeFirst.classes).includes('oddsPoint') && /^[1-6]$/.test(String(maybeFirst.text || '')) && maybeFirst.rowspan > 1) {
+            groupFirst[group] = String(maybeFirst.text);
+            cursor += 1;
+          }
+
+          const secondCell = cells[cursor];
+          const oddsCell = cells[cursor + 1];
+          if (!secondCell || !oddsCell) {
+            continue;
+          }
+          const thirdLane = String(secondCell.text || '');
+          const secondLane = String(groupFirst[group] || '');
+          const oddsValue = toOddsNumber(oddsCell.text);
+          const ticket = normalizeTicket(`${firstLane}-${secondLane}-${thirdLane}`);
+          cursor += 2;
+
+          if (!isValidTrifectaTicket(ticket)) {
+            continue;
+          }
+          if (!(oddsValue > 0)) {
+            continue;
+          }
+
+          rows.push({ ticket, odds: oddsValue });
+        }
+      }
+      return rows;
+    };
+
+    const parsePairRows = (tableHtml, allowSamePair = false) => {
+      const rows = [];
+      const bodyRows = Array.from(String(tableHtml || '').matchAll(/<tbody[^>]*>[\s\S]*?<\/tbody>/gi))
+        .flatMap((tbodyMatch) => Array.from(String(tbodyMatch[0]).matchAll(/<tr\b[^>]*>[\s\S]*?<\/tr>/gi)).map((trMatch) => trMatch[0]));
+      if (!bodyRows.length) {
+        return rows;
+      }
+
+      for (const rowHtml of bodyRows) {
+        const cells = parseTableCells(rowHtml);
+        let cursor = 0;
+        for (let group = 0; group < 6; group += 1) {
+          const firstLane = String(group + 1);
+          const pairCell = cells[cursor];
+          const oddsCell = cells[cursor + 1];
+          if (!pairCell || !oddsCell) {
+            continue;
+          }
+          cursor += 2;
+
+          if (String(pairCell.classes).includes('is-disabled') || String(oddsCell.classes).includes('is-disabled')) {
+            continue;
+          }
+
+          const secondLane = String(pairCell.text || '');
+          const oddsValue = toOddsNumber(oddsCell.text);
+          const rawTicket = `${firstLane}-${secondLane}`;
+          const normalizedTicket = allowSamePair
+            ? normalizeTicket([firstLane, secondLane].map((x) => Number(x)).sort((a, b) => a - b).join('-'))
+            : normalizeTicket(rawTicket);
+
+          if (!isValidExactaTicket(normalizedTicket)) {
+            continue;
+          }
+          if (!(oddsValue > 0)) {
+            continue;
+          }
+
+          rows.push({ ticket: normalizedTicket, odds: oddsValue });
+        }
+      }
+      return rows;
+    };
+
+    const blockList = parseTitleTableBlocks();
+    for (const block of blockList) {
+      const sectionName = detectSection(block.title);
 
       if (sectionName) {
-        currentSection = sectionName;
-      }
-
-      if (!currentSection) {
-        continue;
-      }
-
-      const cellMatches = Array.from(blockHtml.matchAll(/<(td|th)\b[^>]*>[\s\S]*?<\/\1>/gi));
-      const normalizedCells = cellMatches
-        .map((match) => normalizeText(match[0]))
-        .filter(Boolean);
-
-      const ticketText = normalizedCells.map(extractTicket).find(Boolean) || '';
-      const oddsText = normalizedCells
-        .slice()
-        .reverse()
-        .map(extractOdds)
-        .find((value) => Boolean(value)) || '';
-      const rankText = normalizedCells.find((cell) => /^\d+$/.test(cell)) || '';
-
-      if (!ticketText && !oddsText && !rankText) {
-        continue;
-      }
-
-      const candidate = {
-        rank: rankText,
-        ticket: ticketText,
-        odds: oddsText
-      };
-
-      if (candidate.ticket || candidate.odds || candidate.rank) {
-        sections[currentSection].push(candidate);
+        if (sectionName === 'trifecta') {
+          sectionRows.trifecta.push(...parseTrifectaRows(block.tableHtml));
+        } else if (sectionName === 'exacta') {
+          sectionRows.exacta.push(...parsePairRows(block.tableHtml, false));
+        } else if (sectionName === 'quinella') {
+          sectionRows.quinella.push(...parsePairRows(block.tableHtml, true));
+        } else if (sectionName === 'quinellaPlace') {
+          sectionRows.quinellaPlace.push(...parsePairRows(block.tableHtml, true));
+        }
       }
     }
 
-    if (sections.trifecta.length === 0 && sections.exacta.length === 0 && sections.quinella.length === 0 && sections.quinellaPlace.length === 0) {
+    const fallbackParseByRegex = () => {
       const text = normalizeText(normalizedHtml);
-      const ticketMatch = text.match(/\b\d+(?:[・\-/／\s]+\d+){1,}\b/);
-      const oddsMatch = text.match(/(\d+\.\d+)/) || text.match(/\b(\d{2,3})\b/);
-      if (ticketMatch) {
-        sections.trifecta.push({
-          rank: '1',
-          ticket: normalizeTicket(ticketMatch[0]),
-          odds: oddsMatch ? oddsMatch[1] : ''
-        });
+      const ticketMatches = Array.from(text.matchAll(/\b([1-6](?:[・\-/／\s]+[1-6]){2})\b/g));
+      const oddsMatches = Array.from(text.matchAll(/\b(\d+(?:\.\d+)?)\b/g));
+      const firstOdds = oddsMatches.length ? Number(oddsMatches[0][1]) : 0;
+      for (const match of ticketMatches) {
+        const ticket = normalizeTicket(match[1]);
+        if (isValidTrifectaTicket(ticket) && firstOdds > 0) {
+          sectionRows.trifecta.push({ ticket, odds: firstOdds });
+          break;
+        }
       }
+    };
+
+    if (sectionRows.trifecta.length === 0 && sectionRows.exacta.length === 0 && sectionRows.quinella.length === 0 && sectionRows.quinellaPlace.length === 0) {
+      fallbackParseByRegex();
     }
+
+    const trifecta = dedupeRows(sectionRows.trifecta).filter((row) => isValidTrifectaTicket(row.ticket) && toOddsNumber(row.odds) > 0);
+    const exacta = dedupeRows(sectionRows.exacta).filter((row) => isValidExactaTicket(row.ticket) && toOddsNumber(row.odds) > 0);
+    const quinella = dedupeRows(sectionRows.quinella).filter((row) => isValidExactaTicket(row.ticket) && toOddsNumber(row.odds) > 0);
+    const quinellaPlace = dedupeRows(sectionRows.quinellaPlace).filter((row) => isValidExactaTicket(row.ticket) && toOddsNumber(row.odds) > 0);
 
     return {
       venueId: venueId || '',
       raceNo: raceNo || '',
-      trifecta: sections.trifecta,
-      exacta: sections.exacta,
-      quinella: sections.quinella,
-      quinellaPlace: sections.quinellaPlace
+      trifecta,
+      exacta,
+      quinella,
+      quinellaPlace
     };
   } catch (error) {
     return defaultPayload;
@@ -769,36 +883,83 @@ function parseResult(html, venueId, raceNo) {
       });
     }
 
-    const payoutLabels = ['3連単', '2連単', '3連複', '2連複', '拡連複', '単勝', '複勝'];
-    const payouts = [];
+    const payoutTypeList = ['3連単', '2連単', '拡連複', '3連複', '2連複', '単勝', '複勝'];
+    const normalizeResultTicket = (value) => String(value || '')
+      .replace(/[・\s/]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+    const ticketPattern = /[1-6](?:[・\-/／\s]+[1-6]){1,2}/;
+    const normalizeTypeText = (value) => toHalfWidthDigits(String(value || '')).replace(/\s+/g, '');
+    const parseYenToInt = (value) => {
+      const normalized = toHalfWidthDigits(String(value || ''))
+        .replace(/&yen;|&#165;/gi, '¥')
+        .replace(/[¥￥]/g, '')
+        .replace(/\s+/g, '');
+      const yenMarkMatch = toHalfWidthDigits(String(value || '')).match(/(?:¥|￥|&yen;|&#165;)\s*([0-9][0-9,]*)/i);
+      const yenMatch = normalized.match(/([0-9][0-9,]*)円/);
+      const numberText = (yenMarkMatch && yenMarkMatch[1]) || (yenMatch && yenMatch[1]) || (normalized.match(/([0-9][0-9,]{2,})/) || [])[1];
+      if (!numberText) return 0;
+      const digits = numberText.replace(/,/g, '');
+      const parsed = Number.parseInt(digits, 10);
+      return Number.isFinite(parsed) ? parsed : 0;
+    };
 
-    for (const label of payoutLabels) {
-      const labelRegex = new RegExp(label, 'i');
-      const matchedRows = rowMatches
-        .map((rowMatch) => normalizeText(rowMatch[0]))
-        .filter((rowText) => labelRegex.test(rowText));
+    const payoutMap = new Map();
+    let currentType = '';
 
-      for (const rowText of matchedRows) {
-        const ticketMatch = rowText.match(/\b\d+(?:[・\-/／\s]+\d+){1,}\b/);
-        const payoutMatch = rowText.match(/(\d{1,3}(?:,\d{3})*(?:\.\d+)?|\d+(?:\.\d+)?)(?:円|円位)?/);
-        const popularityMatch = rowText.match(/(\d+)(?:人気|人)/);
-
-        const ticket = ticketMatch ? ticketMatch[0].replace(/\s+/g, '-').replace(/[／・]/g, '-') : '';
-        const payout = payoutMatch ? payoutMatch[1].replace(/,/g, '') : '';
-
-        payouts.push({
-          type: label,
-          ticket,
-          payout,
-          popularity: popularityMatch ? popularityMatch[1] : ''
-        });
+    for (const rowMatch of rowMatches) {
+      const rowHtml = rowMatch[0];
+      const rowTextRaw = normalizeText(rowHtml);
+      const rowTypeText = normalizeTypeText(rowTextRaw);
+      const type = payoutTypeList.find((label) => rowTypeText.includes(normalizeTypeText(label)));
+      if (type) {
+        currentType = type;
       }
+      if (!currentType || payoutMap.has(currentType)) continue;
+
+      const cellMatches = Array.from(rowHtml.matchAll(/<(td|th)\b[^>]*>[\s\S]*?<\/\1>/gi));
+      const cells = cellMatches.map((match) => toHalfWidthDigits(normalizeText(match[0]))).filter(Boolean);
+
+      const ticketCell = cells.find((cell) => ticketPattern.test(cell)) || rowTextRaw;
+      const ticketMatch = ticketCell.match(ticketPattern);
+      const ticket = ticketMatch ? normalizeResultTicket(ticketMatch[0]) : '';
+
+      const moneyCell = cells.find((cell) => /円/.test(cell) && /\d/.test(cell))
+        || cells.find((cell) => /\d{1,3}(?:,\d{3})+/.test(cell))
+        || '';
+      const payoutInt = parseYenToInt(moneyCell || rowTextRaw);
+
+      const popularityCell = cells.find((cell) => /人気|人/.test(cell)) || rowTextRaw;
+      const popularityMatch = popularityCell.match(/(\d+)\s*(?:人気|人)/);
+
+      if (payoutInt <= 0) continue;
+
+      payoutMap.set(currentType, {
+        type: currentType,
+        ticket,
+        payout: payoutInt,
+        popularity: popularityMatch ? popularityMatch[1] : ''
+      });
     }
+
+    const payouts = payoutTypeList
+      .filter((type) => payoutMap.has(type))
+      .map((type) => payoutMap.get(type));
+
+    const payoutOrder = (() => {
+      const trifecta = payouts.find((row) => String(row?.type || '') === '3連単');
+      const ticket = String(trifecta?.ticket || '');
+      const digits = ticket.match(/\d+/g) || [];
+      if (digits.length >= 3) {
+        return `${digits[0]}-${digits[1]}-${digits[2]}`;
+      }
+      return '';
+    })();
 
     return {
       venueId: venueId || '',
       raceNo: raceNo || '',
-      order: finishers.map((finisher) => finisher.lane).filter(Boolean).join('-'),
+      order: finishers.map((finisher) => finisher.lane).filter(Boolean).join('-') || payoutOrder,
       kimarite,
       finishers,
       payouts

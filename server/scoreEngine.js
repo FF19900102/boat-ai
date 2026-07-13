@@ -28,6 +28,13 @@ const DEFAULT_WEIGHTS = {
   weather: 1
 };
 
+const SCORE_CORRECTION_LIMITS = {
+  minVenueSample: 60,
+  minWeatherSample: 25,
+  minMotorSample: 30,
+  minRacerSample: 30
+};
+
 function classFactor(className) {
   const c = String(className || '').toUpperCase();
   if (c === 'A1') return 1.08;
@@ -123,6 +130,7 @@ function scoreRace({ entries, beforeInfo, odds, weights = {} }) {
   const motorStatsCache = new Map();
   const racerStatsCache = new Map();
   const correctionMessages = new Set();
+  const lowSampleNotes = new Set();
 
   if (venueStats.totalRaces > 0 && venueStats.lane1WinRate >= 55) {
     correctionMessages.add(`${venueId}では1号艇勝率が高いため内枠を加点`);
@@ -148,11 +156,11 @@ function scoreRace({ entries, beforeInfo, odds, weights = {} }) {
     const boatPoint = boatNorm[idx] * 5 * activeWeights.boat;
     const weatherPoint = calcWeatherBonus(row.lane, weatherContext) * activeWeights.weather;
     const historicalLaneRate = venueId ? getLaneWinRate(venueId, row.lane) : 0;
-    const laneHistoryPoint = venueStats.totalRaces > 0
+    const laneHistoryPoint = venueStats.totalRaces >= SCORE_CORRECTION_LIMITS.minVenueSample
       ? Math.max(-2, Math.min(8, ((historicalLaneRate - 16.7) / 50) * 8))
       : 0;
     const historicalWeatherRate = toNumber(weatherStats?.laneWinRates?.[String(row.lane)], 0);
-    const weatherHistoryPoint = weatherStats.totalRaces > 0
+    const weatherHistoryPoint = weatherStats.totalRaces >= SCORE_CORRECTION_LIMITS.minWeatherSample
       ? Math.max(-1.5, Math.min(3, ((historicalWeatherRate - 16.7) / 50) * 3))
       : 0;
     const outsidePenaltyPoint = weatherStats.totalRaces >= 5 && windSpeed >= 5 && row.lane >= 5 && weatherStats.outsideWinRate < 20
@@ -166,7 +174,7 @@ function scoreRace({ entries, beforeInfo, odds, weights = {} }) {
     if (motorNo && !motorStatsCache.has(motorNo)) {
       motorStatsCache.set(motorNo, motorStats);
     }
-    const motorHistoryPoint = motorStats.appearances >= 10
+    const motorHistoryPoint = motorStats.appearances >= SCORE_CORRECTION_LIMITS.minMotorSample
       ? Math.max(-1, Math.min(3, ((toNumber(motorStats.winRate, 0) - 16.7) / 40) * 3))
       : 0;
 
@@ -177,7 +185,7 @@ function scoreRace({ entries, beforeInfo, odds, weights = {} }) {
     if (registrationNo && !racerStatsCache.has(registrationNo)) {
       racerStatsCache.set(registrationNo, racerStats);
     }
-    const racerHistoryPoint = racerStats.starts >= 10
+    const racerHistoryPoint = racerStats.starts >= SCORE_CORRECTION_LIMITS.minRacerSample
       ? Math.max(-1.5, Math.min(3, ((toNumber(racerStats.winRate, 0) - 16.7) / 40) * 3))
       : 0;
 
@@ -206,10 +214,10 @@ function scoreRace({ entries, beforeInfo, odds, weights = {} }) {
     addReason(reasons, 'モーター2連率', motorPoint, 8);
     addReason(reasons, 'ボート2連率', boatPoint, 5);
     addReason(reasons, '天候補正', weatherPoint, 2);
-    if (venueStats.totalRaces > 0) {
+    if (venueStats.totalRaces >= SCORE_CORRECTION_LIMITS.minVenueSample) {
       addReason(reasons, '過去統計補正', laneHistoryPoint, 8);
     }
-    if (weatherStats.totalRaces > 0) {
+    if (weatherStats.totalRaces >= SCORE_CORRECTION_LIMITS.minWeatherSample) {
       addReason(reasons, '天候統計補正', weatherHistoryPoint, 3);
     }
     if (outsidePenaltyPoint) {
@@ -257,6 +265,13 @@ function scoreRace({ entries, beforeInfo, odds, weights = {} }) {
   const ranked = assignMarks(sorted).map((row, idx) => ({ ...row, rank: idx + 1 }));
   const scoreByLane = [...ranked].sort((a, b) => a.lane - b.lane);
 
+  if (venueStats.totalRaces > 0 && venueStats.totalRaces < SCORE_CORRECTION_LIMITS.minVenueSample) {
+    lowSampleNotes.add(`会場サンプル不足(${venueStats.totalRaces}件)`);
+  }
+  if (weatherStats.totalRaces > 0 && weatherStats.totalRaces < SCORE_CORRECTION_LIMITS.minWeatherSample) {
+    lowSampleNotes.add(`天候サンプル不足(${weatherStats.totalRaces}件)`);
+  }
+
   return {
     score: scoreByLane,
     ranked,
@@ -273,7 +288,9 @@ function scoreRace({ entries, beforeInfo, odds, weights = {} }) {
         lane1WinRate: toNumber(venueStats.lane1WinRate, 0),
         totalRaces: venueStats.totalRaces
       },
-      appliedCorrections: Array.from(correctionMessages)
+      appliedCorrections: Array.from(correctionMessages),
+      lowSampleNotes: Array.from(lowSampleNotes),
+      samplePolicy: SCORE_CORRECTION_LIMITS
     }
   };
 }

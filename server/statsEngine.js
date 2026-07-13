@@ -80,6 +80,50 @@ function buildStats() {
   };
 }
 
+function getSettledRows(rows) {
+  return (Array.isArray(rows) ? rows : []).filter((row) => {
+    if (row?.settlement?.isFinal === true) return true;
+    if (typeof row?.hit === 'boolean' && Number.isFinite(Number(row?.payout))) return true;
+    return false;
+  });
+}
+
+function buildTodayDashboard(date = new Date()) {
+  const history = readHistory();
+  const dayRows = history.filter((row) => sameDay(new Date(row?.timestamp || row?.predictedAt || 0), date));
+  const settled = getSettledRows(dayRows);
+  const stake = settled.reduce((sum, row) => sum + toNumber(row?.settlement?.stake, toNumber(row?.evaluation?.stake, 0)), 0);
+  const payout = settled.reduce((sum, row) => sum + toNumber(row?.settlement?.payout, toNumber(row?.payout, 0)), 0);
+  const profit = settled.reduce((sum, row) => sum + toNumber(row?.settlement?.profit, toNumber(row?.profit, 0)), 0);
+  const buyCount = settled.length;
+  const hitCount = settled.filter((row) => row?.settlement?.hit === true || row?.hit === true).length;
+  const roi = stake > 0 ? Math.round((payout / stake) * 1000) / 10 : 0;
+
+  return {
+    date: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`,
+    purchaseAmount: Math.round(stake),
+    payoutAmount: Math.round(payout),
+    profit: Math.round(profit),
+    roi,
+    hitCount,
+    buyCount,
+    hitSummary: `${hitCount}/${buyCount}`,
+    pendingCount: dayRows.length - settled.length
+  };
+}
+
+function getLatestRaceHistory(venueId, raceNo) {
+  const history = readHistory();
+  const rows = history
+    .filter((row) => String(row?.venueId || '') === String(venueId || '') && String(row?.raceNo || '') === String(raceNo || ''))
+    .sort((a, b) => {
+      const aTime = new Date(a?.timestamp || a?.predictedAt || 0).getTime();
+      const bTime = new Date(b?.timestamp || b?.predictedAt || 0).getTime();
+      return bTime - aTime;
+    });
+  return rows[0] || null;
+}
+
 function getRecentHistory(limit = 100) {
   return readHistory().slice(0, limit);
 }
@@ -92,7 +136,9 @@ function buildLeagueStats() {
 
 module.exports = {
   buildStats,
+  buildTodayDashboard,
   getRecentHistory,
+  getLatestRaceHistory,
   buildLeagueStats,
   buildPeriodStats
 };

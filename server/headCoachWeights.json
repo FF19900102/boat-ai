@@ -1,0 +1,56 @@
+{
+  "venue": {
+    "hamanako": {
+      "trustBias": -0.12,
+      "buyBias": -0.06,
+      "riskBias": 0.08,
+      "scoreBias": -0.1,
+      "sampleCount": 1,
+      "updatedAt": "2026-07-12T14:00:22.149Z"
+    },
+    "toda": {
+      "trustBias": -0.12,
+      "buyBias": -0.06,
+      "riskBias": 0.08,
+      "scoreBias": -0.1,
+      "sampleCount": 1,
+      "updatedAt": "2026-07-12T14:02:17.849Z"
+    }
+  },
+  "condition": {
+    "ナイター": {
+      "trustBias": -0.12,
+      "buyBias": -0.06,
+      "riskBias": 0.08,
+      "scoreBias": -0.1,
+      "sampleCount": 1,
+      "updatedAt": "2026-07-12T14:00:22.149Z"
+    },
+    "一般戦": {
+      "trustBias": -0.12,
+      "buyBias": -0.06,
+      "riskBias": 0.08,
+      "scoreBias": -0.1,
+      "sampleCount": 1,
+      "updatedAt": "2026-07-12T14:02:17.849Z"
+    }
+  },
+  "venueCondition": {
+    "hamanako::ナイター": {
+      "trustBias": -0.12,
+      "buyBias": -0.06,
+      "riskBias": 0.08,
+      "scoreBias": -0.1,
+      "sampleCount": 1,
+      "updatedAt": "2026-07-12T14:00:22.149Z"
+    },
+    "toda::一般戦": {
+      "trustBias": -0.12,
+      "buyBias": -0.06,
+      "riskBias": 0.08,
+      "scoreBias": -0.1,
+      "sampleCount": 1,
+      "updatedAt": "2026-07-12T14:02:17.849Z"
+    }
+  }
+}

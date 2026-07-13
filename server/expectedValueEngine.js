@@ -1,5 +1,79 @@
 const { toNumber } = require('./weatherEngine');
 
+function normalizeTicket(ticket) {
+  return String(ticket || '').replace(/[・\s/]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+}
+
+function generateTrifecta(lanes) {
+  const combos = [];
+  for (const a of lanes) {
+    for (const b of lanes) {
+      for (const c of lanes) {
+        if (a === b || a === c || b === c) {
+          continue;
+        }
+        combos.push(`${a}-${b}-${c}`);
+      }
+    }
+  }
+  return combos;
+}
+
+function buildStrengthMap(scoreRows) {
+  const map = new Map();
+  for (const row of Array.isArray(scoreRows) ? scoreRows : []) {
+    const lane = Number(row?.lane || 0);
+    if (lane <= 0) {
+      continue;
+    }
+    map.set(lane, Math.max(1, Number(row?.score) || 1));
+  }
+  return map;
+}
+
+function rawComboProbability(combo, strengthMap) {
+  const [a, b, c] = String(combo || '').split('-').map((value) => Number(value));
+  const lanes = Array.from(strengthMap.keys());
+  const sA = strengthMap.get(a) || 1;
+  const sB = strengthMap.get(b) || 1;
+  const sC = strengthMap.get(c) || 1;
+  const total = lanes.reduce((sum, lane) => sum + (strengthMap.get(lane) || 0), 0);
+  const remainA = total - sA;
+  const remainAB = remainA - sB;
+  const p1 = total > 0 ? sA / total : 0;
+  const p2 = remainA > 0 ? sB / remainA : 0;
+  const p3 = remainAB > 0 ? sC / remainAB : 0;
+  return Math.max(0, Math.min(1, p1 * p2 * p3));
+}
+
+function buildNormalizedTrifectaProbabilities(scoreRows) {
+  const lanes = [1, 2, 3, 4, 5, 6];
+  const strengthMap = buildStrengthMap(scoreRows);
+  for (const lane of lanes) {
+    if (!strengthMap.has(lane)) {
+      strengthMap.set(lane, 1);
+    }
+  }
+
+  const rows = generateTrifecta(lanes).map((combo) => ({
+    combo,
+    rawProbability: rawComboProbability(combo, strengthMap)
+  }));
+
+  const rawTotal = rows.reduce((sum, row) => sum + row.rawProbability, 0);
+  const normalizedRows = rows.map((row) => ({
+    combo: row.combo,
+    probability: rawTotal > 0 ? row.rawProbability / rawTotal : 0
+  }));
+  const total = normalizedRows.reduce((sum, row) => sum + row.probability, 0);
+
+  return {
+    rows: normalizedRows,
+    totalProbability: total,
+    comboCount: normalizedRows.length
+  };
+}
+
 function calculateExpectedValue(probability, odds) {
   const p = toNumber(probability, 0);
   const o = toNumber(odds, 0);
@@ -20,7 +94,7 @@ function buildOddsMaps(odds) {
   const exacta = new Map();
 
   for (const row of Array.isArray(odds?.trifecta) ? odds.trifecta : []) {
-    const ticket = String(row?.ticket || '').replace(/[・\s/]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    const ticket = normalizeTicket(row?.ticket || '');
     const value = toNumber(row?.odds, 0);
     if (ticket && value > 0) {
       trifecta.set(ticket, value);
@@ -28,7 +102,7 @@ function buildOddsMaps(odds) {
   }
 
   for (const row of Array.isArray(odds?.exacta) ? odds.exacta : []) {
-    const ticket = String(row?.ticket || '').replace(/[・\s/]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    const ticket = normalizeTicket(row?.ticket || '');
     const value = toNumber(row?.odds, 0);
     if (ticket && value > 0) {
       exacta.set(ticket, value);
@@ -52,5 +126,7 @@ module.exports = {
   calculateExpectedValue,
   rateExpectedValue,
   buildOddsMaps,
-  estimateFromExacta
+  estimateFromExacta,
+  normalizeTicket,
+  buildNormalizedTrifectaProbabilities
 };

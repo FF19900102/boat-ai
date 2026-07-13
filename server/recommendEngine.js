@@ -4,6 +4,31 @@ const { getBestAiRecommendation } = require('./bestAiEngine');
 
 const TODAY_URL = 'https://www.boatrace.jp/owpc/pc/race/index';
 
+function normalizeDate(value) {
+  const digits = String(value || '').replace(/\D/g, '');
+  return digits.length === 8 ? digits : '';
+}
+
+function getTomorrowDateJst() {
+  const now = new Date();
+  const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
+  const jst = new Date(utcMs + 9 * 60 * 60000 + 24 * 60 * 60000);
+  const yyyy = jst.getFullYear();
+  const mm = String(jst.getMonth() + 1).padStart(2, '0');
+  const dd = String(jst.getDate()).padStart(2, '0');
+  return `${yyyy}${mm}${dd}`;
+}
+
+function getTodayDateJst() {
+  const now = new Date();
+  const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
+  const jst = new Date(utcMs + 9 * 60 * 60000);
+  const yyyy = jst.getFullYear();
+  const mm = String(jst.getMonth() + 1).padStart(2, '0');
+  const dd = String(jst.getDate()).padStart(2, '0');
+  return `${yyyy}${mm}${dd}`;
+}
+
 function toNumber(value, fallback = 0) {
   const n = Number.parseFloat(String(value ?? '').replace(/[^0-9.+-]/g, ''));
   return Number.isFinite(n) ? n : fallback;
@@ -81,15 +106,17 @@ function buildCandidate({ venueId, venueName, raceNo, prediction, bestAiRecommen
   const bestAiName = String(bestAiRecommendation?.aiName || '');
   const bestAiRow = sortedLeagueRows.find((row) => String(row?.aiId || '') === bestAiId) || null;
   const chosenRow = bestAiRow || sortedLeagueRows[0] || null;
-  const topTicket = Array.isArray(chosenRow?.buyDetails) ? chosenRow.buyDetails[0] || {} : {};
-  const topPick = String(chosenRow?.topPick || topTicket?.combo || prediction?.buy?.[0] || '');
+  const chosenBuyDetails = Array.isArray(chosenRow?.buyDetails) ? chosenRow.buyDetails : [];
+  const predictionBuyDetails = Array.isArray(prediction?.buyDetails) ? prediction.buyDetails : [];
+  const topTicket = chosenBuyDetails[0] || predictionBuyDetails[0] || {};
+  const valueTopTicket = buyableValueRanking[0] || valueRanking[0] || topTicket || null;
+  const topPick = String(chosenRow?.topPick || valueTopTicket?.combo || topTicket?.combo || prediction?.buy?.[0] || '');
   const expectedValue = Math.round(toNumber(chosenRow?.expectedValue, topTicket?.expectedValue || 0) * 10) / 10;
   const confidence = Math.round(toNumber(chosenRow?.confidence, chosenRow?.score || 0) * 10) / 10;
   const roughLevel = String(chosenRow?.roughRace?.roughLevel || prediction?.roughRace?.roughLevel || '');
   const decision = toDecisionText(chosenRow?.decision?.decision || prediction?.decision?.decision || '');
   const topLeagueRows = sortedLeagueRows.filter((row) => String(row?.aiId || '') !== String(chosenRow?.aiId || '')).slice(0, 2);
   const consensusWithLeagueTop = topLeagueRows.some((row) => String(row?.topPick || '') === topPick);
-  const topValueTicket = buyableValueRanking[0] || valueRanking[0] || null;
   const valueTopPicks = buyableValueRanking.slice(0, 3);
 
   const strictMatched =
@@ -133,8 +160,10 @@ function buildCandidate({ venueId, venueName, raceNo, prediction, bestAiRecommen
   };
 }
 
-async function fetchTodayVenues() {
-  const response = await fetch(TODAY_URL);
+async function fetchVenuesByDate(targetDate) {
+  const date = normalizeDate(targetDate);
+  const url = date ? `${TODAY_URL}?hd=${date}` : TODAY_URL;
+  const response = await fetch(url);
   const text = await response.text();
   if (!response.ok) {
     throw new Error(`HTTP ${response.status} ${response.statusText}`);
@@ -144,9 +173,22 @@ async function fetchTodayVenues() {
     .filter((venue) => String(venue?.status || '') !== 'cancelled');
 }
 
-async function recommendTodayRaces() {
+async function recommendRacesByDate(targetDate) {
+  const date = normalizeDate(targetDate) || getTodayDateJst();
   const bestAiRecommendation = getBestAiRecommendation();
-  const venues = await fetchTodayVenues();
+  const venues = await fetchVenuesByDate(date);
+
+  if (!venues.length) {
+    const isTomorrow = date === getTomorrowDateJst();
+    return {
+      recommendations: [],
+      fallbackRecommendations: [],
+      bestAiRecommendation,
+      mode: isTomorrow ? 'unpublished' : 'no-race',
+      statusMessage: isTomorrow ? '明日の出走表はまだ公開されていません' : '今日は勝負レースなし'
+    };
+  }
+
   const targetVenues = venues.filter((venue) => venue?.currentRace).length > 0
     ? venues.filter((venue) => venue?.currentRace)
     : venues;
@@ -161,7 +203,10 @@ async function recommendTodayRaces() {
   const predictions = [];
   for (const task of tasks) {
     try {
-      const prediction = await predictRace(task.venueId, task.raceNo, { persistLearning: false });
+      const prediction = await predictRace(task.venueId, task.raceNo, {
+        persistLearning: false,
+        targetDate: date
+      });
       predictions.push({ ...task, prediction });
     } catch (error) {
       // ignore failed races for recommendation view
@@ -174,23 +219,91 @@ async function recommendTodayRaces() {
     })
     .sort((a, b) => b.totalScore - a.totalScore || b.expectedValue - a.expectedValue || b.confidence - a.confidence);
 
-  const recommendations = candidates
-    .filter((row) => row.strictMatched)
-    .slice(0, 10)
+  // If parsing/prediction failed for all races but venues exist, expose lightweight reference rows.
+  const safeCandidates = candidates.length > 0
+    ? candidates
+    : tasks.slice(0, 3).map((task) => ({
+        venueId: task.venueId,
+        venueName: task.venueName,
+        raceNo: task.raceNo,
+        decision: '参考候補',
+        bestAi: `${bestAiRecommendation?.aiId || '-'} ${bestAiRecommendation?.aiName || ''}`.trim(),
+        topPick: '',
+        expectedValue: 0,
+        confidence: 0,
+        roughLevel: '',
+        reason: '開催レースあり（参考候補）',
+        valueRanking: [],
+        valueTopTicket: null,
+        valueTopPicks: []
+      }));
+
+  const buyRows = safeCandidates.filter((row) => row?.decision === '買い');
+  const smallRows = safeCandidates.filter((row) => row?.decision === '少額');
+
+  let selectedRows = [];
+  let mode = 'no-race';
+  let statusMessage = '今日は勝負レースなし';
+
+  if (safeCandidates.length === 0) {
+    mode = 'no-race';
+    statusMessage = '今日は勝負レースなし';
+  } else if (buyRows.length > 0) {
+    selectedRows = buyRows.slice(0, 10);
+    mode = 'buy';
+    statusMessage = '買い判定レースを表示';
+  } else if (smallRows.length > 0) {
+    selectedRows = smallRows.slice(0, 10);
+    mode = 'small';
+    statusMessage = '積極的に買うレースはありません';
+  } else {
+    selectedRows = [...safeCandidates]
+      .sort((a, b) => b.expectedValue - a.expectedValue || b.confidence - a.confidence)
+      .slice(0, 3)
+      .map((row) => ({
+        ...row,
+        decision: row?.decision || '参考候補',
+        reason: row?.reason || '期待値上位の参考候補'
+      }));
+    mode = 'reference';
+    statusMessage = '積極的に買うレースはありません';
+  }
+
+  const recommendations = selectedRows
     .map((row, index) => ({ rank: index + 1, ...row }));
 
-  const fallbackRecommendations = recommendations.length === 0
-    ? candidates.slice(0, 3).map((row, index) => ({ rank: index + 1, ...row }))
+  // Keep compatibility: fallbackRecommendations remains present.
+  const fallbackRecommendations = mode === 'reference'
+    ? recommendations
     : [];
 
   return {
     recommendations: recommendations.map(({ totalScore, strictMatched, ...row }) => row),
     fallbackRecommendations: fallbackRecommendations.map(({ totalScore, strictMatched, ...row }) => row),
     bestAiRecommendation,
-    mode: recommendations.length > 0 ? 'normal' : 'fallback'
+    mode,
+    statusMessage
   };
 }
 
+async function recommendTodayRaces() {
+  return recommendRacesByDate(getTodayDateJst());
+}
+
+async function recommendTomorrowRaces() {
+  return recommendRacesByDate(getTomorrowDateJst());
+}
+
+async function recommendRacesByDateApi(date) {
+  const normalized = normalizeDate(date);
+  if (!normalized) {
+    throw new Error('date must be YYYYMMDD');
+  }
+  return recommendRacesByDate(normalized);
+}
+
 module.exports = {
-  recommendTodayRaces
+  recommendTodayRaces,
+  recommendTomorrowRaces,
+  recommendRacesByDateApi
 };

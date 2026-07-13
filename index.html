@@ -21,6 +21,25 @@
       justify-content: space-between;
       margin-bottom: 10px;
     }
+    .recommend-date-switch {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .recommend-date-switch .ghost-btn {
+      min-height: 34px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .recommend-date-switch .ghost-btn.active {
+      background: #111827;
+      color: #fff;
+      border-color: #111827;
+    }
     .today-fire {
       font-weight: 900;
       font-size: 20px;
@@ -311,15 +330,82 @@
       font-weight: 700;
       line-height: 1.6;
     }
-    #toggleVenueDetailsBtn {
-      margin: 6px 0 12px;
-      width: 100%;
-      min-height: 44px;
-      font-size: 15px;
+    .result-compare-box {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px;
+    }
+    .conference-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .conference-ai-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 10px;
+    }
+    .conference-ai-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: baseline;
+    }
+    .conference-stars {
+      margin-top: 6px;
+      font-size: 20px;
+      font-weight: 900;
+      color: #92400e;
+      letter-spacing: 0.04em;
+    }
+    .conference-kv-grid {
+      margin-top: 8px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .conference-kv-grid span {
+      display: block;
+      color: #6b7280;
+      font-size: 11px;
       font-weight: 700;
     }
-    #raceSection,
-    #analysisSection,
+    .conference-kv-grid b {
+      font-size: 15px;
+      color: #111827;
+    }
+    .conference-final {
+      margin-top: 12px;
+      border: 1px solid #bfdbfe;
+      background: #f8fbff;
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .conference-final-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 8px;
+    }
+    .conference-final-grid span {
+      display: block;
+      color: #64748b;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .conference-final-grid strong {
+      font-size: 18px;
+      color: #0f172a;
+    }
+    .conference-reason {
+      margin-top: 10px;
+      color: #334155;
+      font-size: 13px;
+      line-height: 1.6;
+      font-weight: 700;
+    }
     #resetBtn {
       display: none !important;
     }
@@ -426,23 +512,21 @@
         </div>
         <span id="todayLabel" class="pill"></span>
       </div>
-      <button id="toggleVenueDetailsBtn" class="ghost">開催場一覧を開く</button>
-      <details id="venueDetails" class="result-card full hidden">
-        <summary><strong>詳細情報（開催場選択）</strong></summary>
-        <div id="flowSteps" class="flow-steps">
-          <div class="flow-step active"><span>1</span><div>開催場</div></div>
-          <div class="flow-step"><span>2</span><div>レース一覧</div></div>
-          <div class="flow-step"><span>3</span><div>詳細</div></div>
-          <div class="flow-step"><span>4</span><div>AI予想</div></div>
-        </div>
+      <div id="flowSteps" class="flow-steps">
+        <div class="flow-step active"><span>1</span><div>開催場</div></div>
+        <div class="flow-step"><span>2</span><div>レース一覧</div></div>
+        <div class="flow-step"><span>3</span><div>AI予想</div></div>
+      </div>
+      <div class="result-card full">
+        <h3 style="margin:0 0 10px;">2. 全国24場の開催場選択</h3>
         <div id="venueGrid" class="venue-grid"></div>
-      </details>
+      </div>
     </section>
 
     <section id="raceSection" class="panel hidden">
       <div class="section-head">
         <div>
-          <h2 id="venueTitle">2. レース一覧</h2>
+          <h2 id="venueTitle">3. レース一覧</h2>
           <p id="venueHint" class="muted">レースを選択すると、詳細とAI予想に進めます。</p>
         </div>
         <button id="backVenue" class="ghost">開催場に戻る</button>
@@ -454,11 +538,12 @@
     <section id="analysisSection" class="panel hidden">
       <div class="section-head">
         <div>
-          <h2 id="raceTitle">3. レース詳細・AI予想</h2>
+          <h2 id="raceTitle">4. レース詳細・AI予想</h2>
           <p class="muted">まずはシンプルな流れを確認できるように、AI結論を最初に表示します。</p>
         </div>
         <button id="backRace" class="ghost">レース選択に戻る</button>
       </div>
+      <p id="dataStatus" class="muted"></p>
 
       <div class="race-hero">
         <div class="race-hero__title">
@@ -480,6 +565,8 @@
           <div class="ai-summary-item"><span>本命</span><strong id="favoriteReason">-</strong></div>
           <div class="ai-summary-item"><span>対抗</span><strong id="secondReason">-</strong></div>
           <div class="ai-summary-item"><span>穴</span><strong id="darkReason">-</strong></div>
+          <div class="ai-summary-item"><span>期待値</span><strong id="valueReason">-</strong></div>
+          <div class="ai-summary-item"><span>推奨購入金額</span><strong id="analysisMoneyPlan">-</strong></div>
           <div class="ai-summary-item"><span>推奨買い目</span><strong id="ticketReason">-</strong></div>
         </div>
         <div class="ai-comment-box">
@@ -554,6 +641,27 @@
             <thead><tr><th>順位</th><th>買い目</th><th>確率</th><th>オッズ</th><th>期待値</th><th>判定</th></tr></thead>
             <tbody></tbody>
           </table>
+        </div>
+      </div>
+
+      <div class="result-card full">
+        <div class="section-head compact">
+          <h3>公式オッズ</h3>
+          <span class="muted">3連単 / 2連単 / 拡連複</span>
+        </div>
+        <div id="oddsSummaryPanel" class="cards">
+          <div class="result-card">
+            <h4>3連単</h4>
+            <div id="oddsTrifecta" class="muted">-</div>
+          </div>
+          <div class="result-card">
+            <h4>2連単</h4>
+            <div id="oddsExacta" class="muted">-</div>
+          </div>
+          <div class="result-card">
+            <h4>拡連複</h4>
+            <div id="oddsQuinellaPlace" class="muted">-</div>
+          </div>
         </div>
       </div>
 

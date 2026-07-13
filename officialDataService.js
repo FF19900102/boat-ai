@@ -20,19 +20,86 @@
       fallbackEntries = []
     } = options;
 
+    const venueNameById = Object.fromEntries(
+      (Array.isArray(venues) ? venues : []).map((name) => [
+        String(name || '')
+          .normalize('NFKC')
+          .toLowerCase()
+          .replace(/\s+/g, ''),
+        String(name || '')
+      ])
+    );
+
+    const venueIdByName = {
+      '桐生': 'kiryu', '戸田': 'toda', '江戸川': 'edogawa', '平和島': 'heiwajima', '多摩川': 'tamagawa', '浜名湖': 'hamanako',
+      '蒲郡': 'gamagori', '常滑': 'tokoname', '津': 'tsu', '三国': 'mikuni', 'びわこ': 'biwako', '住之江': 'suminoe',
+      '尼崎': 'amagasaki', '鳴門': 'naruto', '丸亀': 'marugame', '児島': 'kojima', '宮島': 'miyajima', '徳山': 'tokuyama',
+      '下関': 'shimonoseki', '若松': 'wakamatsu', '芦屋': 'ashiya', '福岡': 'fukuoka', '唐津': 'karatsu', '大村': 'omura'
+    };
+    const venueNameByIdMap = Object.fromEntries(
+      Object.entries(venueIdByName).map(([name, id]) => [String(id), String(name)])
+    );
+
+    function normalizeVenueKey(value) {
+      return String(value || '')
+        .normalize('NFKC')
+        .toLowerCase()
+        .replace(/\s+/g, '');
+    }
+
+    function venueNameFromAny(value) {
+      const raw = String(value || '').trim();
+      if (!raw) return '';
+      if (venueIdByName[raw]) return raw;
+      if (venueNameByIdMap[raw]) return venueNameByIdMap[raw];
+      const normalized = normalizeVenueKey(raw);
+      if (venueNameById[normalized]) return venueNameById[normalized];
+      return '';
+    }
+
+    function normalizeStatus(value) {
+      const text = String(value || '').trim();
+      if (!text) return '未公開';
+      if (/発売中|open|live/i.test(text)) return '発売中';
+      if (/締切|close|closed/i.test(text)) return '締切';
+      if (/中止|休催|cancel/i.test(text)) return '中止';
+      if (/結果|確定|final/i.test(text)) return '結果確定';
+      return text;
+    }
+
+    function toNumber(value, fallback = 0) {
+      const num = Number(value);
+      return Number.isFinite(num) ? num : fallback;
+    }
+
     let bootstrapPromise = null;
     let raceData = localRaceData;
     let players = localPlayers;
     let source = 'local-fallback';
+    let lastError = '';
+    const raceListCache = new Map();
 
     async function requestJson(pathname) {
       try {
         const response = await fetch(pathname);
         if (!response.ok) return null;
-        return await response.json();
+        const payload = await response.json();
+        if (payload && payload.success === false) return null;
+        return payload;
       } catch (error) {
         return null;
       }
+    }
+
+    async function requestOfficialThenLegacy(officialPath, legacyPath) {
+      const official = await requestJson(officialPath);
+      if (official != null) {
+        lastError = '';
+        return official;
+      }
+      lastError = `公式取得失敗: ${officialPath}`;
+      if (!legacyPath) return null;
+      return requestJson(legacyPath);
     }
 
     async function ensureBootstrap() {
@@ -83,34 +150,107 @@
     }
 
     async function getTodayVenues() {
-      const payload = await requestJson('/api/today-venues');
-      if (payload) {
+      const payload = await requestOfficialThenLegacy('/api/official/today-venues', '/api/today-venues');
+      if (Array.isArray(payload) && payload.length) {
         source = 'server-api';
-        return payload;
+        return payload
+          .map((item) => {
+            const venueName = venueNameFromAny(item?.venue || item?.venueName || item?.name || item?.venueId);
+            if (!venueName) return null;
+            return {
+              venue: venueName,
+              currentRace: toNumber(item?.currentRace, 0),
+              closeTime: String(item?.deadline || item?.close || item?.closeTime || ''),
+              weather: String(item?.weather || ''),
+              windSpeed: toNumber(item?.windSpeed, 0)
+            };
+          })
+          .filter(Boolean);
       }
       return venueHomeData.map((item) => ({ ...item }));
     }
 
     async function getRaceList(venue) {
-      const payload = await requestJson(`/api/races/${encodeURIComponent(venue)}`);
-      if (payload) {
-        source = 'server-api';
-        return payload.map((race) => ({ ...race, venue }));
+      const venueId = venueIdByName[venue] || String(venue || '');
+      const cacheKey = String(venueId || venue || '');
+      if (!raceListCache.has(cacheKey)) {
+        raceListCache.set(cacheKey, requestOfficialThenLegacy(
+          `/api/official/races/${encodeURIComponent(venueId)}`,
+          `/api/races/${encodeURIComponent(venueId)}`
+        ));
       }
+
+      const payload = await raceListCache.get(cacheKey);
+      if (Array.isArray(payload) && payload.length) {
+        source = 'server-api';
+        return payload.map((race) => ({
+          venue,
+          raceNo: toNumber(race?.raceNo, 0),
+          start: String(race?.start || race?.startTime || race?.deadline || ''),
+          close: String(race?.close || race?.deadline || race?.startTime || ''),
+          status: normalizeStatus(race?.status || race?.resultStatus || '')
+        }));
+      }
+
       const schedule = raceScheduleDefaults[venue] || {};
-      return Object.keys(schedule).map((raceNo) => ({
+      const scheduleRows = Object.keys(schedule).map((raceNo) => ({
         venue,
         raceNo: Number(raceNo),
-        source
+        start: String(schedule?.[raceNo]?.start || ''),
+        close: String(schedule?.[raceNo]?.close || ''),
+        status: normalizeStatus(schedule?.[raceNo]?.status || '')
+      }));
+      if (scheduleRows.length) return scheduleRows;
+
+      await ensureBootstrap();
+      const localVenueRows = raceData?.[venue] || {};
+      const localRaceNos = Object.keys(localVenueRows)
+        .map((raceNo) => Number(raceNo))
+        .filter((raceNo) => Number.isFinite(raceNo) && raceNo > 0)
+        .sort((a, b) => a - b);
+
+      return localRaceNos.map((raceNo) => ({
+        venue,
+        raceNo,
+        start: '',
+        close: '',
+        status: '未公開'
       }));
     }
 
     async function getEntryList(venue, raceNo) {
-      const payload = await requestJson(`/api/entries/${encodeURIComponent(venue)}/${raceNo}`);
-      if (payload) {
+      const venueId = venueIdByName[venue] || String(venue || '');
+      const payload = await requestOfficialThenLegacy(
+        `/api/official/entries/${encodeURIComponent(venueId)}/${raceNo}`,
+        `/api/entries/${encodeURIComponent(venueId)}/${raceNo}`
+      );
+
+      if (Array.isArray(payload) && payload.length) {
         source = 'server-api';
-        return payload;
+        return payload.map((entry, index) => ({
+          boat: toNumber(entry?.boat || entry?.lane, index + 1),
+          registrationNo: toNumber(entry?.registrationNo, 0),
+          name: String(entry?.name || entry?.racerName || ''),
+          branch: String(entry?.branch || ''),
+          className: String(entry?.className || ''),
+          age: toNumber(entry?.age, 0),
+          nationalWin: toNumber(entry?.nationalWin || entry?.nationalWinRate, 0),
+          localWin: toNumber(entry?.localWin || entry?.localWinRate, 0),
+          national2Win: toNumber(entry?.national2Win, 0),
+          local2Win: toNumber(entry?.local2Win, 0),
+          avgSt: toNumber(entry?.avgSt || entry?.avgST || entry?.startTiming, 0),
+          motorRate: toNumber(entry?.motorRate, 0),
+          boatRate: toNumber(entry?.boatRate, 0),
+          exhibitionTime: toNumber(entry?.exhibitionTime, 0),
+          weight: toNumber(entry?.weight, 0),
+          tilt: toNumber(entry?.tilt, 0),
+          currentForm: String(entry?.currentForm || entry?.recentResults || ''),
+          raceNo: toNumber(raceNo, 0),
+          motorNo: String(entry?.motorNo || ''),
+          boatNo: String(entry?.boatNo || '')
+        }));
       }
+
       await ensureBootstrap();
       const raceEntries = raceData?.[venue]?.[String(raceNo)] || raceData?.[venue]?.[raceNo];
       if (Array.isArray(raceEntries) && raceEntries.length) {
@@ -123,19 +263,28 @@
     }
 
     async function getWeather(venue, raceNo) {
-      const payload = await requestJson(`/api/before/${encodeURIComponent(venue)}/${raceNo}`);
+      const venueId = venueIdByName[venue] || String(venue || '');
+      const [payload, raceList] = await Promise.all([
+        requestOfficialThenLegacy(
+          `/api/official/before/${encodeURIComponent(venueId)}/${raceNo}`,
+          `/api/before/${encodeURIComponent(venueId)}/${raceNo}`
+        ),
+        getRaceList(venue)
+      ]);
+      const raceInfo = (Array.isArray(raceList) ? raceList : []).find((row) => Number(row?.raceNo) === Number(raceNo)) || {};
+
       if (payload) {
         source = 'server-api';
         return {
           venue,
           raceNo,
-          start: payload.start || '10:45',
-          close: payload.close || '10:20',
-          status: payload.status || 'live',
+          start: String(raceInfo?.start || payload.start || payload.startTime || ''),
+          close: String(raceInfo?.close || payload.close || payload.deadline || ''),
+          status: normalizeStatus(raceInfo?.status || payload.status || ''),
           weather: payload.weather || '晴',
-          windDir: payload.windDir || '向かい風',
+          windDir: payload.windDir || payload.windDirection || '向かい風',
           windSpeed: payload.windSpeed || 2,
-          wave: payload.wave || 3,
+          wave: payload.wave || payload.waveHeight || 3,
           exhibitionTime: payload.exhibitionTime || '',
           startDisplay: payload.startDisplay || '',
           source: 'server-api'
@@ -159,13 +308,21 @@
     }
 
     async function getOdds(venue, raceNo) {
-      const payload = await requestJson(`/api/odds/${encodeURIComponent(venue)}/${raceNo}`);
+      const venueId = venueIdByName[venue] || String(venue || '');
+      const payload = await requestOfficialThenLegacy(
+        `/api/official/odds/${encodeURIComponent(venueId)}/${raceNo}`,
+        `/api/odds/${encodeURIComponent(venueId)}/${raceNo}`
+      );
       if (payload) {
         source = 'server-api';
         return {
           venue,
           raceNo,
-          odds: payload.odds || null,
+          odds: {
+            trifecta: Array.isArray(payload.trifecta) ? payload.trifecta : [],
+            exacta: Array.isArray(payload.exacta) ? payload.exacta : [],
+            quinellaPlace: Array.isArray(payload.quinellaPlace) ? payload.quinellaPlace : []
+          },
           market: 'server-api',
           source: 'server-api'
         };
@@ -181,21 +338,37 @@
 
     async function getRaceStatus(venue, raceNo) {
       const weather = await getWeather(venue, raceNo);
-      const statusLabel = weather.status === 'live' ? '発売中' : '締切';
+      const normalized = normalizeStatus(weather.status);
+      const statusLabel = normalized === '発売中' ? '発売中' : normalized === '締切' ? '締切' : normalized;
       return {
         venue,
         raceNo,
-        status: weather.status,
+        status: normalized,
         raceStatusLabel: statusLabel,
         source
       };
     }
 
     async function getRaceResult(venue, raceNo) {
-      const payload = await requestJson(`/api/result/${encodeURIComponent(venue)}/${raceNo}`);
+      const venueId = venueIdByName[venue] || String(venue || '');
+      const payload = await requestOfficialThenLegacy(
+        `/api/official/result/${encodeURIComponent(venueId)}/${raceNo}`,
+        `/api/result/${encodeURIComponent(venueId)}/${raceNo}`
+      );
       if (payload) {
         source = 'server-api';
-        return payload;
+        const payouts = Array.isArray(payload.payouts) ? payload.payouts : [];
+        const trifecta = payouts.find((row) => String(row?.type || '').includes('3連単')) || null;
+        return {
+          isFinal: Boolean(payload?.isFinal || payload?.order),
+          order: String(payload?.order || ''),
+          winMethod: String(payload?.kimarite || ''),
+          payout: trifecta?.payout ? `${Number(trifecta.payout).toLocaleString('ja-JP')}円` : '',
+          confirmedAt: String(payload?.confirmedAt || ''),
+          trifectaPayout: Number(payload?.trifectaPayout || trifecta?.payout || 0),
+          exactaPayout: Number(payload?.exactaPayout || 0),
+          quinellaPlacePayout: Number(payload?.quinellaPlacePayout || 0)
+        };
       }
       return resultData[venue]?.[String(raceNo)] || resultData[venue]?.[raceNo] || null;
     }
@@ -229,7 +402,8 @@
       getWeather,
       getOdds,
       getRaceStatus,
-      getSource: () => source
+      getSource: () => source,
+      getLastError: () => lastError
     };
   }
 

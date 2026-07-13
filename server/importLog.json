@@ -1,5 +1,285 @@
 [
   {
+    "timestamp": "2026-07-12T20:35:23.633Z",
+    "dateFrom": "20260706",
+    "dateTo": "20260706",
+    "venueIds": [
+      "toda",
+      "hamanako"
+    ],
+    "dayMaxLimit": 30,
+    "stopped": false,
+    "imported": 0,
+    "updated": 0,
+    "failed": 24,
+    "failedDetails": [
+      {
+        "date": "20260706",
+        "venueId": "toda",
+        "raceNo": "1",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=1&jcd=02&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "toda",
+        "raceNo": "2",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=2&jcd=02&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "toda",
+        "raceNo": "3",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=3&jcd=02&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "toda",
+        "raceNo": "4",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=4&jcd=02&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "toda",
+        "raceNo": "5",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=5&jcd=02&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "toda",
+        "raceNo": "6",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=6&jcd=02&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "toda",
+        "raceNo": "7",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=7&jcd=02&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "toda",
+        "raceNo": "8",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=8&jcd=02&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "toda",
+        "raceNo": "9",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=9&jcd=02&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "toda",
+        "raceNo": "10",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=10&jcd=02&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "toda",
+        "raceNo": "11",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=11&jcd=02&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "toda",
+        "raceNo": "12",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=12&jcd=02&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "hamanako",
+        "raceNo": "1",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=1&jcd=06&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "hamanako",
+        "raceNo": "2",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=2&jcd=06&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "hamanako",
+        "raceNo": "3",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=3&jcd=06&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "hamanako",
+        "raceNo": "4",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=4&jcd=06&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "hamanako",
+        "raceNo": "5",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=5&jcd=06&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "hamanako",
+        "raceNo": "6",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=6&jcd=06&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "hamanako",
+        "raceNo": "7",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=7&jcd=06&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "hamanako",
+        "raceNo": "8",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=8&jcd=06&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "hamanako",
+        "raceNo": "9",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=9&jcd=06&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "hamanako",
+        "raceNo": "10",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=10&jcd=06&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "hamanako",
+        "raceNo": "11",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=11&jcd=06&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      },
+      {
+        "date": "20260706",
+        "venueId": "hamanako",
+        "raceNo": "12",
+        "reason": "before parse failed",
+        "url": "https://www.boatrace.jp/owpc/pc/race/beforeinfo?rno=12&jcd=06&hd=20260706",
+        "status": 200,
+        "title": "BOAT RACE オフィシャルウェブサイト",
+        "retryCount": 0,
+        "errorMessage": ""
+      }
+    ]
+  },
+  {
     "timestamp": "2026-07-07T10:31:00.748Z",
     "dateFrom": "20260701",
     "dateTo": "20260701",

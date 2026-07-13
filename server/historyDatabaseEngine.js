@@ -8,6 +8,10 @@ const MAX_RACES = 100000;
 const MAX_IMPORT_RANGE_DAYS = 7;
 const MAX_IMPORT_RANGE_VENUES = 5;
 const MAX_IMPORT_LOG_ENTRIES = 500;
+const DEFAULT_VER12_DAY_MAX_LIMIT = 120;
+const VER12_MIN_SAMPLE_VENUE = 60;
+const VER12_MIN_SAMPLE_RACER = 30;
+const VER12_MIN_SAMPLE_MOTOR = 30;
 
 const VENUE_CODE_MAP = {
   kiryu: '01',
@@ -24,6 +28,28 @@ const VENUE_CODE_MAP = {
   sakaide: '21',
   kojima: '22',
   miya: '24'
+};
+
+const importControlState = {
+  running: false,
+  stopRequested: false,
+  lastJobId: '',
+  startedAt: '',
+  finishedAt: '',
+  options: null,
+  progress: {
+    totalPairs: 0,
+    processedPairs: 0,
+    imported: 0,
+    updated: 0,
+    failed: 0,
+    currentDate: '',
+    currentVenueId: '',
+    percent: 0,
+    progressLogs: [],
+    failedDetails: []
+  },
+  lastResult: null
 };
 
 function ensureDatabaseFile() {
@@ -374,7 +400,7 @@ function normalizeVenueIds(values) {
   return unique;
 }
 
-async function importVenueDateIntoMap({ targetDate, venueId, byKey, maxRacesPerVenue }) {
+async function importVenueDateIntoMap({ targetDate, venueId, byKey, maxRacesPerVenue, shouldStop }) {
   const venueCode = VENUE_CODE_MAP[venueId];
   const counters = {
     imported: 0,
@@ -413,6 +439,12 @@ async function importVenueDateIntoMap({ targetDate, venueId, byKey, maxRacesPerV
   parseRaceList(raceListFetch.html, venueId);
 
   for (let raceNo = 1; raceNo <= Math.min(12, maxRacesPerVenue); raceNo += 1) {
+    if (shouldStop && shouldStop()) {
+      return {
+        ...counters,
+        stopped: true
+      };
+    }
     const raceNoText = String(raceNo);
     if (raceNo > 1) {
       await sleep(300 + Math.floor(Math.random() * 501));
@@ -498,7 +530,10 @@ async function importVenueDateIntoMap({ targetDate, venueId, byKey, maxRacesPerV
     }
   }
 
-  return counters;
+  return {
+    ...counters,
+    stopped: false
+  };
 }
 
 function flushDatabaseFromMap(byKey) {
@@ -528,8 +563,11 @@ async function importRaceRange(options = {}) {
   }
 
   const dates = enumerateDateRange(dateFrom, dateTo);
-  if (dates.length > MAX_IMPORT_RANGE_DAYS) {
-    throw new Error(`date range must be <= ${MAX_IMPORT_RANGE_DAYS} days`);
+  const dayMaxLimit = Number(options?.dayMaxLimit) > 0
+    ? Number(options.dayMaxLimit)
+    : MAX_IMPORT_RANGE_DAYS;
+  if (dates.length > dayMaxLimit) {
+    throw new Error(`date range must be <= ${dayMaxLimit} days`);
   }
 
   const venueIds = normalizeVenueIds(options?.venueIds);
@@ -549,15 +587,29 @@ async function importRaceRange(options = {}) {
   let updated = 0;
   let failed = 0;
   const failedDetails = [];
+  const onProgress = typeof options?.onProgress === 'function' ? options.onProgress : null;
+  const shouldStop = typeof options?.shouldStop === 'function' ? options.shouldStop : null;
+  const totalPairs = dates.length * venueIds.length;
+  let processedPairs = 0;
+  let stopped = false;
 
   for (const targetDate of dates) {
+    if (shouldStop && shouldStop()) {
+      stopped = true;
+      break;
+    }
     for (const venueId of venueIds) {
+      if (shouldStop && shouldStop()) {
+        stopped = true;
+        break;
+      }
       progressLogs.push(`start ${targetDate} ${venueId}`);
       const venueResult = await importVenueDateIntoMap({
         targetDate,
         venueId,
         byKey,
-        maxRacesPerVenue
+        maxRacesPerVenue,
+        shouldStop
       });
 
       imported += venueResult.imported;
@@ -570,6 +622,29 @@ async function importRaceRange(options = {}) {
       progressLogs.push(
         `done ${targetDate} ${venueId} imported=${venueResult.imported} updated=${venueResult.updated} failed=${venueResult.failed}`
       );
+
+      processedPairs += 1;
+      if (onProgress) {
+        onProgress({
+          totalPairs,
+          processedPairs,
+          imported,
+          updated,
+          failed,
+          currentDate: targetDate,
+          currentVenueId: venueId,
+          percent: totalPairs > 0 ? Math.round((processedPairs / totalPairs) * 1000) / 10 : 0,
+          progressLogs,
+          failedDetails
+        });
+      }
+      if (venueResult.stopped) {
+        stopped = true;
+        break;
+      }
+    }
+    if (stopped) {
+      break;
     }
   }
 
@@ -580,6 +655,8 @@ async function importRaceRange(options = {}) {
     dateFrom,
     dateTo,
     venueIds,
+    dayMaxLimit,
+    stopped,
     imported,
     updated,
     failed,
@@ -595,9 +672,182 @@ async function importRaceRange(options = {}) {
     totalInDatabase: rows.length,
     latestDate,
     venues: venueIds.length,
+    stopped,
+    processedPairs,
+    totalPairs,
     progressLogs,
     failedDetails
   };
+}
+
+function resetImportControlState() {
+  importControlState.running = false;
+  importControlState.stopRequested = false;
+  importControlState.startedAt = '';
+  importControlState.finishedAt = '';
+  importControlState.options = null;
+  importControlState.progress = {
+    totalPairs: 0,
+    processedPairs: 0,
+    imported: 0,
+    updated: 0,
+    failed: 0,
+    currentDate: '',
+    currentVenueId: '',
+    percent: 0,
+    progressLogs: [],
+    failedDetails: []
+  };
+}
+
+function getImportControlStatus() {
+  return {
+    running: importControlState.running,
+    stopRequested: importControlState.stopRequested,
+    lastJobId: importControlState.lastJobId,
+    startedAt: importControlState.startedAt || null,
+    finishedAt: importControlState.finishedAt || null,
+    options: importControlState.options,
+    progress: {
+      ...importControlState.progress,
+      progressLogs: Array.isArray(importControlState.progress?.progressLogs)
+        ? importControlState.progress.progressLogs.slice(-120)
+        : [],
+      failedDetails: Array.isArray(importControlState.progress?.failedDetails)
+        ? importControlState.progress.failedDetails.slice(0, 300)
+        : []
+    },
+    lastResult: importControlState.lastResult
+  };
+}
+
+function requestImportStop() {
+  importControlState.stopRequested = true;
+  return {
+    success: true,
+    running: importControlState.running,
+    stopRequested: true,
+    message: importControlState.running ? 'stop requested' : 'no running import'
+  };
+}
+
+function pickResumeDateFromImportLog(venueIds, defaultDate) {
+  const logs = getImportLog(200);
+  if (!Array.isArray(logs) || logs.length === 0) {
+    return defaultDate;
+  }
+  const venueSet = new Set((Array.isArray(venueIds) ? venueIds : []).map((v) => String(v || '')));
+  for (const log of logs) {
+    if (log?.stopped) {
+      continue;
+    }
+    const logVenues = Array.isArray(log?.venueIds) ? log.venueIds.map((v) => String(v || '')) : [];
+    if (venueSet.size > 0 && !logVenues.some((v) => venueSet.has(v))) {
+      continue;
+    }
+    const latest = normalizeImportDate(log?.dateTo);
+    if (latest) {
+      return latest;
+    }
+  }
+  return defaultDate;
+}
+
+function nextDateKey(dateKey) {
+  const y = Number(String(dateKey || '').slice(0, 4));
+  const m = Number(String(dateKey || '').slice(4, 6));
+  const d = Number(String(dateKey || '').slice(6, 8));
+  if (!y || !m || !d) {
+    return '';
+  }
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  dt.setUTCDate(dt.getUTCDate() + 1);
+  const yy = String(dt.getUTCFullYear()).padStart(4, '0');
+  const mm = String(dt.getUTCMonth() + 1).padStart(2, '0');
+  const dd = String(dt.getUTCDate()).padStart(2, '0');
+  return `${yy}${mm}${dd}`;
+}
+
+async function importRaceRangeVer12(options = {}) {
+  if (importControlState.running) {
+    throw new Error('import already running');
+  }
+
+  const dateFrom = normalizeImportDate(options?.dateFrom);
+  const dateTo = normalizeImportDate(options?.dateTo);
+  if (!dateFrom || !dateTo) {
+    throw new Error('dateFrom/dateTo must be YYYYMMDD');
+  }
+
+  const venueIds = normalizeVenueIds(options?.venueIds);
+  if (venueIds.length === 0) {
+    throw new Error('venueIds must include at least one valid venue');
+  }
+
+  const resume = Boolean(options?.resume);
+  const continueOnFailure = options?.continueOnFailure !== false;
+  const maxRacesPerVenue = Number(options?.maxRacesPerVenue) > 0 ? Number(options.maxRacesPerVenue) : 12;
+  const dayMaxLimit = Number(options?.dayMaxLimit) > 0
+    ? Number(options.dayMaxLimit)
+    : DEFAULT_VER12_DAY_MAX_LIMIT;
+  const baseFrom = resume ? pickResumeDateFromImportLog(venueIds, dateFrom) : dateFrom;
+  const resumedFrom = resume ? nextDateKey(baseFrom) || baseFrom : dateFrom;
+  const boundedFrom = resumedFrom < dateFrom ? dateFrom : resumedFrom;
+
+  const jobId = `ver12-${Date.now()}`;
+  resetImportControlState();
+  importControlState.running = true;
+  importControlState.lastJobId = jobId;
+  importControlState.startedAt = new Date().toISOString();
+  importControlState.options = {
+    dateFrom,
+    dateTo,
+    effectiveDateFrom: boundedFrom,
+    venueIds,
+    resume,
+    continueOnFailure,
+    maxRacesPerVenue,
+    dayMaxLimit
+  };
+
+  try {
+    const result = await importRaceRange({
+      dateFrom: boundedFrom,
+      dateTo,
+      venueIds,
+      maxRacesPerVenue,
+      dayMaxLimit,
+      shouldStop: () => importControlState.stopRequested,
+      onProgress: (progress) => {
+        importControlState.progress = {
+          ...progress,
+          failedDetails: continueOnFailure
+            ? (Array.isArray(progress?.failedDetails) ? progress.failedDetails : [])
+            : []
+        };
+      }
+    });
+
+    importControlState.lastResult = {
+      ...result,
+      jobId,
+      resume,
+      continueOnFailure,
+      effectiveDateFrom: boundedFrom
+    };
+
+    return {
+      ...result,
+      jobId,
+      resume,
+      continueOnFailure,
+      effectiveDateFrom: boundedFrom
+    };
+  } finally {
+    importControlState.running = false;
+    importControlState.finishedAt = new Date().toISOString();
+    importControlState.stopRequested = false;
+  }
 }
 
 async function importRaceDate(date, options = {}) {
@@ -850,17 +1100,214 @@ function getVenueStatistics(venueId) {
   };
 }
 
+function classifyWindSpeedBand(value) {
+  const speed = toNumber(value, 0);
+  if (speed >= 8) return '8m+';
+  if (speed >= 5) return '5-7m';
+  if (speed >= 3) return '3-4m';
+  if (speed >= 1) return '1-2m';
+  return '0m';
+}
+
+function classifyWaveBand(value) {
+  const wave = toNumber(value, 0);
+  if (wave >= 15) return '15cm+';
+  if (wave >= 10) return '10-14cm';
+  if (wave >= 5) return '5-9cm';
+  return '0-4cm';
+}
+
+function classifyStBand(value) {
+  const st = toNumber(value, NaN);
+  if (!Number.isFinite(st)) return 'unknown';
+  if (st <= 0.12) return '0.12以下';
+  if (st <= 0.15) return '0.13-0.15';
+  if (st <= 0.18) return '0.16-0.18';
+  if (st <= 0.22) return '0.19-0.22';
+  return '0.23以上';
+}
+
+function classifyGrade(row) {
+  const text = String(row?.raceName || row?.raceTitle || row?.raceType || '').toUpperCase();
+  if (/SG/.test(text)) return 'SG';
+  if (/G1/.test(text)) return 'G1';
+  if (/G2/.test(text)) return 'G2';
+  if (/G3/.test(text)) return 'G3';
+  return '一般';
+}
+
+function classifyDayNight(row) {
+  const raceNo = toNumber(row?.raceNo, 0);
+  if (raceNo >= 7) return 'night';
+  return 'day';
+}
+
+function getGlobalDatabaseSummary() {
+  const rows = readRaceDatabase();
+  const venues = new Set();
+  const uniqueRaceDays = new Set();
+  let latestImportAt = '';
+  let withResult = 0;
+
+  for (const row of rows) {
+    const venueId = String(row?.venueId || '').trim();
+    const date = String(row?.date || '').trim();
+    if (venueId) {
+      venues.add(venueId);
+    }
+    if (venueId && date) {
+      uniqueRaceDays.add(`${venueId}:${date}`);
+    }
+    const importedAt = String(row?.importedAt || '');
+    if (importedAt > latestImportAt) {
+      latestImportAt = importedAt;
+    }
+    if (getWinningLane(row)) {
+      withResult += 1;
+    }
+  }
+
+  const statsConfidence = rows.length > 0
+    ? Math.round(Math.min(1, withResult / Math.max(1, rows.length)) * 1000) / 10
+    : 0;
+
+  return {
+    totalRaces: rows.length,
+    venues: venues.size,
+    uniqueRaceDays: uniqueRaceDays.size,
+    latestDate: rows.reduce((latest, row) => {
+      const rowDate = String(row?.date || '');
+      return rowDate > latest ? rowDate : latest;
+    }, '') || null,
+    latestImportAt: latestImportAt || null,
+    learningRaceCount: withResult,
+    statsConfidence
+  };
+}
+
+function getVer12VenueStatistics(venueId) {
+  const rows = getVenueRows(venueId);
+  const venueStats = getVenueStats(venueId);
+  const windBands = {};
+  const waveBands = {};
+  const stBands = {};
+  const gradeCounts = {};
+  const dayNightCounts = { day: 0, night: 0 };
+
+  for (const row of rows) {
+    const winningLane = getWinningLane(row);
+    if (!winningLane) {
+      continue;
+    }
+
+    const windBand = classifyWindSpeedBand(row?.beforeInfo?.windSpeed);
+    const waveBand = classifyWaveBand(row?.beforeInfo?.waveHeight);
+    const grade = classifyGrade(row);
+    const dayNight = classifyDayNight(row);
+
+    windBands[windBand] = windBands[windBand] || { total: 0, laneWinRates: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0 } };
+    waveBands[waveBand] = waveBands[waveBand] || { total: 0, laneWinRates: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0 } };
+    windBands[windBand].total += 1;
+    waveBands[waveBand].total += 1;
+    windBands[windBand].laneWinRates[winningLane] += 1;
+    waveBands[waveBand].laneWinRates[winningLane] += 1;
+
+    gradeCounts[grade] = (gradeCounts[grade] || 0) + 1;
+    dayNightCounts[dayNight] = (dayNightCounts[dayNight] || 0) + 1;
+
+    const beforeEntries = Array.isArray(row?.beforeInfo?.entries) ? row.beforeInfo.entries : [];
+    for (const entry of beforeEntries) {
+      const lane = String(entry?.lane || '');
+      if (!/^[1-6]$/.test(lane)) {
+        continue;
+      }
+      const stBand = classifyStBand(entry?.startTiming);
+      const key = `${lane}:${stBand}`;
+      stBands[key] = stBands[key] || { lane, stBand, starts: 0, wins: 0 };
+      stBands[key].starts += 1;
+      if (lane === winningLane) {
+        stBands[key].wins += 1;
+      }
+    }
+  }
+
+  const normalizeLaneRates = (bandMap) => Object.fromEntries(Object.entries(bandMap).map(([band, info]) => {
+    const total = Number(info?.total || 0);
+    const laneWinRates = {};
+    for (let lane = 1; lane <= 6; lane += 1) {
+      const laneKey = String(lane);
+      laneWinRates[laneKey] = total > 0
+        ? Math.round(((Number(info?.laneWinRates?.[laneKey] || 0)) / total) * 1000) / 10
+        : 0;
+    }
+    return [band, { total, laneWinRates }];
+  }));
+
+  const stBandStats = Object.values(stBands)
+    .map((row) => ({
+      ...row,
+      winRate: row.starts > 0 ? Math.round((row.wins / row.starts) * 1000) / 10 : 0
+    }))
+    .sort((a, b) => b.starts - a.starts || a.lane.localeCompare(b.lane));
+
+  return {
+    venueId: String(venueId || ''),
+    totalRaces: venueStats.totalRaces,
+    laneWinRates: venueStats.laneWinRates,
+    weatherLaneWinRates: buildWeatherLaneWinRates(rows),
+    windSpeedBands: normalizeLaneRates(windBands),
+    waveBands: normalizeLaneRates(waveBands),
+    stBands: stBandStats,
+    dayNightCounts,
+    gradeCounts,
+    samplePolicy: {
+      minVenueSample: VER12_MIN_SAMPLE_VENUE
+    }
+  };
+}
+
+function getVer12RacerStatistics(registrationNo) {
+  const base = getRacerStats(registrationNo);
+  const starts = Number(base?.starts || 0);
+  const effectiveWinRate = starts >= VER12_MIN_SAMPLE_RACER ? Number(base?.winRate || 0) : 0;
+  return {
+    ...base,
+    effectiveWinRate,
+    sampleSufficient: starts >= VER12_MIN_SAMPLE_RACER,
+    minSample: VER12_MIN_SAMPLE_RACER
+  };
+}
+
+function getVer12MotorStatistics(motorNo) {
+  const base = getMotorStats(motorNo);
+  const appearances = Number(base?.appearances || 0);
+  const effectiveWinRate = appearances >= VER12_MIN_SAMPLE_MOTOR ? Number(base?.winRate || 0) : 0;
+  return {
+    ...base,
+    effectiveWinRate,
+    sampleSufficient: appearances >= VER12_MIN_SAMPLE_MOTOR,
+    minSample: VER12_MIN_SAMPLE_MOTOR
+  };
+}
+
 module.exports = {
   readRaceDatabase,
   importRaceDate,
   importRaceRange,
   getImportLogSummary,
+  getImportControlStatus,
+  requestImportStop,
+  importRaceRangeVer12,
   getDatabaseStatus,
+  getGlobalDatabaseSummary,
   getVenueStats,
   getLaneWinRate,
   getWeatherStats,
   getMotorStats,
   getRacerStats,
   getVenueStatistics,
+  getVer12VenueStatistics,
+  getVer12RacerStatistics,
+  getVer12MotorStatistics,
   normalizeWindDirection
 };

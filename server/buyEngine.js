@@ -3,7 +3,7 @@ const {
   calculateExpectedValue,
   rateExpectedValue,
   buildOddsMaps,
-  estimateFromExacta
+  buildNormalizedTrifectaProbabilities
 } = require('./expectedValueEngine');
 
 function clamp(value, min, max) {
@@ -18,53 +18,6 @@ function buildOddsMap(odds) {
   return buildOddsMaps(odds);
 }
 
-function generateTrifecta(lanes) {
-  const combos = [];
-  for (const a of lanes) {
-    for (const b of lanes) {
-      for (const c of lanes) {
-        if (a === b || a === c || b === c) {
-          continue;
-        }
-        combos.push(`${a}-${b}-${c}`);
-      }
-    }
-  }
-  return combos;
-}
-
-function buildStrengthMap(scoreRows) {
-  const map = new Map();
-  for (const row of scoreRows) {
-    map.set(Number(row.lane), Math.max(1, Number(row.score) || 1));
-  }
-  return map;
-}
-
-function comboProbability(combo, strengthMap) {
-  const [a, b, c] = combo.split('-').map((x) => Number(x));
-  const allLanes = Array.from(strengthMap.keys());
-  const sA = strengthMap.get(a) || 1;
-  const sB = strengthMap.get(b) || 1;
-  const sC = strengthMap.get(c) || 1;
-  const total = allLanes.reduce((sum, lane) => sum + (strengthMap.get(lane) || 0), 0);
-  const remainA = total - sA;
-  const remainAB = remainA - sB;
-
-  const p1 = total > 0 ? sA / total : 0;
-  const p2 = remainA > 0 ? sB / remainA : 0;
-  const p3 = remainAB > 0 ? sC / remainAB : 0;
-
-  return clamp(p1 * p2 * p3, 0, 0.95);
-}
-
-function estimateOdds(probability) {
-  if (probability <= 0) {
-    return 99.9;
-  }
-  const raw = 0.72 / probability;
-  return Math.max(4, Math.min(180, Math.round(raw * 10) / 10));
-}
 
 function pickUnique(source, count, selected) {
   const result = [];
@@ -85,22 +38,28 @@ function buildBuyPlan({ ranked, scoreRows, odds }) {
   const ordered = Array.isArray(ranked) && ranked.length > 0 ? ranked : scoreRows;
   const lanesByRank = ordered.map((r) => Number(r.lane)).filter((lane) => lane > 0);
   const targetLanes = lanesByRank.length > 0 ? lanesByRank.slice(0, 5) : [1, 2, 3, 4, 5];
-
-  const strengthMap = buildStrengthMap(scoreRows);
   const oddsMaps = buildOddsMap(odds);
 
-  const combos = generateTrifecta(targetLanes).map((combo) => {
-    const probability = comboProbability(combo, strengthMap);
-    const oddsValue = oddsMaps.trifecta.get(combo)
-      || estimateFromExacta(combo, oddsMaps.exacta)
-      || estimateOdds(probability);
-    const expectedValue = calculateExpectedValue(probability, oddsValue);
+  const normalized = buildNormalizedTrifectaProbabilities(scoreRows);
+  const combos = normalized.rows
+    .filter((row) => {
+      const lanes = String(row.combo || '').split('-').map((value) => Number(value));
+      return lanes.every((lane) => targetLanes.includes(lane));
+    })
+    .map((row) => {
+    const combo = parseTicket(row.combo);
+    const probability = clamp(Number(row.probability || 0), 0, 1);
+    const officialOdds = oddsMaps.trifecta.get(combo) || 0;
+    const evCalculable = officialOdds > 0;
+    const expectedValue = evCalculable ? calculateExpectedValue(probability, officialOdds) : 0;
     return {
       combo,
       probability: Math.round(probability * 10000) / 10000,
-      odds: Math.round(oddsValue * 10) / 10,
+      odds: Math.round(officialOdds * 10) / 10,
       expectedValue,
-      rating: rateExpectedValue(expectedValue)
+      evCalculable,
+      oddsSource: evCalculable ? 'official' : 'missing',
+      rating: evCalculable ? rateExpectedValue(expectedValue) : '---'
     };
   }).sort((a, b) => b.probability - a.probability || b.expectedValue - a.expectedValue);
 
@@ -130,6 +89,8 @@ function buildBuyPlan({ ranked, scoreRows, odds }) {
     odds: row.odds,
     probability: row.probability,
     expectedValue: row.expectedValue,
+    evCalculable: Boolean(row.evCalculable),
+    oddsSource: row.oddsSource,
     rating: row.rating
   }));
 
